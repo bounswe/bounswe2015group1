@@ -65,5 +65,9 @@ public class MathematicalOperations {
 			return true;
 		}
 	}
+	
+	public boolean equals(int a, int b){
+		return a==b;
+	}
 }
 
