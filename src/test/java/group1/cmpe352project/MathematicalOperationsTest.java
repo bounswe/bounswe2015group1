@@ -40,4 +40,3 @@ public class MathematicalOperationsTest{
         assertEquals(2, mo.remainder(7,5));
     }
 }
->>>>>>> origin/master
