@@ -31,12 +31,12 @@ public class MathematicalOperationsTest{
 
     @Test
     public void testThreeTimesFour(){
-        assertEquals(12, mo.multiply(3,4));
+        assertEquals(12, mo.times(3,4));
     }
 
     @Test
     public void testNegativeTimesPositive(){
-	   assertEquals(-3,mo.multiply(-1,3));	
+	   assertEquals(-3,mo.times(-1,3));	
     }
 
     @Test

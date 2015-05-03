@@ -8,7 +8,7 @@ public class MathematicalOperations {
     	return a-b;
     }
 
-    public int multiply (int a, int b){
+    public int times (int a, int b){
     	return a*b;
     }
 
