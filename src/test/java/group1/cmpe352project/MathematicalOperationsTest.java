@@ -93,4 +93,14 @@ public class MathematicalOperationsTest{
 	public void testNegativeTwoPowerZero(){
 		assertEquals(1.0, mo.power(-2,0));
 	}
+	
+	@Test
+	public void testNegationTrue(){
+		assertEquals(false,mo.negation(true));
+	}
+
+	@Test
+	public void testNegationFalse(){
+		assertEquals(true,mo.negation(false));
+	}
 }

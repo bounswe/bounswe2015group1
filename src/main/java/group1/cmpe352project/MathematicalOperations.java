@@ -57,5 +57,13 @@ public class MathematicalOperations {
 			return result;
 		}
 	}
+
+	public boolean negation(boolean b){
+		if(b==true){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
 
