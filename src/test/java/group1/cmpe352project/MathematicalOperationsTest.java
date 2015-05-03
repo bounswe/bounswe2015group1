@@ -103,4 +103,14 @@ public class MathematicalOperationsTest{
 	public void testNegationFalse(){
 		assertEquals(true,mo.negation(false));
 	}
+	
+	@Test
+	public void testEqual(){
+		assertEquals(true,mo.equals(1,1));
+	}
+	
+	@Test
+	public void testNotEqual(){
+		assertEquals(false,mo.equals(1,0));
+	}
 }
