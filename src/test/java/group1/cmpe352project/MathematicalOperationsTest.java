@@ -68,19 +68,20 @@ public class MathematicalOperationsTest{
     public void testTwoDividedByZero(){
         mo.divide(2,0);
     }
+
 	
-	@Test
-	public void testNegativeThreePowerTwo(){
-		assertEquals(9, mo.power(-3,2));
-	}
 	
-	@Test
-	public void testTwoPowerNegativeThree(){
-		assertEquals(0.125, mo.power(2,-3));
-	}
 	
+
+
+    @Test(expected=ArithmeticException.class)
+    public void testTwoInverseDividedByZero(){
+        mo.inverseDivide(0,2);
+    }
+
 	@Test
-	public void testNegativeTwoPowerZero(){
-		assertEquals(1,mo.power(-2,0));
-	}
+    public void testTwoInverseDividedBySix(){
+        assertEquals(3, mo.inverseDivide(2,6));
+    }
+
 }
