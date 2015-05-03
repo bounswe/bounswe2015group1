@@ -62,4 +62,15 @@ public class MathematicalOperationsTest{
     public void testTenLogicalShiftRightNegativeHundred(){
         assertEquals(0, mo.logicalShiftRight(10,-100));
     }
+    
+    @Test
+    public void testSixDividedByTwo(){
+        assertEquals(3, mo.divide(6,2));
+    }
+
+    @Test
+    (expected=ArithmeticException)
+    public void testTwoDividedByZero(){
+        mo.divide(2,0);
+    }
 }

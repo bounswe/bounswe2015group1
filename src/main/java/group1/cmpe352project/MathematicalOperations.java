@@ -19,5 +19,8 @@ public class MathematicalOperations {
     public int logicalShiftRight(int n, int shiftAmount) {
       return n >>> shiftAmount;
     }
-        
+     
+    public int divide (int a, int b){
+    	return a/b;
+    }
 }
