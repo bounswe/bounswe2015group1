@@ -20,7 +20,7 @@ public class MathematicalOperations {
       return n >>> shiftAmount;
     }
      
-    public int divide (int a, int b){
+    public int divide(int a, int b){
     	return a/b;
     }
 }

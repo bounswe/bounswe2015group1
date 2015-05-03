@@ -36,11 +36,7 @@ public class MathematicalOperationsTest{
 
     @Test
     public void testNegativeTimesPositive(){
-<<<<<<< HEAD
-	   assertEquals(-3,mo.times(-1,3));	
-=======
-	   assertEquals(-3,mo.multiply(-1,3));
->>>>>>> origin/master
+	   assertEquals(-3,mo.times(-1,3));
     }
 
     @Test
@@ -68,8 +64,7 @@ public class MathematicalOperationsTest{
         assertEquals(3, mo.divide(6,2));
     }
 
-    @Test
-    (expected=ArithmeticException)
+    @Test(expected=ArithmeticException.class)
     public void testTwoDividedByZero(){
         mo.divide(2,0);
     }
