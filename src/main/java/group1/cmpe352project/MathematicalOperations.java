@@ -24,7 +24,15 @@ public class MathematicalOperations {
     	return a/b;
     }
 
-
+	/**
+     * <p>
+     * returns division of parameters in reversed order.
+     * </p>
+     *
+     * @param a the divisor value
+     * @param b the number which will be divided
+     * @return b/a value as integer
+     */
     public int inverseDivide(int a, int b){
     	return b/a;
     }
