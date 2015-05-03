@@ -23,4 +23,8 @@ public class MathematicalOperations {
     public int divide(int a, int b){
     	return a/b;
     }
+
+    public int inverseDivide(int a, int b){
+    	return b/a;
+    }
 }

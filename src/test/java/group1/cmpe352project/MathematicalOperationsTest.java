@@ -68,4 +68,14 @@ public class MathematicalOperationsTest{
     public void testTwoDividedByZero(){
         mo.divide(2,0);
     }
+
+    @Test(expected=ArithmeticException.class)
+    public void testTwoInverseDividedByZero(){
+        mo.inverseDivide(0,2);
+    }
+
+	@Test
+    public void testTwoInverseDividedBySix(){
+        assertEquals(3, mo.inverseDivide(2,6));
+    }
 }
