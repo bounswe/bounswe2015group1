@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.068" errors="0" skipped="0" tests="12" name="MathematicalOperationsTest">
+<testsuite failures="0" time="0.092" errors="0" skipped="0" tests="19" name="MathematicalOperationsTest">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64"/>
@@ -59,16 +59,23 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.001" classname="MathematicalOperationsTest" name="testNegativeTimesPositive"/>
+  <testcase time="0.002" classname="MathematicalOperationsTest" name="testNegativeTwoPowerZero"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testNegativeTimesPositive"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testNegativeOneLogicalShiftRightThirtyOne"/>
-  <testcase time="0" classname="MathematicalOperationsTest" name="testTwoPlusTwo"/>
-  <testcase time="0.001" classname="MathematicalOperationsTest" name="testTenLogicalShiftRightNegativeHundred"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testTwoInverseDividedByZero"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testTwoPlusTwo"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testTwoInverseDividedBySix"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testTenLogicalShiftRightNegativeHundred"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testNegationFalse"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testTwoPowerNegativeThree"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testThreeTimesFour"/>
-  <testcase time="0" classname="MathematicalOperationsTest" name="testTwoDividedByZero"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testTwoDividedByZero"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testSevenMinusNine"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testFourRemainderThree"/>
-  <testcase time="0" classname="MathematicalOperationsTest" name="testZeroPlus"/>
-  <testcase time="0" classname="MathematicalOperationsTest" name="testFourMinusZero"/>
+  <testcase time="0" classname="MathematicalOperationsTest" name="testNegationTrue"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testZeroPlus"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testFourMinusZero"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testSevenRemainderFive"/>
   <testcase time="0" classname="MathematicalOperationsTest" name="testSixDividedByTwo"/>
+  <testcase time="0.001" classname="MathematicalOperationsTest" name="testNegativeThreePowerTwo"/>
 </testsuite>

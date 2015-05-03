@@ -90,17 +90,17 @@ public class MathematicalOperationsTest{
 
 	@Test
 	public void testNegativeThreePowerTwo(){
-		assertEquals(9.0, mo.power(-3,2));
+		assertEquals(9.0, mo.power(-3,2), 0.001);
 	}
 	
 	@Test
 	public void testTwoPowerNegativeThree(){
-		assertEquals(0.125, mo.power(2,-3));
+		assertEquals(0.125, mo.power(2,-3), 0.001);
 	}
 	
 	@Test
 	public void testNegativeTwoPowerZero(){
-		assertEquals(1.0, mo.power(-2,0));
+		assertEquals(1.0, mo.power(-2,0), 0.001);
 	}
 	
 	@Test
@@ -111,5 +111,15 @@ public class MathematicalOperationsTest{
 	@Test
 	public void testNegationFalse(){
 		assertEquals(true,mo.negation(false));
+	}
+	
+	@Test
+	public void testEqual(){
+		assertEquals(true,mo.equals(1,1));
+	}
+	
+	@Test
+	public void testNotEqual(){
+		assertEquals(false,mo.equals(1,0));
 	}
 }
