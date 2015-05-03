@@ -23,9 +23,19 @@ public class MathematicalOperations {
     public int divide(int a, int b){
     	return a/b;
     }
-	
-	public int unaryPlus(int a){
-		return a;
+
+	public double power(double a, int b){
+ 	if(b==0)
+  	return 1;
+
+  	if(b<0){
+     	 a = 1.0/a;
+      	b = -b;
+ 	}
+ 	double ret = power(a,b/2);
+ 		ret = ret * ret;
+ 		if(n%2!=0) ret = ret * x;
+ 	return ret;
 	}
 
 	/**
