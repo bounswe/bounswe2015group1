@@ -36,7 +36,11 @@ public class MathematicalOperationsTest{
 
     @Test
     public void testNegativeTimesPositive(){
+<<<<<<< HEAD
 	   assertEquals(-3,mo.times(-1,3));	
+=======
+	   assertEquals(-3,mo.multiply(-1,3));
+>>>>>>> origin/master
     }
 
     @Test
@@ -48,6 +52,14 @@ public class MathematicalOperationsTest{
     public void testSevenRemainderFive(){
         assertEquals(2, mo.remainder(7,5));
     }
-   
+
+    @Test
+    public void testNegativeOneLogicalShiftRightThirtyOne(){
+        assertEquals(1, mo.logicalShiftRight(-1,31));
+    }
+
+    @Test
+    public void testTenLogicalShiftRightNegativeHundred(){
+        assertEquals(0, mo.logicalShiftRight(10,-100));
+    }
 }
-    
