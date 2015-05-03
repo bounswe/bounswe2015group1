@@ -18,4 +18,14 @@ public class MathematicalOperationsTest{
     public void testZeroPlus(){
         assertEquals(2, mo.plus(0,2));
     }
+
+    @Test
+    public void testFourRemainderThree(){
+        assertEquals(1, mo.remainder(4,3));
+    }
+
+    @Test
+    public void testSevenRemainderFive(){
+        assertEquals(2, mo.remainder(7,5));
+    }
 }
