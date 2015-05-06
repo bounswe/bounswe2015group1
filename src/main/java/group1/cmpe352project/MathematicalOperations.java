@@ -7,7 +7,16 @@ public class MathematicalOperations {
     public int minus (int a, int b){
     	return a-b;
     }
-
+    
+    /**
+     * <p>
+     * returns product of parameters
+     * </p>
+     *
+     * @param a the first value which will be multiplied
+     * @param b the second value which will be multiplied
+     * @return a*b  
+     */
     public int times (int a, int b){
     	return a*b;
     }
