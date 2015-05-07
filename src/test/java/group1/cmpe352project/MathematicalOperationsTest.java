@@ -132,17 +132,50 @@ public class MathematicalOperationsTest{
     public void testTwoInverseDividedBySix(){
         assertEquals(3, mo.inverseDivide(2,6));
     }
-
+	
+	/**
+        * <p>
+        * test#1 for the power operation.
+        * testing negative number power positive number
+        * calls the power method with 2 parameters: -3 and 2.
+        * </p>
+        *
+        * @param -3, base. 
+        * @param 2, power.
+        * @return 9.0, result. 
+        */
 	@Test
 	public void testNegativeThreePowerTwo(){
 		assertEquals(9.0, mo.power(-3,2), 0.001);
 	}
 	
+	/**
+        * <p>
+        * test#2 for the power operation.
+        * testing positive number power negative number
+        * calls the power method with 2 parameters: 2 and -3.
+        * </p>
+        *
+        * @param 2, base. 
+        * @param -3, power.
+        * @return 0.125, result. 
+        */
 	@Test
 	public void testTwoPowerNegativeThree(){
 		assertEquals(0.125, mo.power(2,-3), 0.001);
 	}
 	
+	/**
+        * <p>
+        * test#3 for the power operation.
+        * testing negative number power zero 
+        * calls the power method with 2 parameters: -2 and 0.
+        * </p>
+        *
+        * @param -2, base. 
+        * @param 0, power.
+        * @return 1, result. 
+        */
 	@Test
 	public void testNegativeTwoPowerZero(){
 		assertEquals(1.0, mo.power(-2,0), 0.001);
@@ -158,31 +191,11 @@ public class MathematicalOperationsTest{
 		assertEquals(true,mo.negation(false));
 	}
 	
-       /**
-       * <p>
-       * test1 for the equals operation.
-       * calls the equals method with the parameters: 1, 1
-       * </p>
-       *
-       * @param 1, the first integer to be compared with the second one. 
-       * @param 1, the second integer to be compared with the first one.
-       * @return true, equality. 
-       */
 	@Test
 	public void testEqual(){
 		assertEquals(true,mo.equals(1,1));
 	}
 	
-	/**
-       * <p>
-       * test2 for the equals operation.
-       * calls the equals method with the parameters: 1, 0
-       * </p>
-       *
-       * @param 1, the first integer to be compared with the second one. 
-       * @param 0, the second integer to be compared with the first one.
-       * @return false, inequality. 
-       */
 	@Test
 	public void testNotEqual(){
 		assertEquals(false,mo.equals(1,0));
