@@ -191,11 +191,31 @@ public class MathematicalOperationsTest{
 		assertEquals(true,mo.negation(false));
 	}
 	
+    /**
+       * <p>
+       * test1 for the equals operation.
+       * calls the equals method with the parameters: 1, 1
+       * </p>
+       *
+       * @param 1, the first integer to be compared with the second one. 
+       * @param 1, the second integer to be compared with the first one.
+       * @return true, equality. 
+       */
 	@Test
 	public void testEqual(){
 		assertEquals(true,mo.equals(1,1));
 	}
 	
+    /**
+       * <p>
+       * test2 for the equals operation.
+       * calls the equals method with the parameters: 1, 0
+       * </p>
+       *
+       * @param 1, the first integer to be compared with the second one. 
+       * @param 0, the second integer to be compared with the first one.
+       * @return false, inequality. 
+       */
 	@Test
 	public void testNotEqual(){
 		assertEquals(false,mo.equals(1,0));
