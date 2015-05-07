@@ -1,6 +1,10 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 
+/**
+ *  Our mathematical operations test class.
+ *  It has a total of 24 test methods for various mathematical operations.
+ */
 public class MathematicalOperationsTest{
     private MathematicalOperations mo;
 
@@ -68,12 +72,22 @@ public class MathematicalOperationsTest{
     public void testSevenRemainderFive(){
         assertEquals(2, mo.remainder(7,5));
     }
-
+    /**
+     * <p>
+     * Test #1 for the Logical Shift Right operation.
+     * Calls the logicalShiftRight method with 2 parameters, -1 and 31. It should return 1.
+     * </p>
+     */
     @Test
     public void testNegativeOneLogicalShiftRightThirtyOne(){
         assertEquals(1, mo.logicalShiftRight(-1,31));
     }
-
+    /**
+     * <p>
+     * Test #2 for the Logical Shift Right operation.
+     * Calls the logicalShiftRight method with 2 parameters, 10 and -100. It should return 0.
+     * </p>
+     */
     @Test
     public void testTenLogicalShiftRightNegativeHundred(){
         assertEquals(0, mo.logicalShiftRight(10,-100));
@@ -88,15 +102,26 @@ public class MathematicalOperationsTest{
      public void testPositiveToPositiveUnaryPlus(){
 	assertEquals(10, mo.unaryPlus(10));
     }
-    @Test
-    public void testSixDividedByTwo(){
-        assertEquals(3, mo.divide(6,2));
-    }
-
-    @Test(expected=ArithmeticException.class)
-    public void testTwoDividedByZero(){
-        mo.divide(2,0);
-    }
+     /**
+      * <p>
+      * test#1 for the division operation.
+      * Six divided by two (6/2) is tested here. It should result 3 if the method is correct.
+      * </p>
+      */
+      @Test
+      public void testSixDividedByTwo(){
+          assertEquals(3, mo.divide(6,2));
+      }
+      /**
+       * <p>
+       * test#2 for the division operation.
+       * Six divided by two (2/0) is tested here. It should result an arithmetic exception if the method is correct.
+       * </p>
+       */
+      @Test(expected=ArithmeticException.class)
+      public void testTwoDividedByZero(){
+          mo.divide(2,0);
+      }
 
     @Test(expected=ArithmeticException.class)
     public void testTwoInverseDividedByZero(){

@@ -2,7 +2,6 @@
  *  Our mathematical operations class.
  *  It has a total of 11 methods for various mathematical operations.
  */
-
 public class MathematicalOperations {
 
     public int plus(int a, int b){
@@ -51,7 +50,15 @@ public class MathematicalOperations {
     public int logicalShiftRight(int n, int shiftAmount) {
       return n >>> shiftAmount;
     }
-     
+    /**
+     * <p>
+     * returns divided result of the parameters
+     * </p>
+     *
+     * @param a dividend of the division operation as integer value.
+     * @param b divider of the operation as integer value
+     * @return a/b the quotient result of the division operation as integer value. The remainder is discarded since operating on integers.
+     */      
     public int divide(int a, int b){
     	return a/b;
     }
@@ -110,6 +117,15 @@ public class MathematicalOperations {
 		}
 	}
 	
+	    /**
+     * <p>
+     * returns true if a and b are equal, returns false otherwise
+     * </p>
+     *
+     * @param a, the integer to be compared with b.
+     * @param b, the integer to be compared with a.
+     * @return a==b, equality as boolean
+     */
 	public boolean equals(int a, int b){
 		return a==b;
 	}
