@@ -109,6 +109,15 @@ public class MathematicalOperations {
 		}
 	}
 	
+	    /**
+     * <p>
+     * returns true if a and b are equal, returns false otherwise
+     * </p>
+     *
+     * @param a, the integer to be compared with b.
+     * @param b, the integer to be compared with a.
+     * @return a==b, equality as boolean
+     */
 	public boolean equals(int a, int b){
 		return a==b;
 	}
