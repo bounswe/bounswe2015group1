@@ -34,6 +34,15 @@ public class MathematicalOperations {
     	return a*b;
     }
 
+   /**
+     * <p>
+     * returns remaining value of division of parameters
+     * </p>
+     *
+     * @param a will be divided to second parameter
+     * @param b will be divisor
+     * @return a%b as integer  
+     */
     public int remainder(int a, int b){
 	    return a%b;
     }
