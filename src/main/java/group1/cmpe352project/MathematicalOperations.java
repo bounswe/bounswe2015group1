@@ -24,7 +24,16 @@ public class MathematicalOperations {
     public int remainder(int a, int b){
 	    return a%b;
     }
-
+    
+    /**
+     * <p>
+     * Returns n logically shifted right by shiftAmount
+     * </p>
+     *
+     * @param n the number whose bits will be shifted
+     * @param shiftAmount the amount of shifting
+     * @return n>>>shiftAmount as integer
+     */
     public int logicalShiftRight(int n, int shiftAmount) {
       return n >>> shiftAmount;
     }
