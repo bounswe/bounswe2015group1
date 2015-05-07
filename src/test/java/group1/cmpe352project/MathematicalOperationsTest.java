@@ -102,15 +102,26 @@ public class MathematicalOperationsTest{
      public void testPositiveToPositiveUnaryPlus(){
 	assertEquals(10, mo.unaryPlus(10));
     }
-    @Test
-    public void testSixDividedByTwo(){
-        assertEquals(3, mo.divide(6,2));
-    }
-
-    @Test(expected=ArithmeticException.class)
-    public void testTwoDividedByZero(){
-        mo.divide(2,0);
-    }
+     /**
+      * <p>
+      * test#1 for the division operation.
+      * Six divided by two (6/2) is tested here. It should result 3 if the method is correct.
+      * </p>
+      */
+      @Test
+      public void testSixDividedByTwo(){
+          assertEquals(3, mo.divide(6,2));
+      }
+      /**
+       * <p>
+       * test#2 for the division operation.
+       * Six divided by two (2/0) is tested here. It should result an arithmetic exception if the method is correct.
+       * </p>
+       */
+      @Test(expected=ArithmeticException.class)
+      public void testTwoDividedByZero(){
+          mo.divide(2,0);
+      }
 
     @Test(expected=ArithmeticException.class)
     public void testTwoInverseDividedByZero(){

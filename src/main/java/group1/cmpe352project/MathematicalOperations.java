@@ -50,7 +50,15 @@ public class MathematicalOperations {
     public int logicalShiftRight(int n, int shiftAmount) {
       return n >>> shiftAmount;
     }
-     
+    /**
+     * <p>
+     * returns divided result of the parameters
+     * </p>
+     *
+     * @param a dividend of the division operation as integer value.
+     * @param b divider of the operation as integer value
+     * @return a/b the quotient result of the division operation as integer value. The remainder is discarded since operating on integers.
+     */      
     public int divide(int a, int b){
     	return a/b;
     }
