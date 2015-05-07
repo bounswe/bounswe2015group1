@@ -72,12 +72,22 @@ public class MathematicalOperationsTest{
     public void testSevenRemainderFive(){
         assertEquals(2, mo.remainder(7,5));
     }
-
+    /**
+     * <p>
+     * Test #1 for the Logical Shift Right operation.
+     * Calls the logicalShiftRight method with 2 parameters, -1 and 31. It should return 1.
+     * </p>
+     */
     @Test
     public void testNegativeOneLogicalShiftRightThirtyOne(){
         assertEquals(1, mo.logicalShiftRight(-1,31));
     }
-
+    /**
+     * <p>
+     * Test #2 for the Logical Shift Right operation.
+     * Calls the logicalShiftRight method with 2 parameters, 10 and -100. It should return 0.
+     * </p>
+     */
     @Test
     public void testTenLogicalShiftRightNegativeHundred(){
         assertEquals(0, mo.logicalShiftRight(10,-100));
