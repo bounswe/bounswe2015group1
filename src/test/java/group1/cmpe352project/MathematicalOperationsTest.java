@@ -63,11 +63,23 @@ public class MathematicalOperationsTest{
 	   assertEquals(-3,mo.times(-1,3));
     }
 
+    /**
+     * <p>
+     * Test #1 for the Remainder operation.
+     * Calls the remainder method with 2 parameters, 4 and 3. It should return 1.
+     * </p>
+     */
     @Test
     public void testFourRemainderThree(){
         assertEquals(1, mo.remainder(4,3));
     }
 
+    /**
+     * <p>
+     * Test #2 for the Remainder operation.
+     * Calls the remainder method with 2 parameters, 7 and 5. It should return 2.
+     * </p>
+     */
     @Test
     public void testSevenRemainderFive(){
         assertEquals(2, mo.remainder(7,5));
