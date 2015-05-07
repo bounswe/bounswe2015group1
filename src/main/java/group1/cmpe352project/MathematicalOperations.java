@@ -1,3 +1,8 @@
+/**
+ *  Our mathematical operations class.
+ *  It has a total of 11 methods for various mathematical operations.
+ */
+
 public class MathematicalOperations {
 
     public int plus(int a, int b){
@@ -56,8 +61,7 @@ public class MathematicalOperations {
  * returns unary plus result of the operand.
  * </p>
  * @param a the operand to be returned since the unary plus does return the same operand.
- */
-	
+ */	
 	public int unaryPlus(int a){
 		return a;
 	}
