@@ -11,6 +11,38 @@
         <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.oscillation.maven</groupId>
+                <artifactId>doxygen-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <configuration>
+                    <workingDirectory>${basedir}</workingDirectory>
+                    <executable>doxygen</executable>
+                    <doxyfile>Doxyfile</doxyfile>
+                    <autogen>false</autogen>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
