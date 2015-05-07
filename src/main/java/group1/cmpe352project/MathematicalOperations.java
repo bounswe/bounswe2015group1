@@ -2,7 +2,6 @@
  *  Our mathematical operations class.
  *  It has a total of 11 methods for various mathematical operations.
  */
-
 public class MathematicalOperations {
 
     public int plus(int a, int b){

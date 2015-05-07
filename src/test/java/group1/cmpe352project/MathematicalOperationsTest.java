@@ -1,6 +1,10 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 
+/**
+ *  Our mathematical operations test class.
+ *  It has a total of 24 test methods for various mathematical operations.
+ */
 public class MathematicalOperationsTest{
     private MathematicalOperations mo;
 
