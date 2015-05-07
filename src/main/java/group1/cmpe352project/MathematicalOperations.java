@@ -4,6 +4,15 @@ public class MathematicalOperations {
         return a+b;
     }
 
+    /**
+     * <p>
+     * returns the remainder of parameters
+     * </p>
+     *
+     * @param a, minuend. It is an integer.
+     * @param b, subtrahend. It is an integer.
+     * @return a-b, difference. It is also an integer.
+     */
     public int minus (int a, int b){
     	return a-b;
     }
