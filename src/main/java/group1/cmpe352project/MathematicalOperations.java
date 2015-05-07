@@ -41,10 +41,19 @@ public class MathematicalOperations {
     public int divide(int a, int b){
     	return a/b;
     }
+
+	/**
+ * <p>
+ * returns unary plus result of the operand.
+ * </p>
+ * @param a the operand to be returned since the unary plus does return the same operand.
+ */
 	
 	public int unaryPlus(int a){
 		return a;
 	}
+
+
 
 	/**
      * <p>
