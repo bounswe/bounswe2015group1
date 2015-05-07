@@ -18,12 +18,32 @@ public class MathematicalOperationsTest{
     public void testZeroPlus(){
         assertEquals(2, mo.plus(0,2));
     }
-
+    
+    /**
+     * <p>
+     * test#1 for the minus operation.
+     * calls the minus method with 2 parameters: 7 and 9.
+     * </p>
+     *
+     * @param 7, minuend. 
+     * @param 9, subtrahend.
+     * @return -2, difference. 
+     */
     @Test
     public void testSevenMinusNine(){
         assertEquals(-2, mo.minus(7,9));
     }
-
+    
+    /**
+     * <p>
+     * test#2 for the minus operation.
+     * calls the minus method with 2 parameters: 4 and 0.
+     * </p>
+     *
+     * @param 4, minuend. 
+     * @param 0, subtrahend.
+     * @return 4, difference. 
+     */
     @Test
     public void testFourMinusZero(){
         assertEquals(4, mo.minus(4,0));
