@@ -87,7 +87,17 @@ public class MathematicalOperations {
     public int inverseDivide(int a, int b){
     	return b/a;
     }
-	
+    
+    
+     /**	
+     * <p>
+     * returns first parameter power second parameter
+     * </p>
+     *
+     * @param a the base value
+     * @param b the power value
+     * @return a^b value as double
+     */	
 	public double power(int a, int b){
 		double result=1.0;
 		if(b==0){
