@@ -127,7 +127,14 @@ public class MathematicalOperations {
 			return result;
 		}
 	}
-
+	/**
+     	* <p>
+     	* returns the negation of boolean parameter
+     	* </p>
+     	*
+     	* @param b boolean value to negate
+     	* @return negated boolean value of the parameter b 
+     	*/
 	public boolean negation(boolean b){
 		if(b==true){
 			return false;
