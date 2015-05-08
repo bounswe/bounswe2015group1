@@ -193,11 +193,23 @@ public class MathematicalOperationsTest{
 		assertEquals(1.0, mo.power(-2,0), 0.001);
 	}
 	
+	/**
+     	* <p>
+     	* Test #1 for the negation operation.
+     	* Testing if false boolean value can be negated to true.
+     	* </p>
+     	*/
 	@Test
 	public void testNegationTrue(){
 		assertEquals(false,mo.negation(true));
 	}
-
+	
+	/**
+     	* <p>
+     	* Test #2 for the negation operation.
+     	* Testing if true boolean value can be negated to false.
+     	* </p>
+     	*/
 	@Test
 	public void testNegationFalse(){
 		assertEquals(true,mo.negation(false));
