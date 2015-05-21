@@ -63,6 +63,8 @@ public class MathematicalOperationsTest{
 	   assertEquals(-3,mo.times(-1,3));
     }
 
+
+
     /**
      * <p>
      * Test #1 for the Remainder operation.
@@ -84,6 +86,37 @@ public class MathematicalOperationsTest{
     public void testSevenRemainderFive(){
         assertEquals(2, mo.remainder(7,5));
     }
+    
+    /**
+     * <p>
+     * Test #1 for the Unary Plus operation
+     * Calls the unaryPlus method with 1 parameter, -10. It should return -10.
+     * </p>
+     * */
+      @Test
+    public void testNegativeToNegativeUnaryPlus(){
+	assertEquals(-10, mo.unaryPlus(-10));
+    }
+       /**
+     * <p>
+     * Test #2 for the Unary Plus operation
+     * Calls the unaryPlus method with 1 parameter, 0. It should return 0.
+     * </p>
+     * */
+    public void testZeroToZeroUnaryPlus(){
+	assertEquals(0, mo.unaryPlus(0));
+    }
+       /**
+     * <p>
+     * Test #3 for the Unary Plus operation
+     * Calls the unaryPlus method with 10 parameter, 10. It should return 10.
+     * </p>
+     * */
+     public void testPositiveToPositiveUnaryPlus(){
+	assertEquals(10, mo.unaryPlus(10));
+    }
+    
+    
     /**
      * <p>
      * Test #1 for the Logical Shift Right operation.
@@ -245,3 +278,4 @@ public class MathematicalOperationsTest{
 		assertEquals(false,mo.equals(1,0));
 	}
 }
+
