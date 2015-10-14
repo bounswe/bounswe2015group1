@@ -10,7 +10,7 @@
   
   <properties>
     <dropwizard.version>0.8.2</dropwizard.version>
-    <jetty.version>8.1.10.v20130312</jetty.version>
+    <jetty.version>9.2.9.v20150224</jetty.version>
   </properties>
 
   <build>
@@ -88,6 +88,12 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-servlets</artifactId>
+      <version>${jetty.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
       <version>${jetty.version}</version>
     </dependency>
   </dependencies>

@@ -54,4 +54,5 @@ public class App extends Application<AppConfig>
         filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
         filter.setInitParameter("allowCredentials", "true");
       }
+      
 }

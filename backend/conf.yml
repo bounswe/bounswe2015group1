@@ -5,7 +5,11 @@ database:
     url: jdbc:postgresql://localhost/test
 
 server:
-    type: simple
+    type: default
     rootPath: /api/*
-    applicationContextPath: /
-
+    applicationConnectors:
+        - type: http
+          port: 8000
+    adminConnectors:
+        - type: http
+          port: 8001
