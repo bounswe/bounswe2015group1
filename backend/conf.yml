@@ -1,0 +1,11 @@
+database:
+    driverClass: org.postgresql.Driver
+    user: postgres
+    password: pass
+    url: jdbc:postgresql://localhost/test
+
+server:
+    type: simple
+    rootPath: /api/*
+    applicationContextPath: /
+
