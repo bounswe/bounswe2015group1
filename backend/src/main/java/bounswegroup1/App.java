@@ -8,6 +8,10 @@ import io.dropwizard.assets.AssetsBundle;
 import org.skife.jdbi.v2.DBI;
 import bounswegroup1.resource.UserResource;
 import bounswegroup1.db.UserDAO;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration.Dynamic;
 
 /**
  * Hello world!
