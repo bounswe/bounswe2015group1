@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WAWWE</string>
+    
+    <!-- Strings related to login -->
+    <string name="prompt_email">User Name</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign up</string>
+    <string name="button_set_user">SIGN UP</string>
+    <string name="button_load_users">LOAD USERS</string>
+</resources>
