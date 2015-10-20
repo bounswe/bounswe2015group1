@@ -1,6 +1,7 @@
 package bounswegroup1.resource;
 
 import javax.ws.rs.core.MediaType;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,8 +25,9 @@ public class UserResource {
     }
 
     @POST
-    public User addUser(User user){
-        dao.addUser(user);
+    public User addUser(@Valid User user){
+        Long id = dao.addUser(user);
+        user.setId(id);
         return user;
     }
 }
