@@ -4,6 +4,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.jdbi.OptionalContainerFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.db.DataSourceFactory;
@@ -49,6 +50,7 @@ public class App extends Application<AppConfig>
 
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(env, config.getDatabase(), "postgresql");
+        jdbi.registerContainerFactory(new OptionalContainerFactory());
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
 
         final UserResource userResource = new UserResource(userDAO);

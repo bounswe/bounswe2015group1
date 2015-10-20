@@ -1,6 +1,8 @@
 package bounswegroup1.db;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+
+import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -19,4 +21,7 @@ public interface UserDAO {
     		+ "values (:email, :passwordHash, :passwordSalt, "
     		+ ":fullName, :location, :dateOfBirth)")
     Long addUser(@BindBean User user);
+    
+    @SqlQuery("select * from users where id = :id")
+    User getUserById(@Bind("id") Long id);
 }

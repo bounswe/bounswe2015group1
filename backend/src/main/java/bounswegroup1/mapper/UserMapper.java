@@ -5,7 +5,6 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Optional;
 
 import org.skife.jdbi.v2.StatementContext;
 
