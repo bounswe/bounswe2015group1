@@ -1,9 +1,14 @@
 package bounswegroup1.model;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Date;
 import java.util.Random;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -48,23 +53,36 @@ public class User {
 	}
 	
 	@JsonSetter("password")
-	public void setPassword(String password){
-		System.out.println("set password");
-		
+	public void setPassword(String password) throws InvalidKeySpecException, NoSuchAlgorithmException{		
 		final Random r = new SecureRandom();
-		byte[] salt = new byte[128];
+		byte[] salt = new byte[16];
 		r.nextBytes(salt);
 		
-		String saltStr = Base64.encodeBase64String(salt);
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
 		
-		this.passwordSalt = saltStr;
-		this.passwordHash = DigestUtils.sha256Hex(saltStr + password);
+		SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		
+		byte[] hash = fac.generateSecret(spec).getEncoded();
+		
+		this.passwordSalt = Base64.encodeBase64String(salt);
+		this.passwordHash = Base64.encodeBase64String(hash);
 	}
 	
-	public boolean checkPassword(String password){
-		String hashed = DigestUtils.sha256Hex(this.passwordSalt + password);
+	public boolean checkPassword(String password) throws InvalidKeySpecException, NoSuchAlgorithmException{
+		byte[] salt = Base64.decodeBase64(this.passwordSalt);
 		
-		return hashed == this.passwordHash;
+		System.out.println(this.passwordSalt);
+		System.out.println(this.passwordHash);
+		
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+		
+		SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		
+		byte[] hash = fac.generateSecret(spec).getEncoded();
+		
+		System.out.println(Base64.encodeBase64String(hash));
+		
+		return Base64.encodeBase64String(hash).equals(this.passwordHash);
 	}
 
 	@JsonGetter("email")

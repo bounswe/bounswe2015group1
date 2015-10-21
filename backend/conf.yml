@@ -13,3 +13,5 @@ server:
     adminConnectors:
         - type: http
           port: 8001
+
+bearerRealm: we-are-what-we-eat

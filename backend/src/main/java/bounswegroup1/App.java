@@ -8,9 +8,17 @@ import io.dropwizard.jdbi.OptionalContainerFactory;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.oauth.OAuthFactory;
 import org.skife.jdbi.v2.DBI;
+
+import bounswegroup1.resource.SessionResource;
 import bounswegroup1.resource.UserResource;
+import bounswegroup1.auth.OAuthAuthenticator;
+import bounswegroup1.db.AccessTokenDAO;
 import bounswegroup1.db.UserDAO;
+import bounswegroup1.model.AccessToken;
+
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
@@ -40,7 +48,6 @@ public class App extends Application<AppConfig>
 			public DataSourceFactory getDataSourceFactory(AppConfig config) {
 				return config.getDatabase();
 			}
-        	
         });
     }
 
@@ -52,9 +59,17 @@ public class App extends Application<AppConfig>
         final DBI jdbi = factory.build(env, config.getDatabase(), "postgresql");
         jdbi.registerContainerFactory(new OptionalContainerFactory());
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+        final AccessTokenDAO accessTokenDAO = jdbi.onDemand(AccessTokenDAO.class);
 
         final UserResource userResource = new UserResource(userDAO);
+        final SessionResource sessionResource = new SessionResource(accessTokenDAO, userDAO);
+        
+        env.jersey().register(AuthFactory.binder(new OAuthFactory<AccessToken>(new OAuthAuthenticator(accessTokenDAO), 
+        		              config.getBearerRealm(), AccessToken.class)));
+        
         env.jersey().register(userResource);
+        env.jersey().register(sessionResource);
+        
     }
 
     private void configureCors(Environment environment) {

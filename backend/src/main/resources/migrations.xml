@@ -28,4 +28,25 @@
 		</createTable>
 	</changeSet>
 	
+	<changeSet id="2" author="group1">
+		<createTable tableName="tokens">
+			<column name="access_token" type="uuid">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_session_user" references="users(id)" />
+			</column>
+			<column name="creation_time" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_access_time" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createIndex indexName="idx_user_email" tableName="users" unique="true">
+			<column name="email" type="text" />
+		</createIndex>
+	</changeSet>
+	
 </databaseChangeLog>
