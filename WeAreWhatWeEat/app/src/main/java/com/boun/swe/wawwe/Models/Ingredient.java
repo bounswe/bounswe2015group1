@@ -12,7 +12,7 @@ public class Ingredient implements Parcelable {
     private float amount;
     private int amountType;
 
-    public Ingredient(String name, int amount, int amountType) {
+    public Ingredient(String name, float amount, int amountType) {
         this.name = name;
         this.amount = amount;
         this.amountType = amountType;

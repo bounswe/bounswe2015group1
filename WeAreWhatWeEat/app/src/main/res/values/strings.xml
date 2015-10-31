@@ -11,4 +11,19 @@
     <!-- Fragment TAGs -->
     <string name="TAG_login">LOGIN</string>
     <string name="TAG_recipeCreation">RECIPE_CREATION</string>
+
+    <!-- Recipe Creation -->
+    <string name="title_recipe">Recipe Creation</string>
+    <string name="title_ingredients">Ingredients</string>
+    <string name="title_directions">How To?</string>
+    <string name="button_submit_recipe">Submit</string>
+
+    <string-array name="amount_type">
+        <item>--</item>
+        <item>gram</item>
+        <item>kilogram</item>
+        <item>teaspoon</item>
+        <item>tablespoon</item>
+        <item>cups</item>
+    </string-array>
 </resources>
