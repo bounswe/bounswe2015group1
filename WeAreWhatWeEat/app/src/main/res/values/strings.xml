@@ -7,4 +7,8 @@
     <string name="action_sign_in_short">Sign up</string>
     <string name="button_set_user">SIGN UP</string>
     <string name="button_load_users">LOAD USERS</string>
+
+    <!-- Fragment TAGs -->
+    <string name="TAG_login">LOGIN</string>
+    <string name="TAG_recipeCreation">RECIPE_CREATION</string>
 </resources>

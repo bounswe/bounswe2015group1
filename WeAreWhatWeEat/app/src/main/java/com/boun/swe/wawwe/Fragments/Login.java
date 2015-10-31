@@ -1,9 +1,7 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,32 +9,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.UserAdapter;
 import com.boun.swe.wawwe.App;
-import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
 
-import org.json.JSONObject;
-
 /**
  * Created by Mert on 15/10/15.
  */
-public class Login extends Fragment {
+public class Login extends BaseFragment {
 
-    MainActivity main;
     RecyclerView usersList;
 
+    public Login() { }
+
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        main = (MainActivity) context;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setTAG(context.getString(R.string.TAG_login));
     }
 
     @Nullable
@@ -50,7 +45,7 @@ public class Login extends Fragment {
 
         // Configured list for displaying users.
         usersList = (RecyclerView) loginView.findViewById(R.id.users);
-        usersList.setLayoutManager(new LinearLayoutManager(main));
+        usersList.setLayoutManager(new LinearLayoutManager(context));
         usersList.setItemAnimator(new DefaultItemAnimator());
         final UserAdapter adapter = new UserAdapter();
         usersList.setAdapter(adapter);
@@ -86,27 +81,13 @@ public class Login extends Fragment {
                     }
                 }
         );
-        loginView.findViewById(R.id.button_loadUsers).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        API.getUsers(new Response.Listener<User[]>() {
-                                         @Override
-                                         public void onResponse(User[] response) {
-                                             adapter.setData(response);
-                                         }
-                                     },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(App.getInstance(), "Users cannot be received",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                }
-        );
 
         return loginView;
+    }
+
+    public static Login getFragment() {
+        Login loginFragment = new Login();
+        loginFragment.setArguments(new Bundle());
+        return loginFragment;
     }
 }
