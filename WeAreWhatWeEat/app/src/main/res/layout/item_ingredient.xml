@@ -10,7 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="40"
-        android:id="@+id/ingredient_name" />
+        android:id="@+id/ingredient_name"
+        android:hint="Enter ingredient"
+        />
 
     <EditText
         android:layout_width="0dp"
@@ -18,17 +20,21 @@
         android:inputType="numberDecimal"
         android:layout_weight="20"
         android:ems="10"
-        android:id="@+id/ingredient_amount" />
+        android:id="@+id/ingredient_amount"
+        android:hint="Amount"
+        />
 
     <Spinner
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="30"
-        android:id="@+id/spinner_amountType" />
+        android:id="@+id/spinner_amountType"
+        />
 
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="10"
-        android:id="@+id/button_ingredient_delete" />
+        android:id="@+id/button_ingredient_delete"
+        />
 </LinearLayout>
