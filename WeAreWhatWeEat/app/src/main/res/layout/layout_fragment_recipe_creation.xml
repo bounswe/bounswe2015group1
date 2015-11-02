@@ -20,13 +20,20 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/title_recipe"
-                android:id="@+id/textView" />
+                android:id="@+id/textView"
+                android:layout_marginTop="20dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/recipeName"
-                android:hint="Enter name of the recipe here"
+                android:hint="Enter the name of the recipe here"
+                android:background="@drawable/border_style"
+                android:layout_marginTop="20dp"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 />
 
 
@@ -36,7 +43,9 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/title_ingredients"
-                android:id="@+id/textView2" />
+                android:id="@+id/textView2"
+                android:layout_marginTop="20dp"
+                />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -46,10 +55,13 @@
                 >
 
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:id="@+id/add_new_ingredient" />
+                    android:id="@+id/add_new_ingredient"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/plus"
+                    />
             </LinearLayout>
 
 
@@ -59,13 +71,21 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/title_directions"
-                android:id="@+id/textView3" />
+                android:id="@+id/textView3"
+                android:layout_marginTop="20dp"
+                />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/directions"
                 android:hint="Enter the recipe here"
+                android:background="@drawable/border_style"
+                android:layout_marginTop="20dp"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:minLines="3"
                 />
 
             <Button
@@ -75,7 +95,8 @@
                 android:textAllCaps="false"
                 android:layout_height="wrap_content"
                 android:text="@string/button_submit_recipe"
-                android:id="@+id/button_recipe_submit" />
+                android:id="@+id/button_recipe_submit"
+                />
 
         </LinearLayout>
 

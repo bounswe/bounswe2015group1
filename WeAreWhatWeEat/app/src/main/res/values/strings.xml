@@ -19,11 +19,10 @@
     <string name="button_submit_recipe">Submit</string>
 
     <string-array name="amount_type">
-        <item>--</item>
-        <item>gram</item>
-        <item>kilogram</item>
-        <item>teaspoon</item>
-        <item>tablespoon</item>
+        <item>gr</item>
+        <item>kg</item>
+        <item>tsp</item>
+        <item>tbsp</item>
         <item>cups</item>
     </string-array>
 </resources>

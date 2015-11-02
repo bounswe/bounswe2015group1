@@ -69,8 +69,8 @@ public class RecipeCreator extends BaseFragment {
                     return;
                 }
 
-                List<Ingredient> ingredients  = new ArrayList<Ingredient>();
-                for (int i = 0;i < ingredientHolder.getChildCount() - 1;i++) {
+                List<Ingredient> ingredients = new ArrayList<Ingredient>();
+                for (int i = 0; i < ingredientHolder.getChildCount() - 1; i++) {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
 
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
@@ -114,7 +114,18 @@ public class RecipeCreator extends BaseFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ingredientHolder.removeView(ingredient);
+
+                if(ingredientHolder.getChildCount() - 2 != 0){
+                    ingredientHolder.removeView(ingredient);
+                }
+                else {
+                    final EditText ingName = (EditText) ingredient.findViewById(R.id.ingredient_name);
+                    ingName.setText(null);
+                    final EditText  ingAmt = (EditText) ingredient.findViewById(R.id.ingredient_amount);
+                    ingAmt.setText(null);
+                    final Spinner amountType = (Spinner) ingredient.findViewById(R.id.spinner_amountType);
+                    amountType.setSelection(0);
+                }
             }
         });
 
