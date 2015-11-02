@@ -23,7 +23,7 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 });
 
 angular.module('FoodApp').run(function($rootScope) {
-		$rootScope.baseUrl = "http://localhost:8000";
+		$rootScope.baseUrl = "http://localhost:8080";
 });
 
 angular.module('FoodApp').factory('userService', function($http, $window, $state, $rootScope) {
@@ -82,7 +82,34 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 			loggedIn = false;
 			$window.location.href = "/";
 	};
+	var register = function (fullName, email, password, dateOfBirth, location) {
+		var req = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/user',
+		 headers: {
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"email" : email,
+		 	"password" : password,
+		 	"fullName" : fullName,
+		 	"location" : location,
+		 	"dateOfBirth" : dateOfBirth
+		 }
+		};
+		$http(req).then(function(response){
+			console.log("Register Success");
+			console.log(JSON.stringify(response.data));
+			alert("You have registered successfully...");
+			$window.location.href = "/";
 
+		}, function(){
+			console.log("Register Error");
+			alert("An error occured while registering. Try again...");
+			$window.location.href = "/register";
+		});
+
+	};
 
 	if($window.sessionStorage.token) {
 		console.log("Session Token: " + $window.sessionStorage.token);
@@ -96,6 +123,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 	return {
 		login : login,
 		logout : logout,
+		register: register,
 		getUser : function() {
 			return user;
 		},

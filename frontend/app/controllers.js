@@ -2,7 +2,11 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 
 
 
-	}).controller('RegisterCtrl', function($scope) {
+	}).controller('RegisterCtrl', function($scope, userService) {
+		$scope.register= function(){
+			userService.register($scope.nameRegister, $scope.emailRegister,
+				$scope.passRegister, $scope.birthDateRegister, $scope.locationRegister);
+		}
 
 	}).controller('NavBarCtrl', function($scope, $http, $window, $state, userService) {
 		$scope.loggedIn = false;
