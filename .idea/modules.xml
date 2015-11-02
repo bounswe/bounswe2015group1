@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WeAreWhatWeEat/app/src/androidTest/androidTest.iml" filepath="$PROJECT_DIR$/WeAreWhatWeEat/app/src/androidTest/androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cmpe352/src/main/java/group1/group1.iml" filepath="$PROJECT_DIR$/cmpe352/src/main/java/group1/group1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cmpe352/src/test/java/group1/group11.iml" filepath="$PROJECT_DIR$/cmpe352/src/test/java/group1/group11.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/src/main/main.iml" filepath="$PROJECT_DIR$/backend/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WeAreWhatWeEat/app/src/main/main1.iml" filepath="$PROJECT_DIR$/WeAreWhatWeEat/app/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/src/test/test.iml" filepath="$PROJECT_DIR$/backend/src/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WeAreWhatWeEat/app/src/test/test1.iml" filepath="$PROJECT_DIR$/WeAreWhatWeEat/app/src/test/test1.iml" />
+    </modules>
+  </component>
+</project>

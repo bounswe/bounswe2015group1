@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/row_height_bigger"
+    android:weightSum="100"
+    >
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:inputType="numberDecimal"
+        android:layout_weight="20"
+        android:layout_marginLeft="10dp"
+        android:ems="10"
+        android:id="@+id/ingredient_amount"
+        android:hint="Amt."
+        android:background="@drawable/border_style"
+        android:layout_marginTop="15dp"
+        />
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="25"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/spinner_amountType"
+        android:background="@drawable/border_style"
+        android:layout_marginTop="15dp"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="55"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/ingredient_name"
+        android:hint="Enter ingredient"
+        android:background="@drawable/border_style"
+        android:layout_marginTop="15dp"
+
+        />
+
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/button_ingredient_delete"
+        android:background="@drawable/minus"
+        />
+</LinearLayout>

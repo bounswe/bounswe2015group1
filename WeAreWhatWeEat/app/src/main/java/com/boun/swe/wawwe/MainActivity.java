@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 
 import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.Login;
+import com.boun.swe.wawwe.Fragments.RecipeCreator;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
 
@@ -19,7 +20,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
     // This is the menu component for application
     private ResideMenu resideMenu;
-    private Handler handler = new Handler(getMainLooper());
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +29,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         // fragment, later on will have multiple fragments
         // and can be navigated from left menu.
         setContentView(R.layout.layout_activity_main);
+        handler = new Handler(getMainLooper());
 
         // Do not add navigator for now...
         //prepareResideMenu();
 
         // initially directly goes into login fragment...
-        makeFragmentTransaction(Login.getFragment());
+        makeFragmentTransaction(RecipeCreator.getFragment());
 
     }
 
