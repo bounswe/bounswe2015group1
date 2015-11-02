@@ -90,8 +90,10 @@
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="@dimen/button_marginRight"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button_style"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
                 android:textAllCaps="false"
                 android:layout_height="wrap_content"
                 android:text="@string/button_submit_recipe"
