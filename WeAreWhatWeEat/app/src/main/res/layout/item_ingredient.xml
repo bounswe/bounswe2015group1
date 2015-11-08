@@ -48,6 +48,6 @@
         android:layout_marginTop="5dp"
         android:layout_gravity="center_vertical"
         android:id="@+id/button_ingredient_delete"
-        android:background="@drawable/minus"
+        android:background="@mipmap/minus"
         />
 </LinearLayout>

@@ -25,18 +25,23 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isRemembers = App.getRememberMe();
+        if (!isRemembers)
+            getSupportActionBar().hide();
+
+        setContentView(R.layout.layout_activity_main);
+
+        handler = new Handler(getMainLooper());
+
         // For now this application has only one static
         // fragment, later on will have multiple fragments
         // and can be navigated from left menu.
-        setContentView(R.layout.layout_activity_main);
-        handler = new Handler(getMainLooper());
-
         // Do not add navigator for now...
         //prepareResideMenu();
 
         // initially directly goes into login fragment...
-        makeFragmentTransaction(RecipeCreator.getFragment());
-
+        makeFragmentTransaction(!isRemembers ? Login.getFragment() :
+                RecipeCreator.getFragment(), isRemembers);
     }
 
     private void prepareResideMenu() {
@@ -59,15 +64,22 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     }
 
     public void makeFragmentTransaction(final BaseFragment fragment) {
+        makeFragmentTransaction(fragment, true);
+    }
+
+    public void makeFragmentTransaction(final BaseFragment fragment, final boolean addToBackStack) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction
-                        .replace(R.id.container, fragment)
-                        .addToBackStack(null)
-                        .commit();
+
+                if (addToBackStack) {
+                    transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
+                    transaction.addToBackStack(fragment.getClass().getSimpleName());
+                }
+                else transaction.add(R.id.container, fragment, fragment.getClass().getSimpleName());
+                transaction.commit();
             }
         });
     }

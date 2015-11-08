@@ -17,20 +17,11 @@ import android.support.v4.app.Fragment;
  */
 public class BaseFragment extends Fragment {
 
-    private static String TAG;
     protected Context context;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-    }
-
-    public static String getTAG() {
-        return TAG;
-    }
-
-    public static void setTAG(String TAG) {
-        BaseFragment.TAG = TAG;
     }
 }

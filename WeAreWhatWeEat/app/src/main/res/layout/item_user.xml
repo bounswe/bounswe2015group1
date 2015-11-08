@@ -13,8 +13,8 @@
         android:weightSum="2">
 
         <TextView
-            tools:text="userName"
-            android:id="@+id/userName"
+            tools:text="fullName"
+            android:id="@+id/userEmail"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_width="match_parent"
