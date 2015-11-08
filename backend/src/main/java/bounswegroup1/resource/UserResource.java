@@ -10,7 +10,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import bounswegroup1.model.AccessToken;
 import bounswegroup1.model.User;
+import io.dropwizard.auth.Auth;
 import bounswegroup1.db.UserDAO;
 import java.util.List;
 
@@ -33,6 +36,16 @@ public class UserResource {
         Long id = dao.addUser(user);
         user.setId(id);
         return user;
+    }
+    
+    @POST
+    @Path("/update")
+    public User updateUser(@Auth AccessToken token, User user){
+    	if(token.getUserId() == user.getId()){
+    		dao.updateUser(user);
+    	}
+    	
+    	return user;
     }
     
     @GET

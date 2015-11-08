@@ -9,9 +9,22 @@ server:
     rootPath: /api/*
     applicationConnectors:
         - type: http
-          port: 8000
+          port: 8080
     adminConnectors:
         - type: http
-          port: 8001
+          port: 8081
+
+httpClient:
+    timeout: 500ms
+    connectionTimeout: 500ms
+    timeToLive: 1 hour
+    cookiesEnabled: false
+    maxConnections: 1024
+    maxConnectionsPerRoute: 1024
+    keepAlive: 0s
 
 bearerRealm: we-are-what-we-eat
+
+nutritionixAppId: e08194dd
+
+nutritionixAppKey: b6e4f6cb05f3338c5178b3f6ad208406 
