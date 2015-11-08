@@ -52,7 +52,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(UserViewHolder holder, int position) {
         User user = data.get(position);
 
-        holder.userName.setText(user.getUserName());
+        holder.userName.setText(user.getFullName());
         holder.password.setText(user.getPassword());
     }
 
@@ -64,7 +64,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         public UserViewHolder(View itemView) {
             super(itemView);
 
-            userName = (TextView) itemView.findViewById(R.id.userName);
+            userName = (TextView) itemView.findViewById(R.id.userEmail);
             password = (TextView) itemView.findViewById(R.id.password);
         }
     }

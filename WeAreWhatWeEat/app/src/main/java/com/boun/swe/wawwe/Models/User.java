@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Created by Mert on 16/10/15.
  *
@@ -17,37 +19,84 @@ public class User implements Parcelable {
     // Service has saved user names with
     // "username" string this is to meet
     // that usage and also java conventions
-    // userName...
-    @SerializedName("username")
-    private String userName;
-    private String password;
+    // fullName...
 
-    public User(String userName, String password) {
-        setUserName(userName);
-        setPassword(password);
+    private int id;
+    private String email;
+    private String password;
+    private String fullName;
+    private String location;
+    private Date dateOfBirth;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(int id, String email, String password, String fullName, String location, Date dateOfBirth) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
     }
 
     protected User(Parcel in) {
-        userName = in.readString();
+        id = in.readInt();
+        email = in.readString();
         password = in.readString();
+        fullName = in.readString();
+        location = in.readString();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getFullName() {
+        return fullName;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-
 
     @Override
     public int describeContents() {
@@ -56,8 +105,11 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userName);
+        dest.writeInt(id);
+        dest.writeString(email);
         dest.writeString(password);
+        dest.writeString(fullName);
+        dest.writeString(location);
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

@@ -60,7 +60,7 @@
                     android:layout_gravity="center_horizontal"
                     android:id="@+id/add_new_ingredient"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/plus"
+                    android:background="@mipmap/plus"
                     />
             </LinearLayout>
 
@@ -89,13 +89,9 @@
                 />
 
             <Button
-                android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/button_style"
-                android:textColor="@color/white"
+                style="@style/CustomButton"
                 android:layout_marginTop="20dp"
-                android:textAllCaps="false"
-                android:layout_height="wrap_content"
                 android:text="@string/button_submit_recipe"
                 android:id="@+id/button_recipe_submit"
                 />

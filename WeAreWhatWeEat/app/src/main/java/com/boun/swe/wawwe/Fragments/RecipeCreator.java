@@ -32,12 +32,6 @@ public class RecipeCreator extends BaseFragment {
 
     public RecipeCreator() { }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTAG(context.getString(R.string.TAG_recipeCreation));
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

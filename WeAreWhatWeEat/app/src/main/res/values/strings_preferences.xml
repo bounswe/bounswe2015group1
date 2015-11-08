@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_user">userPreferences</string>
+
+    <string name="preference_rememberMe">rememberMe</string>
+    <string name="preference_userInfo">userInfo</string>
+</resources>
