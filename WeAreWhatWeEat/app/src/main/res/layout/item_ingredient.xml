@@ -3,6 +3,8 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/row_height_bigger"
     android:weightSum="100"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     >
 
     <EditText
@@ -10,7 +12,6 @@
         android:layout_height="match_parent"
         android:inputType="numberDecimal"
         android:layout_weight="20"
-        android:layout_marginLeft="10dp"
         android:ems="10"
         android:id="@+id/ingredient_amount"
         android:hint="Amt."

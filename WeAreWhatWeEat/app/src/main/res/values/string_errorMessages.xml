@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_loginError">Could not logged in.</string>
+    <string name="error_signUpError">Could not signed up.</string>
+    <string name="error_loginAfterSignUpError">User created but could not logged in.</string>
+</resources>

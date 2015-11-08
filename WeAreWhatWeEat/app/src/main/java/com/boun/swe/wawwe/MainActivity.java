@@ -6,10 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.Login;
 import com.boun.swe.wawwe.Fragments.RecipeCreator;
+import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Utils.API;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
 
@@ -25,9 +30,26 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean isRemembers = App.getRememberMe();
-        if (!isRemembers)
-            getSupportActionBar().hide();
+        final boolean isRemembers = App.getRememberMe();
+        if (isRemembers)
+            API.login(MainActivity.class.getSimpleName(), App.getUser(),
+                    new Response.Listener<AccessToken>() {
+
+                        @Override
+                        public void onResponse(AccessToken response) {
+                            App.setAccessValues(response);
+                            makeFragmentTransaction(RecipeCreator.getFragment(), isRemembers);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("isRemembers", isRemembers);
+                            makeFragmentTransaction(Login.getFragment(bundle), isRemembers);
+                        }
+                    });
+        else getSupportActionBar().hide();
 
         setContentView(R.layout.layout_activity_main);
 
@@ -39,9 +61,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         // Do not add navigator for now...
         //prepareResideMenu();
 
-        // initially directly goes into login fragment...
-        makeFragmentTransaction(!isRemembers ? Login.getFragment() :
-                RecipeCreator.getFragment(), isRemembers);
+        if (!isRemembers)
+            makeFragmentTransaction(Login.getFragment(new Bundle()), isRemembers);
     }
 
     private void prepareResideMenu() {
@@ -87,6 +108,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         // TODO handle menu clicks
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        API.logout(MainActivity.class.getSimpleName(), null, null);
     }
 }
 
