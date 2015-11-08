@@ -81,7 +81,7 @@
 				<constraints nullable="false" />
 			</column>
 			
-			<column name="unit" type="string">
+			<column name="unit" type="text">
 			</column>
 		</createTable>
 	</changeSet>

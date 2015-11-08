@@ -68,6 +68,8 @@ public class User {
 	}
 	
 	public boolean checkPassword(String password) throws InvalidKeySpecException, NoSuchAlgorithmException{
+		if(password == null) return false;
+		
 		byte[] salt = Base64.decodeBase64(this.passwordSalt);
 		
 		System.out.println(this.passwordSalt);
