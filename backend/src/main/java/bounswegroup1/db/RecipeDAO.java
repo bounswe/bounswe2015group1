@@ -24,6 +24,12 @@ public abstract class RecipeDAO {
 	@Mapper(RecipesMapper.class)
 	abstract protected List<List<Recipe>> _getRecipes();
 	
+	@SqlQuery("select * from recipes, recipe_ingredients where "
+			+ "recipes.id = recipe_ingredients.recipe_id"
+			+ "and recipes.user_id = :userId")
+	@Mapper(RecipesMapper.class)
+	abstract protected List<List<Recipe>> _getRecipesForUser(@Bind("userId") Long userId);
+	
 	@GetGeneratedKeys
 	@SqlUpdate("insert into recipes (name, user_id) values (:name, :userId)")
 	abstract protected Long _createRecipe(@BindBean Recipe recipe);
@@ -51,6 +57,16 @@ public abstract class RecipeDAO {
 	
 	public List<Recipe> getRecipes(){
 		List<List<Recipe>> res = _getRecipes();
+		
+		if(res == null || res.isEmpty()){
+			return null;
+		}
+		
+		return res.get(0);
+	}
+	
+	public List<Recipe> getRecipesForUser(Long userId){
+		List<List<Recipe>> res = _getRecipesForUser(userId);
 		
 		if(res == null || res.isEmpty()){
 			return null;

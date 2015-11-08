@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -27,6 +28,12 @@ public class RecipeResource {
 	@GET
 	public List<Recipe> getAllRecipes(){
 		return recipeDAO.getRecipes();
+	}
+	
+	@Path("/user/:id")
+	@GET
+	public List<Recipe> getRecipesForUser(@PathParam("id") Long userId){
+		return recipeDAO.getRecipesForUser(userId);
 	}
 	
 	@POST
