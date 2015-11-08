@@ -49,4 +49,41 @@
 		</createIndex>
 	</changeSet>
 	
+	<changeSet id="3" author="group1">
+		<createTable tableName="recipes">
+			<column name="id" type="integer">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="name" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_recipe_user" references="users(id)" />
+			</column>
+		</createTable>
+		
+		<createTable tableName="recipe_ingredients">
+			<column name="recipe_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_recipe_ingredient" references="recipes(id)" />
+			</column>
+			
+			<column name="ingredient_id" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="ingredient_name" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="amount" type="integer">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="unit" type="string">
+			</column>
+		</createTable>
+	</changeSet>
+	
 </databaseChangeLog>

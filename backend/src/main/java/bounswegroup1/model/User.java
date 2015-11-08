@@ -11,7 +11,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.binary.Base64;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -37,7 +36,7 @@ public class User {
     
 
     public User(){
-
+    	this.id = -1l;
     }
 
 	public User(Long id, String email, String passwordHash, String passwordSalt, String fullName,
