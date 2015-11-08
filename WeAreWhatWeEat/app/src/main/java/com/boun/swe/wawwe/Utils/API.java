@@ -14,7 +14,10 @@ import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
@@ -40,6 +43,10 @@ public class API {
             instance = new API();
             mQueue = Volley.newRequestQueue(App.getInstance());
         }
+    }
+
+    public static void setUUID(String UUID) {
+        instance.UUID = UUID;
     }
 
     public static void cancelRequestByTag(final String tag) {
@@ -76,22 +83,44 @@ public class API {
      */
     public static void addUser(String tag, User user, Response.Listener<User> successListener,
                                 Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return !(f.getName().equals("email") || f.getName().equals("password"));
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create().toJson(user, User.class);
         mQueue.add(new GeneralRequest<User>(Request.Method.POST,
                 BASE_URL + "/api/user", User.class, successListener, failureListener)
-                .setPostBodyInJSONForm(user, User.class).setTag(tag));
+                .setPostBodyInJSONForm(postBody).setTag(tag));
     }
 
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return !(f.getName().equals("email") || f.getName().equals("password"));
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create().toJson(user, User.class);
         mQueue.add(new GeneralRequest<AccessToken>(Request.Method.POST,
-                BASE_URL + "/api/user/login", AccessToken.class, successListener, failureListener)
-                .setPostBodyInJSONForm(user, User.class).setTag(tag));
+                BASE_URL + "/api/session/login", AccessToken.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
     }
 
     public static void logout(String tag, Response.Listener<User> successListener,
                                Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<User>(Request.Method.POST,
-                BASE_URL + "/api/user/logout", User.class,
+                BASE_URL + "/api/session/logout", User.class,
                 successListener, failureListener).setTag(tag));
     }
 
@@ -128,7 +157,13 @@ public class API {
         public GeneralRequest<T> setPostBodyInJSONForm(Object postObject,
                                                        Class<? extends Object> postClass) {
             this.postBody = gson.toJson(postObject, postClass);
-            Log.d((String) getTag(), postBody);
+            Log.v("", postBody);
+            return this;
+        }
+
+        public GeneralRequest<T> setPostBodyInJSONForm(String postBody) {
+            this.postBody = postBody;
+            Log.v("", postBody);
             return this;
         }
 
@@ -174,6 +209,7 @@ public class API {
                 String json = new String(
                         response.data,
                         HttpHeaderParser.parseCharset(response.headers));
+                Log.v((String) getTag(), json);
                 return Response.success(
                         responseClazz.equals(Void.class) ? null :
                         gson.fromJson(json, responseClazz),

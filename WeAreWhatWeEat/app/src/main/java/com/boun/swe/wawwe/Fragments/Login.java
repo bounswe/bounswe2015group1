@@ -33,48 +33,42 @@ public class Login extends BaseFragment {
         View loginView = inflater.inflate(R.layout.layout_fragment_login,
                 container, false);
 
-        final EditText userNameTextView = (EditText) loginView.findViewById(R.id.userEmail);
-        final EditText passwordTextView = (EditText) loginView.findViewById(R.id.password);
+        final EditText emailEditText = (EditText) loginView.findViewById(R.id.userEmail);
+        final EditText passwordEditText = (EditText) loginView.findViewById(R.id.password);
 
         final CheckBox rememberMe = (CheckBox) loginView.findViewById(R.id.checkBox_rememberMe);
+        if(getArguments().getBoolean("isRemembers", false))
+            rememberMe.setChecked(true);
 
         // Button on click events have been set.
         loginView.findViewById(R.id.button_signIn).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(App.getInstance(), "=On Construction=",
-                                Toast.LENGTH_SHORT).show();
-                        if (true) return;
+                        String email = emailEditText.getText().toString();
+                        String password = passwordEditText.getText().toString();
 
-                        String userName = userNameTextView.getText().toString();
-                        String passwords = passwordTextView.getText().toString();
-
-                        if (userName.equals("") || passwords.equals("")) {
-                            Toast.makeText(App.getInstance(), "Some fields are missing",
-                                    Toast.LENGTH_SHORT).show();
+                        if (!isInputValid(new EditText[]{emailEditText, passwordEditText}))
                             return;
-                        }
-                        final User user = new User(userName, passwords);
+
+                        final User user = new User(email, password);
                         API.login(getTag(), user,
                                 new Response.Listener<AccessToken>() {
 
                                     @Override
                                     public void onResponse(AccessToken response) {
+                                        App.setAccessValues(response);
                                         if (rememberMe.isChecked()) {
                                             App.setRememberMe(true);
                                             App.setUser(user);
                                         }
-                                        if (context instanceof MainActivity) {
-                                            MainActivity main = (MainActivity) context;
-                                            main.makeFragmentTransaction(RecipeCreator.getFragment());
-                                        }
+                                        exitLoginFragment();
                                     }
                                 },
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(App.getInstance(), "Could not login!",
+                                        Toast.makeText(App.getInstance(), context.getString(R.string.error_loginError),
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -85,54 +79,47 @@ public class Login extends BaseFragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String userName = userNameTextView.getText().toString();
-                        String passwords = passwordTextView.getText().toString();
+                        final String email = emailEditText.getText().toString();
+                        final String password = passwordEditText.getText().toString();
 
-                        boolean userNameEmpty = userName.equals("");
-                        boolean passwordEmpty = passwords.equals("");
+                        if (!isInputValid(new EditText[]{emailEditText, passwordEditText}))
+                            return;
 
-                        if (userNameEmpty || passwordEmpty) {
-                            LevelListDrawable drawable = (LevelListDrawable)
-                                    userNameTextView.getBackground();
-                            if (userNameEmpty) {
-                                drawable.setLevel(2);
-                                return;
-                            }
-                            else drawable.setLevel(1);
-
-                            drawable = (LevelListDrawable) passwordTextView.
-                                    getBackground();
-                            if (passwordEmpty) {
-                                drawable.setLevel(2);
-                                return;
-                            }
-                            else drawable.setLevel(1);
-                        }
-
-                        API.addUser(getTag(), new User(userName, passwords),
+                        User user = new User(email, password);
+                        API.addUser(getTag(), user,
                                 new Response.Listener<User>() {
 
                                     @Override
-                                    public void onResponse(User response) {
-                                        // User added...
-                                        if (rememberMe.isChecked()) {
-                                            App.setRememberMe(true);
-                                            App.setUser(response);
-                                        }
+                                    public void onResponse(final User user) {
 
-                                        if (context instanceof MainActivity) {
-                                            MainActivity main = (MainActivity) context;
-                                            main.getSupportFragmentManager().beginTransaction()
-                                                    .remove(Login.this).commit();
-                                            main.makeFragmentTransaction(RecipeCreator.getFragment(), false);
-                                        }
+                                        API.login(getTag(), new User(email, password),
+                                                new Response.Listener<AccessToken>() {
+
+                                                    @Override
+                                                    public void onResponse(AccessToken response) {
+                                                        App.setAccessValues(response);
+                                                        if (rememberMe.isChecked()) {
+                                                            App.setRememberMe(true);
+                                                            App.setUser(user);
+                                                        }
+                                                        exitLoginFragment();
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Toast.makeText(App.getInstance(),
+                                                                context.getString(R.string.error_loginAfterSignUpError),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
                                 },
                                 new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
                                         Log.d(getTag(), error.toString());
-                                        Toast.makeText(App.getInstance(), "Could not sign up!",
+                                        Toast.makeText(App.getInstance(), context.getString(R.string.error_signUpError),
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -152,9 +139,37 @@ public class Login extends BaseFragment {
         }
     }
 
-    public static Login getFragment() {
+    public static Login getFragment(Bundle bundle) {
         Login loginFragment = new Login();
-        loginFragment.setArguments(new Bundle());
+        loginFragment.setArguments(bundle);
         return loginFragment;
+    }
+
+    private boolean isInputValid(EditText[] textFields) {
+        boolean isValid = true;
+        LevelListDrawable drawable;
+        for (EditText textField: textFields) {
+            String text = textField.getText().toString();
+
+            drawable = (LevelListDrawable)
+                    textField.getBackground();
+            if (text.isEmpty()) {
+                drawable.setLevel(2);
+                if (isValid)
+                    isValid = false;
+            }
+            else drawable.setLevel(1);
+        }
+        return isValid;
+    }
+
+    private void exitLoginFragment() {
+        if (context instanceof MainActivity) {
+            MainActivity main = (MainActivity) context;
+            main.getSupportFragmentManager().beginTransaction()
+                    .remove(Login.this).commit();
+            main.findViewById(R.id.container).invalidate();
+            main.makeFragmentTransaction(RecipeCreator.getFragment(), false);
+        }
     }
 }

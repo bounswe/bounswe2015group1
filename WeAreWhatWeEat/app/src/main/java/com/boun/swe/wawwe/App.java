@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
 import com.google.gson.Gson;
@@ -20,6 +21,8 @@ public class App extends Application {
     // used frequently and across the app so we made them
     // static and put it under application class.
     private static App instance;
+
+    private static int userId;
 
     @Override
     public void onCreate() {
@@ -65,5 +68,10 @@ public class App extends Application {
                 .getString(R.string.preference_userInfo), "");
         return "".equals(userStr) ? null :
                 new Gson().fromJson(userStr, User.class);
+    }
+
+    public static void setAccessValues(AccessToken accessToken) {
+        instance.userId = accessToken.getUserId();
+        API.setUUID(accessToken.getUUID());
     }
 }
