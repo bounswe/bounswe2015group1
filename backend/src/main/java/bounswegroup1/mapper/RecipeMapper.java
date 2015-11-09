@@ -15,7 +15,7 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
 	public Recipe map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
 		if(idx==0){
 			// first row, create the recipe object
-			recipe = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"));
+			recipe = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("description"));
 		}
 		
 		recipe.addIngredient(rs.getString("ingredient_id"), rs.getString("ingredient_name"), rs.getLong("amount"), rs.getString("unit"));

@@ -24,7 +24,7 @@ public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
 	@Override
 	public List<Recipe> map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
 		if(rs.getLong("id") != lastId){
-			curr = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"));
+			curr = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"), rs.getString("description"));
 			lastId = rs.getLong("id");
 			res.add(curr);
 		}

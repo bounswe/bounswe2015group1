@@ -31,7 +31,7 @@ public abstract class RecipeDAO {
 	abstract protected List<List<Recipe>> _getRecipesForUser(@Bind("userId") Long userId);
 	
 	@GetGeneratedKeys
-	@SqlUpdate("insert into recipes (name, user_id) values (:name, :userId)")
+	@SqlUpdate("insert into recipes (name, user_id, description) values (:name, :userId, :description)")
 	abstract protected Long _createRecipe(@BindBean Recipe recipe);
 	
 	@SqlUpdate("insert into recipe_ingredients (recipe_id, ingredient_name, amount, unit) "
