@@ -24,7 +24,16 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 			$scope.token = userService.getToken();
 		});
 
-	}).controller('ProfileCtrl', function() {
+	}).controller('ProfileCtrl', function($scope,userService) {
+		var init = function() {
+			$scope.userName = userService.getUser().fullName;
+			$scope.address = userService.getUser().location;
+			$scope.email = userService.getUser().email;
+			$scope.birthDate=userService.getUser.dateOfBirth;
+
+		}
+
+		init();
 
 	}).controller('LoginCtrl', function($scope, $state, $stateParams, userService) {
 		console.log("Incorrect : " + $stateParams.incorrect);
