@@ -86,4 +86,10 @@
 		</createTable>
 	</changeSet>
 	
+	
+	<changeSet id="4" author="group1">
+		<addColumn tableName="recipes">
+			<column name="description" type="text"></column>	
+		</addColumn>
+	</changeSet>
 </databaseChangeLog>

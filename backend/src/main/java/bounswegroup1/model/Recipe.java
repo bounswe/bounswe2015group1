@@ -12,7 +12,7 @@ public class Recipe {
 	private String name;
 	
 	private List<Ingredient> ingredients;
-	
+	private String description;
 
 
 	public Long getId() {
@@ -75,13 +75,22 @@ public class Recipe {
 		}
 	}
 
-	public Recipe(Long id, Long userId, String name) {
+	public Recipe(Long id, Long userId, String name, String description) {
 		this.id = id;
 		this.userId = userId;
 		this.name = name;
+		this.description = description;
 		this.ingredients = new ArrayList<Ingredient>();
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public void addIngredient(String ingredientId, String name, Long amount, String unit){
 		ingredients.add(new Ingredient(ingredientId, name, amount, unit));
 	}
