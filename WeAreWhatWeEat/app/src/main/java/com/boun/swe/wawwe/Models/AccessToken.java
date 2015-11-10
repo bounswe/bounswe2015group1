@@ -8,20 +8,20 @@ import android.os.Parcelable;
  */
 public class AccessToken implements Parcelable {
 
-    private String UUID;
+    private String accessToken;
     private int userId;
 
     public AccessToken(String UUID, int userId) {
-        this.UUID = UUID;
+        this.accessToken = UUID;
         this.userId = userId;
     }
 
-    public String getUUID() {
-        return UUID;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public int getUserId() {
@@ -33,7 +33,7 @@ public class AccessToken implements Parcelable {
     }
 
     protected AccessToken(Parcel in) {
-        UUID = in.readString();
+        accessToken = in.readString();
         userId = in.readInt();
     }
 
@@ -44,7 +44,7 @@ public class AccessToken implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(UUID);
+        dest.writeString(accessToken);
         dest.writeInt(userId);
     }
 

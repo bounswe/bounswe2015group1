@@ -42,6 +42,15 @@ public class User implements Parcelable {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public User update(User user) {
+        this.email = user.email;
+        this.fullName = user.fullName;
+        this.location = user.location;
+        this.dateOfBirth = user.dateOfBirth;
+
+        return this;
+    }
+
     protected User(Parcel in) {
         id = in.readInt();
         email = in.readString();

@@ -4,25 +4,31 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.CustomViews.MenuItem;
 import com.boun.swe.wawwe.Fragments.BaseFragment;
+import com.boun.swe.wawwe.Fragments.Feeds;
 import com.boun.swe.wawwe.Fragments.Login;
-import com.boun.swe.wawwe.Fragments.RecipeCreator;
+import com.boun.swe.wawwe.Fragments.Profile;
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
 import com.special.ResideMenu.ResideMenu;
-import com.special.ResideMenu.ResideMenuItem;
 
 /**
  * Created by Mert on 16/10/15.
  */
 public class MainActivity extends BaseActivity implements OnClickListener {
 
+    private Toolbar toolbar;
     // This is the menu component for application
     private ResideMenu resideMenu;
     private Handler handler;
@@ -30,58 +36,89 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final boolean isRemembers = App.getRememberMe();
-        if (isRemembers)
+        handler = new Handler(getMainLooper());
+
+        setContentView(R.layout.layout_activity_main);
+        prepareToolbar();
+        prepareResideMenu();
+        getSupportActionBar().hide();
+
+        if (App.getRememberMe())
             API.login(MainActivity.class.getSimpleName(), App.getUser(),
                     new Response.Listener<AccessToken>() {
 
                         @Override
                         public void onResponse(AccessToken response) {
                             App.setAccessValues(response);
-                            makeFragmentTransaction(RecipeCreator.getFragment(), isRemembers);
+                            getSupportActionBar().show();
+                            makeFragmentTransaction(Feeds.getFragment(new Bundle()), true);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Bundle bundle = new Bundle();
-                            bundle.putBoolean("isRemembers", isRemembers);
-                            makeFragmentTransaction(Login.getFragment(bundle), isRemembers);
+                            bundle.putBoolean("isRemembers", true);
+                            makeFragmentTransaction(Login.getFragment(bundle), true);
                         }
                     });
-        else getSupportActionBar().hide();
+        else
+            makeFragmentTransaction(Login.getFragment(new Bundle()), false);
+    }
 
-        setContentView(R.layout.layout_activity_main);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-        handler = new Handler(getMainLooper());
+    private void prepareToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // For now this application has only one static
-        // fragment, later on will have multiple fragments
-        // and can be navigated from left menu.
-        // Do not add navigator for now...
-        //prepareResideMenu();
-
-        if (!isRemembers)
-            makeFragmentTransaction(Login.getFragment(new Bundle()), isRemembers);
+        setDisplayHomeAsNavigator();
     }
 
     private void prepareResideMenu() {
         // attach to current activity;
         resideMenu = new ResideMenu(this);
         resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
-        resideMenu.setBackground(R.drawable.shadow);
+        resideMenu.setBackground(R.color.colorPrimaryDark);
         resideMenu.attachToActivity(this);
 
         // Create and add menu items
-        String titles[] = { "Login", "Settings" };
-        // int icon[] = { R.drawable.icon_home, R.drawable.icon_settings };
+        String titles[] = { "Feed", "Profile" };
+        int icon[] = { R.mipmap.ic_whatshot_black_24dp, R.mipmap.ic_person_black_24dp };
+        int ids[] = { R.id.menu_feeds, R.id.menu_profile };
 
         for (int i = 0; i < titles.length; i++){
-            //ResideMenuItem item = new ResideMenuItem(this, icon[i], titles[i]);
-            ResideMenuItem item = new ResideMenuItem(this, R.drawable.ic_launcher, titles[i]);
+            MenuItem item = new MenuItem(this, icon[i], titles[i]);
+            item.setId(ids[i]);
             item.setOnClickListener(this);
-            resideMenu.addMenuItem(item, ResideMenu.DIRECTION_LEFT); // or  ResideMenu.DIRECTION_RIGHT
+            item.setTitleColor(R.color.black);
+            resideMenu.addMenuItem(item, ResideMenu.DIRECTION_LEFT);
         }
+    }
+
+    public void setDisplayHomeAsUp() {
+        toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.onBackPressed();
+            }
+        });
+    }
+
+    public void setDisplayHomeAsNavigator() {
+        toolbar.setNavigationIcon(R.mipmap.ic_menu_black_24dp);
+        toolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
+            }
+        });
     }
 
     public void makeFragmentTransaction(final BaseFragment fragment) {
@@ -106,8 +143,50 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        // TODO handle menu clicks
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main_subSettings:
+                return true;
+            case R.id.menu_main_subLogout:
+                API.logout(MainActivity.class.getSimpleName(),
+                        new Response.Listener<User>() {
+                            @Override
+                            public void onResponse(User response) {
+                                getSupportActionBar().hide();
+                                App.setRememberMe(false);
+                                App.setUser(null);
+                                getSupportFragmentManager().popBackStack(null,
+                                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                MainActivity.this.makeFragmentTransaction(Login
+                                        .getFragment(new Bundle()), false);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(MainActivity.this, MainActivity.this
+                                        .getString(R.string.error_logoutError),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.menu_feeds:
+                makeFragmentTransaction(Feeds.getFragment(new Bundle()));
+                resideMenu.closeMenu();
+                break;
+            case R.id.menu_profile:
+                makeFragmentTransaction(Profile.getFragment(new Bundle()));
+                resideMenu.closeMenu();
+                break;
+        }
     }
 
     @Override

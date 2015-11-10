@@ -14,10 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
+import com.boun.swe.wawwe.Utils.API;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,20 +85,46 @@ public class RecipeCreator extends BaseFragment {
                     }
 
                     ingredients.add(new Ingredient(ingredient_name, Float.parseFloat(ingredient_amount),
-                            amountType.getSelectedItemPosition()));
+                            (String) amountType.getSelectedItem()));
                 }
 
                 Recipe recipe = new Recipe(recipe_name, directions, ingredients);
 
-                return;
-
-                // TODO API call
+                API.createRecipe(RecipeCreator.class.getSimpleName(), recipe,
+                        new Response.Listener<Recipe>() {
+                            @Override
+                            public void onResponse(Recipe response) {
+                                if (context instanceof MainActivity) {
+                                    MainActivity main = (MainActivity) context;
+                                    main.onBackPressed();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(context, context.getString(R.string.error_createRecipe),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
         addIngredientRow();
 
         return recipeCreationView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (context instanceof MainActivity) {
+            MainActivity main = (MainActivity) context;
+            main.getSupportActionBar()
+                    .setTitle(R.string.title_menu_recipeCreation);
+            main.setDisplayHomeAsUp();
+        }
     }
 
     private void addIngredientRow() {
@@ -132,9 +162,9 @@ public class RecipeCreator extends BaseFragment {
         ingredientHolder.addView(ingredient, ingredientHolder.getChildCount() - 1);
     }
 
-    public static RecipeCreator getFragment() {
+    public static RecipeCreator getFragment(Bundle bundle) {
         RecipeCreator recipeCreationFragment = new RecipeCreator();
-        recipeCreationFragment.setArguments(new Bundle());
+        recipeCreationFragment.setArguments(bundle);
         return recipeCreationFragment;
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MAMA</string>
+    <string name="app_name">Mama</string>
     
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -21,4 +21,29 @@
         <item>tbsp</item>
         <item>cups</item>
     </string-array>
+
+    <!-- Profile -->
+    <string name="title_fullName">Name</string>
+    <string name="title_location">Location</string>
+    <string name="title_dateOfBirth">Birth Date</string>
+    <string name="prompt_fullName">No Name?</string>
+    <string name="prompt_location">No Location?</string>
+    <string name="prompt_dateOfBirth">No Birth Date?</string>
+    <string name="button_action_myRecipes">My Recipes</string>
+    <string name="button_action_createRecipes">Create Recipe</string>
+
+    <!-- Profile Edit -->
+    <string name="title_email">Email</string>
+    <string name="title_password">Password</string>
+
+    <!-- Menu -->
+    <string name="action_menu_settings">Settings</string>
+    <string name="action_menu_logout">Logout</string>
+    <string name="action_menu_edit">Edit</string>
+    <string name="action_menu_add">Add</string>
+    <string name="title_menu_feeds">Feeds</string>
+    <string name="title_menu_profile">Profile</string>
+    <string name="title_menu_profileEdit">Update Profile</string>
+    <string name="title_menu_recipeCreation">Create Recipe</string>
+    <string name="title_menu_myRecipe">My Recipes</string>
 </resources>

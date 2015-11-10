@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_loginError">Could not logged in.</string>
+    <string name="error_logoutError">Could not logged out.</string>
     <string name="error_signUpError">Could not signed up.</string>
     <string name="error_loginAfterSignUpError">User created but could not logged in.</string>
+
+    <string name="error_feed">Could not get feeds.</string>
+
+    <string name="error_myRecipes">Could not find my recipes.</string>
+
+    <string name="error_updateUser">User values could not be updated!</string>
+
+    <string name="error_createRecipe">Could not add this recipe.</string>
 </resources>
