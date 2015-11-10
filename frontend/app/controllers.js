@@ -80,7 +80,7 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc);
 			};
 			$scope.addIngredient = function() {
-				var ing = { "id": makeid(), "name": $scope.newIngredientName, "amount": parseInt($scope.newIngredientAmount), "unit": $scope.newIngredientUnit};
+				var ing = { "ingredientId": makeid(), "name": $scope.newIngredientName, "amount": parseInt($scope.newIngredientAmount), "unit": $scope.newIngredientUnit};
 				$scope.ingredients.push(ing);
 				console.log(JSON.stringify($scope.ingredients));
 			};
