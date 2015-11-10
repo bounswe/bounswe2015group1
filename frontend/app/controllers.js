@@ -1,6 +1,10 @@
-angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope, $http, $rootScope, recipeService) {
+angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope, $state, $http, $rootScope, recipeService) {
 		var init = function() {
 			recipeService.fetchAllRecipes();
+		};
+
+		$scope.viewRecipe = function(id) {
+			$state.go('viewRecipe', { recipeID : id});
 		};
 
 		$scope.recipes = [];
@@ -44,6 +48,8 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 
 		}
 
+		$scope.tabs= [{ title : "", }]
+
 		init();
 
 	}).controller('LoginCtrl', function($scope, $state, $stateParams, userService) {
@@ -84,4 +90,11 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 				console.log('Add Recipe Successful');
 			});
 
+	}).controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $stateParams, recipeService) {
+		$scope.recipe =  recipeService.getRecipeWithID(parseInt($stateParams.recipeID));
+		console.log("Recipe view: " + JSON.stringify($scope.recipe));
+
+		$scope.back = function() {
+			$state.go($rootScope.previousState, $rootScope.previousParams);
+		}
 	});

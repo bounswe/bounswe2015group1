@@ -60,6 +60,12 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 
 angular.module('FoodApp').run(function($rootScope) {
 		$rootScope.baseUrl = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080";
+		$rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+   			$rootScope.previousState = from.name;
+    		$rootScope.previousParams = fromParams;
+    		console.log('Previous state:'+$rootScope.previousState);
+    		console.log('Previous Params state:'+$rootScope.previousParams);
+		});
 });
 
 angular.module('FoodApp').factory('userService', function($http, $window, $state, $rootScope) {
@@ -175,6 +181,12 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 
 angular.module('FoodApp').factory('recipeService', function($http, $rootScope, userService) {
 	var recipes = [];
+	var deneme = { id: 123, userId: 42, name: "penne alla puttanesca", ingredients: [{ id: "3a5bffxd", name: "domatiz", amount: 300, unit: "grams"}]};
+	var deneme2 = { id: 12, userId: 42, name: "domates", ingredients: [{ id: "3a5bffxd", name: "domates", amount: 12, unit: "kilograms"}]};
+	var deneme3 = { id: 14, userId: 42, name: "pizza", ingredients: [{ id: "3a5bffxd", name: "pizza particles", amount: 4, unit: "moles"}], description : "Shake all the particles in a shaker"};
+	recipes.push(deneme);
+	recipes.push(deneme2);
+	recipes.push(deneme3);
 	var recipeAddStatus = 0;
 	var addRecipe = function(name,ingredients,desc) {
 			var req = {
@@ -201,7 +213,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 		};
 	var fetchAllRecipes = function() {
 		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
-			recipes = response.data
+			//recipes = response.data;
 			console.log(JSON.stringify(recipes));
 		});
 	};
@@ -217,6 +229,14 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 				recipeAddStatus = 0;
 				return temp;
 			} else return 0;
+		},
+		getRecipeWithID : function(id) {
+			var arrLen = recipes.length;
+			for (var i = 0; i < arrLen; i++) {
+    			if(recipes[i].id == id) {
+    				return recipes[i];
+    			}
+			}
 		}
 	};
 });
