@@ -1,50 +1,45 @@
 <html ng-app="FoodApp">
-	<head>
-		<title>Mama</title>
-    <meta charset="UTF-8">
-		<script src="lib/angular.js"> </script>
+  <head>
+    <title>MAMA</title>
+    <script src="lib/angular.js"> </script>
     <script src="lib/angular-ui-router.js"> </script>
     <script src="lib/ui-layout.js"> </script>
-		<script src="lib/ui-bootstrap-tpls-0.14.2.js"></script>
-		<link rel="stylesheet" href="lib/bootstrap.css">
+    <script src="lib/ui-bootstrap-tpls-0.14.2.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap.css">
     <link rel="stylesheet" href="lib/ui-layout.css">
-		<script src="app/app.js"> </script>
+    <script src="app/app.js"> </script>
     <script src="app/controllers.js"> </script>
-	</head>
+  </head>
 
-	<body>
-	  <nav class="navbar navbar-default" ng-controller="NavBarCtrl">
+  <body>
+    <nav class="navbar navbar-default" ng-controller="NavBarCtrl">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" ui-sref="main">Mama</a>
+          <a class="navbar-brand" ui-sref="main">MAMA</a>
         </div>
 
         <div>
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Username" ng-model="emailLogin">
-                <input type="password" class="form-control" placeholder="Password" ng-model="passLogin">
-              </div>
-              <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
-            
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Search</button>
           </form>
           <ul class="nav navbar-nav">
-            <li><a ui-sref="register">Register</a></li> 
-            
-            <li><a ui-sref="profile"> Profile</a></li>
+            <li><a href="#"> Advanced Search</a></li>
           </ul>
-
 
       <!--Logged Out Navigation Bar -->
           <div ng-hide="loggedIn">
               <ul class="nav navbar-nav navbar-right">
-              <li><a href="#"> Advanced Search</a></li> 
+                <li><a ui-sref="register">Register</a></li>
               </ul>
               <form class="navbar-form navbar-right" role="search">
               <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-default">Search</button>
+                <input type="text" class="form-control" placeholder="Username" ng-model="emailLogin">
+                <input type="password" class="form-control" placeholder="Password" ng-model="passLogin">
+              </div>
+              <button type="submit" class="btn btn-default" ng-click="login()">Login</button>
             </form>
           </div>
       <!--Logged In NavBar End-->
@@ -52,6 +47,7 @@
       <!--Logged In Navigation Bar -->
           <div ng-show="loggedIn">
             <ul class="nav navbar-nav navbar-right">
+              <li><a ui-sref="addRecipe" > Create A Recipe </a></li>
               <li><a ui-sref="profile" > {{user.fullName}} </a></li>
               <li><a href="#" ng-click="logout()">Logout</a></li>
             </ul>
@@ -60,7 +56,7 @@
 
         </div>
       </div>
-	  </nav>
+    </nav>
 
     <div class="row">
     <div class="col-sm-3"></div>
@@ -69,6 +65,6 @@
     </div>
 
 
-	</body>
+  </body>
 
 </html>
