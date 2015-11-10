@@ -180,13 +180,6 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 });
 
 angular.module('FoodApp').factory('recipeService', function($http, $rootScope, userService) {
-	var recipes = [];
-	var deneme = { id: 123, userId: 42, name: "penne alla puttanesca", ingredients: [{ id: "3a5bffxd", name: "domatiz", amount: 300, unit: "grams"}]};
-	var deneme2 = { id: 12, userId: 42, name: "domates", ingredients: [{ id: "3a5bffxd", name: "domates", amount: 12, unit: "kilograms"}]};
-	var deneme3 = { id: 14, userId: 42, name: "pizza", ingredients: [{ id: "3a5bffxd", name: "pizza particles", amount: 4, unit: "moles"}], description : "Shake all the particles in a shaker"};
-	recipes.push(deneme);
-	recipes.push(deneme2);
-	recipes.push(deneme3);
 	var recipeAddStatus = 0;
 	var addRecipe = function(name,ingredients,desc) {
 			var req = {
@@ -213,7 +206,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 		};
 	var fetchAllRecipes = function() {
 		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
-			//recipes = response.data;
+			recipes = response.data;
 			console.log(JSON.stringify(recipes));
 		});
 	};
