@@ -23,7 +23,7 @@ public interface UserDAO {
     Long addUser(@BindBean User user);
     
     @SqlUpdate("update users set password_hash = :passwordHash, password_salt = :passwordSalt,"
-    		+ "full_name = :fullName, location = :location, date_of_birth = :dateOfBirth"
+    		+ "full_name = :fullName, location = :location, date_of_birth = :dateOfBirth "
     		+ "where id = :id")
     void updateUser(@BindBean User user);
     

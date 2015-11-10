@@ -24,20 +24,21 @@ public class RecipeResource {
 		this.recipeDAO = recipeDAO;
 	}
 
+	@Path("/user/:id")
+	@GET
+	public List<Recipe> getRecipesForUser(@PathParam("id") Long userId){
+		System.out.println("giriyon mu buraa");
+		return recipeDAO.getRecipesForUser(userId);
+	}
+	
 	@Path("/all")
 	@GET
 	public List<Recipe> getAllRecipes(){
 		return recipeDAO.getRecipes();
 	}
 	
-	@Path("/user/:id")
-	@GET
-	public List<Recipe> getRecipesForUser(@PathParam("id") Long userId){
-		return recipeDAO.getRecipesForUser(userId);
-	}
-	
 	@POST
-	public Recipe addRecipe(@Auth AccessToken accessToken, Recipe recipe){
+	public Recipe addRecipe(@Auth AccessToken accessToken, Recipe recipe){		
 		recipe.setUserId(accessToken.getUserId());
 		recipeDAO.createRecipe(recipe);
 		

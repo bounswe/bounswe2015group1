@@ -92,4 +92,8 @@
 			<column name="description" type="text"></column>	
 		</addColumn>
 	</changeSet>
+	
+	<changeSet id="5" author="group1">
+		<addAutoIncrement tableName="recipes" columnName="id"/>
+	</changeSet>
 </databaseChangeLog>
