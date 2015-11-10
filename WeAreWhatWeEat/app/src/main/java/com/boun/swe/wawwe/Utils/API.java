@@ -13,6 +13,8 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -21,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +34,7 @@ import java.util.Map;
 public class API {
 
     // Our base url, every extension to this will represent its own request
-    private static String BASE_URL = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080";
+    private static String BASE_URL = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080/api";
     // Designed to have only one request queue for now
     private static RequestQueue mQueue;
     private static API instance;
@@ -67,8 +70,14 @@ public class API {
      */
     public static void getUsers(String tag, Response.Listener<User[]> successListener,
                                 Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<User[]>(Request.Method.GET, BASE_URL + "/api/user",
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/user",
                 User[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getUserInfo(String tag, Response.Listener<User> successListener,
+                                Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/user/%s",
+                App.getUserId()), User.class, successListener, failureListener).setTag(tag));
     }
 
     /**
@@ -94,9 +103,58 @@ public class API {
                 return false;
             }
         }).create().toJson(user, User.class);
-        mQueue.add(new GeneralRequest<User>(Request.Method.POST,
-                BASE_URL + "/api/user", User.class, successListener, failureListener)
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/user", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
+    }
+
+    public static void updateUser(String tag, User user, Response.Listener<User> successListener,
+                               Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getName().equals("id");
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create().toJson(user, User.class);
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/user/update", User.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+    }
+
+    public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
+                                     Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return (f.getDeclaringClass().equals(Recipe.class) && f.getName().equals("id"))
+                        || f.getName().equals("userId");
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create().toJson(recipe, Recipe.class);
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/recipe", Recipe.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+    }
+
+    public static void getUserRecipes(String tag, Response.Listener<Recipe[]> successListener,
+                                    Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/user/%s",
+                App.getUserId()), Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getAllRecipes(String tag, Response.Listener<Recipe[]> successListener,
+                                    Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/recipe/all",
+                Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
@@ -112,15 +170,15 @@ public class API {
                 return false;
             }
         }).create().toJson(user, User.class);
-        mQueue.add(new GeneralRequest<AccessToken>(Request.Method.POST,
-                BASE_URL + "/api/session/login", AccessToken.class, successListener, failureListener)
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/session/login", AccessToken.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
 
     public static void logout(String tag, Response.Listener<User> successListener,
                                Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<User>(Request.Method.POST,
-                BASE_URL + "/api/session/logout", User.class,
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/session/logout", User.class,
                 successListener, failureListener).setTag(tag));
     }
 
@@ -139,7 +197,7 @@ public class API {
 
         private Gson gson = new Gson();
         private Class<T> responseClazz;
-        private Map<String, String> headers;
+        private Map<String, String> headers = new HashMap<>();
         private Response.Listener<T> listener;
 
         private String postBody;
@@ -157,13 +215,13 @@ public class API {
         public GeneralRequest<T> setPostBodyInJSONForm(Object postObject,
                                                        Class<? extends Object> postClass) {
             this.postBody = gson.toJson(postObject, postClass);
-            Log.v("", postBody);
+            Log.v("Request", postBody);
             return this;
         }
 
         public GeneralRequest<T> setPostBodyInJSONForm(String postBody) {
             this.postBody = postBody;
-            Log.v("", postBody);
+            Log.v("Request", postBody);
             return this;
         }
 
@@ -177,13 +235,15 @@ public class API {
             Map<String, String> headers = this.headers != null ?
                     this.headers : super.getHeaders();
             if (UUID != null)
-                this.headers.put("Authorization", "Bearer " + UUID);
+                headers.put("Authorization", "Bearer " + UUID);
             return headers;
         }
 
         @Override
         protected void deliverResponse(T response) {
-            listener.onResponse(response);
+            Log.v("Request", new Gson().toJson(response));
+            if (listener != null)
+                listener.onResponse(response);
         }
 
 
@@ -206,13 +266,14 @@ public class API {
         @Override
         protected Response<T> parseNetworkResponse(NetworkResponse response) {
             try {
+
                 String json = new String(
                         response.data,
                         HttpHeaderParser.parseCharset(response.headers));
-                Log.v((String) getTag(), json);
+                Log.v("Request", json);
                 return Response.success(
                         responseClazz.equals(Void.class) ? null :
-                        gson.fromJson(json, responseClazz),
+                                gson.fromJson(json, responseClazz),
                         HttpHeaderParser.parseCacheHeaders(response));
             } catch (UnsupportedEncodingException e) {
                 return Response.error(new ParseError(e));

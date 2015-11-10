@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class Recipe implements Parcelable {
 
+    private int id;
+    private int userId;
     private String name;
     private String directions;
     private List<Ingredient> ingredients;
@@ -21,9 +23,42 @@ public class Recipe implements Parcelable {
     }
 
     protected Recipe(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         directions = in.readString();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getDirections() {
+        return directions;
+    }
+
+    public void setDirections(String directions) {
+        this.directions = directions;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     @Override
@@ -33,6 +68,7 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(directions);
         dest.writeTypedList(ingredients);

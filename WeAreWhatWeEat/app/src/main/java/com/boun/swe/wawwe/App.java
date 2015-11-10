@@ -22,7 +22,7 @@ public class App extends Application {
     // static and put it under application class.
     private static App instance;
 
-    private static int userId;
+    private static int userId = -1;
 
     @Override
     public void onCreate() {
@@ -72,6 +72,10 @@ public class App extends Application {
 
     public static void setAccessValues(AccessToken accessToken) {
         instance.userId = accessToken.getUserId();
-        API.setUUID(accessToken.getUUID());
+        API.setUUID(accessToken.getAccessToken());
+    }
+
+    public static int getUserId() {
+        return userId;
     }
 }

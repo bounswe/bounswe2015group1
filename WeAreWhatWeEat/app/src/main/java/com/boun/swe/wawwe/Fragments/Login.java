@@ -45,8 +45,8 @@ public class Login extends BaseFragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String email = emailEditText.getText().toString();
-                        String password = passwordEditText.getText().toString();
+                        final String email = emailEditText.getText().toString();
+                        final String password = passwordEditText.getText().toString();
 
                         if (!isInputValid(new EditText[]{emailEditText, passwordEditText}))
                             return;
@@ -58,6 +58,20 @@ public class Login extends BaseFragment {
                                     @Override
                                     public void onResponse(AccessToken response) {
                                         App.setAccessValues(response);
+                                        API.getUserInfo(getTag(),
+                                                new Response.Listener<User>() {
+                                                    @Override
+                                                    public void onResponse(User response) {
+                                                        response.setPassword(password);
+                                                        App.setUser(response);
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+
+                                                    }
+                                                });
                                         if (rememberMe.isChecked()) {
                                             App.setRememberMe(true);
                                             App.setUser(user);
@@ -91,7 +105,6 @@ public class Login extends BaseFragment {
 
                                     @Override
                                     public void onResponse(final User user) {
-
                                         API.login(getTag(), new User(email, password),
                                                 new Response.Listener<AccessToken>() {
 
@@ -169,7 +182,7 @@ public class Login extends BaseFragment {
             main.getSupportFragmentManager().beginTransaction()
                     .remove(Login.this).commit();
             main.findViewById(R.id.container).invalidate();
-            main.makeFragmentTransaction(RecipeCreator.getFragment(), false);
+            main.makeFragmentTransaction(Feeds.getFragment(new Bundle()), false);
         }
     }
 }

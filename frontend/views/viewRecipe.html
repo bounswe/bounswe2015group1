@@ -1,0 +1,15 @@
+<div ng-controller="ViewRecipeCtrl" class="col-md-offset-3">
+	<div>
+	<h3>{{ recipe.name }} </h3>
+	<br/>
+	<h4>Ingredients</h4>
+	<div ng-repeat="ingredient in recipe.ingredients">
+ 		{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
+	</div>
+	<br/>
+	<h4>Description</h4>
+	{{ recipe.description }}
+	<br/>
+	<a href="#" ng-click="back()">Back</a>
+	</div>
+</div>
