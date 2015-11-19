@@ -69,7 +69,8 @@ public class Profile extends BaseFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         myFeeds.setAdapter(adapter);
 
-        API.getUserRecipes(Feeds.class.getSimpleName(), new Response.Listener<Recipe[]>() {
+        API.getAllRecipes(Profile.class.getSimpleName(),
+                new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
                         if (response != null)

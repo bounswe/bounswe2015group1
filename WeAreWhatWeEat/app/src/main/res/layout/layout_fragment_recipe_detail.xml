@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView">
+        android:id="@+id/scrollView" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:orientation="vertical" >
 
 
             <TextView
@@ -29,15 +28,13 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/title_ingredients"
-                android:layout_marginTop="20dp"
-                />
+                android:layout_marginTop="20dp" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/ingredient_item_holder"
-                >
+                android:id="@+id/ingredient_item_holder" >
 
             </LinearLayout>
 
@@ -48,21 +45,21 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/title_directions"
-                android:id="@+id/textView3"
-                android:layout_marginTop="20dp"
-                />
+                android:layout_marginTop="20dp" />
 
             <TextView
+                android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/directions"
-                android:background="@drawable/border_style"
+                android:layout_height="0dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="test"
+                android:textColor="@color/black"
                 android:layout_marginTop="20dp"
                 android:padding="@dimen/activity_horizontal_margin"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:minLines="3"
-                android:layout_weight="1.13" />
+                android:layout_weight="1"/>
 
         </LinearLayout>
 

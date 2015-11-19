@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                         public void onResponse(AccessToken response) {
                             App.setAccessValues(response);
                             getSupportActionBar().show();
-                            makeFragmentTransaction(Feeds.getFragment(new Bundle()), true);
+                            makeFragmentTransaction(Feeds.getFragment(new Bundle()));
                         }
                     },
                     new Response.ErrorListener() {
@@ -59,11 +59,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                         public void onErrorResponse(VolleyError error) {
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("isRemembers", true);
-                            makeFragmentTransaction(Login.getFragment(bundle), true);
+                            makeFragmentTransaction(Login.getFragment(bundle));
                         }
                     });
         else
-            makeFragmentTransaction(Login.getFragment(new Bundle()), false);
+            makeFragmentTransaction(Login.getFragment(new Bundle()));
     }
 
     @Override
@@ -122,22 +122,26 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     }
 
     public void makeFragmentTransaction(final BaseFragment fragment) {
-        makeFragmentTransaction(fragment, true);
-    }
-
-    public void makeFragmentTransaction(final BaseFragment fragment, final boolean addToBackStack) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                if (addToBackStack) {
-                    transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
-                    transaction.addToBackStack(fragment.getClass().getSimpleName());
-                }
-                else transaction.add(R.id.container, fragment, fragment.getClass().getSimpleName());
+                transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
+                transaction.addToBackStack(fragment.getClass().getSimpleName());
                 transaction.commit();
+            }
+        });
+    }
+
+    public void removeFragment(final BaseFragment fragment) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack(fragment.getClass().getSimpleName(),
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
     }
@@ -155,10 +159,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                                 getSupportActionBar().hide();
                                 App.setRememberMe(false);
                                 App.setUser(null);
-                                getSupportFragmentManager().popBackStack(null,
-                                        FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                                getSupportFragmentManager()
+                                        .popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                 MainActivity.this.makeFragmentTransaction(Login
-                                        .getFragment(new Bundle()), false);
+                                        .getFragment(new Bundle()));
                             }
                         },
                         new Response.ErrorListener() {

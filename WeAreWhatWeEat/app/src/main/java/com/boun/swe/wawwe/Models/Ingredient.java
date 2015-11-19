@@ -8,21 +8,21 @@ import android.os.Parcelable;
  */
 public class Ingredient implements Parcelable {
 
-    private String id = "PlaceHolder";
+    private String ingredientId = "PlaceHolder";
     private String name;
-    private float amount;
+    private int amount;
     private String unit;
 
-    public Ingredient(String name, float amount, String unit) {
+    public Ingredient(String name, int amount, String unit) {
         this.name = name;
         this.amount = amount;
         this.unit = unit;
     }
 
     protected Ingredient(Parcel in) {
-        id = in.readString();
+        ingredientId = in.readString();
         name = in.readString();
-        amount = in.readFloat();
+        amount = in.readInt();
         unit = in.readString();
     }
 
@@ -34,11 +34,11 @@ public class Ingredient implements Parcelable {
         this.name = name;
     }
 
-    public float getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -57,7 +57,7 @@ public class Ingredient implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeString(ingredientId);
         dest.writeString(name);
         dest.writeFloat(amount);
         dest.writeString(unit);

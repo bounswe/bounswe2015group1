@@ -179,10 +179,11 @@ public class Login extends BaseFragment {
     private void exitLoginFragment() {
         if (context instanceof MainActivity) {
             MainActivity main = (MainActivity) context;
-            main.getSupportFragmentManager().beginTransaction()
-                    .remove(Login.this).commit();
-            main.findViewById(R.id.container).invalidate();
-            main.makeFragmentTransaction(Feeds.getFragment(new Bundle()), false);
+//            main.getSupportFragmentManager().beginTransaction()
+//                    .remove(Login.this).commit();
+//            main.findViewById(R.id.container).invalidate();
+            main.removeFragment(this);
+            main.makeFragmentTransaction(Feeds.getFragment(new Bundle()));
         }
     }
 }
