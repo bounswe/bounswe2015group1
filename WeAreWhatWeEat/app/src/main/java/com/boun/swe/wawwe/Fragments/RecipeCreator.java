@@ -44,7 +44,7 @@ public class RecipeCreator extends BaseFragment {
 
         final EditText recipeName = (EditText) recipeCreationView.findViewById(R.id.recipeName);
         ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
-        final EditText howTo = (EditText) recipeCreationView.findViewById(R.id.directions);
+        final EditText howTo = (EditText) recipeCreationView.findViewById(R.id.description);
         final Button addIngredients = (Button) recipeCreationView.findViewById(R.id.add_new_ingredient);
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
 
@@ -84,7 +84,7 @@ public class RecipeCreator extends BaseFragment {
                         return;
                     }
 
-                    ingredients.add(new Ingredient(ingredient_name, Float.parseFloat(ingredient_amount),
+                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount),
                             (String) amountType.getSelectedItem()));
                 }
 
@@ -123,7 +123,7 @@ public class RecipeCreator extends BaseFragment {
             MainActivity main = (MainActivity) context;
             main.getSupportActionBar()
                     .setTitle(R.string.title_menu_recipeCreation);
-            main.setDisplayHomeAsUp();
+//            main.setDisplayHomeAsUp();
         }
     }
 

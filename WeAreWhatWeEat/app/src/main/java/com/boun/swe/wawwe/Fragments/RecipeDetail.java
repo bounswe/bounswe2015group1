@@ -19,8 +19,6 @@ import com.boun.swe.wawwe.R;
 
 public class RecipeDetail extends BaseFragment {
 
-    LinearLayout ingredientHolder;
-
     public RecipeDetail() { }
 
     @Nullable
@@ -31,15 +29,16 @@ public class RecipeDetail extends BaseFragment {
 
         Recipe recipe = getArguments().getParcelable("recipe");
 
-        final TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
-        final TextView directions = (TextView) recipeCreationView.findViewById(R.id.directions);
-        ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
+        TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
+        TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
+        LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
+                .findViewById(R.id.ingredient_item_holder);
 
         recipeName.setText(recipe.getName());
-        directions.setText(recipe.getDirections());
+        directions.setText(recipe.getDescription());
 
         for (Ingredient ingredient: recipe.getIngredients())
-            addIngredientRow(ingredient);
+            addIngredientRow(ingredientHolder, ingredient);
 
         return recipeCreationView;
     }
@@ -50,13 +49,22 @@ public class RecipeDetail extends BaseFragment {
 
         if (context instanceof MainActivity) {
             MainActivity main = (MainActivity) context;
-            main.setDisplayHomeAsUp();
+//            main.setDisplayHomeAsUp();
         }
     }
 
-    private void addIngredientRow(Ingredient ingredient) {
+    private void addIngredientRow(LinearLayout ingredientHolder, Ingredient ingredient) {
         TextView text = new TextView(context);
-        text.setText(String.format("%f %s, %s", ingredient.getAmount(),
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        int margin = (int) context.getResources().
+                getDimension(R.dimen.activity_horizontal_margin);
+        params.setMargins(margin, margin, margin, margin);
+        text.setTextColor(context.getResources().getColor(R.color.black));
+        text.setTextAppearance(context, android.R.style.TextAppearance_Large);
+        text.setLayoutParams(params);
+        text.setText(String.format(" - %d %s, %s", ingredient.getAmount(),
                 ingredient.getUnit(), ingredient.getName()));
         ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);
     }

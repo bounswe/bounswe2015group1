@@ -13,19 +13,19 @@ public class Recipe implements Parcelable {
     private int id;
     private int userId;
     private String name;
-    private String directions;
+    private String description;
     private List<Ingredient> ingredients;
 
-    public Recipe(String name, String directions, List<Ingredient> ingredients) {
+    public Recipe(String name, String description, List<Ingredient> ingredients) {
         this.name = name;
-        this.directions = directions;
+        this.description = description;
         this.ingredients = ingredients;
     }
 
     protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        directions = in.readString();
+        description = in.readString();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
     }
 
@@ -45,12 +45,12 @@ public class Recipe implements Parcelable {
         this.userId = userId;
     }
 
-    public String getDirections() {
-        return directions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDirections(String directions) {
-        this.directions = directions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Ingredient> getIngredients() {
@@ -70,7 +70,7 @@ public class Recipe implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(name);
-        dest.writeString(directions);
+        dest.writeString(description);
         dest.writeTypedList(ingredients);
     }
 

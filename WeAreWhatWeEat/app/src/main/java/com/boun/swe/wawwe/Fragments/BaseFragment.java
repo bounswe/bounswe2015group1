@@ -3,6 +3,8 @@ package com.boun.swe.wawwe.Fragments;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.boun.swe.wawwe.Utils.API;
+
 /**
  * Created by Mert on 31/10/15.
  *
@@ -23,5 +25,11 @@ public class BaseFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        API.cancelRequestByTag(this.getClass().getSimpleName());
     }
 }

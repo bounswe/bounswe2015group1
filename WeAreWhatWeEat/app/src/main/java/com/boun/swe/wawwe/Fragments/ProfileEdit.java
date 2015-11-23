@@ -1,5 +1,6 @@
 package com.boun.swe.wawwe.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class ProfileEdit extends BaseFragment {
             MainActivity main = (MainActivity) context;
             main.getSupportActionBar()
                 .setTitle(R.string.title_menu_profileEdit);
-            main.setDisplayHomeAsUp();
+//            main.setDisplayHomeAsUp();
         }
     }
 
@@ -78,6 +79,8 @@ public class ProfileEdit extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
         menu.findItem(R.id.menu_profile_editDone).setIcon(R.mipmap.ic_done_black_24dp);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            menu.findItem(R.id.menu_profile_add).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -89,7 +92,7 @@ public class ProfileEdit extends BaseFragment {
                     final User user = App.getUser();
 
                     String mail = email.getText().toString();
-                    String pass = password.getText().toString();
+                    final String pass = password.getText().toString();
                     String name = fullName.getText().toString();
                     String loc = location.getText().toString();
                     String date = dateOfBirth.getText().toString();
@@ -109,7 +112,8 @@ public class ProfileEdit extends BaseFragment {
                             new Response.Listener<User>() {
                                 @Override
                                 public void onResponse(User response) {
-                                    App.setUser(user.update(response));
+                                    response.setPassword(pass);
+                                    App.setUser(response);
                                     if (context instanceof MainActivity) {
                                         MainActivity main = (MainActivity) context;
                                         main.onBackPressed();
