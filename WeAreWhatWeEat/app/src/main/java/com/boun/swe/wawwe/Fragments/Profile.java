@@ -143,6 +143,7 @@ public class Profile extends BaseFragment {
             case R.id.menu_profile_add:
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
+
                     main.makeFragmentTransaction(RecipeCreator.getFragment(new Bundle()));
                 }
                 return true;

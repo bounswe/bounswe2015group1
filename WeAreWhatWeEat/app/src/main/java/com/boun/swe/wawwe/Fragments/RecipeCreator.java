@@ -1,9 +1,13 @@
 package com.boun.swe.wawwe.Fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,9 +36,16 @@ import java.util.List;
 
 public class RecipeCreator extends BaseFragment {
 
+    static String name = "";
+    static String description  = "";
+    static ArrayList<String> ingredientNames;
+    static ArrayList<Integer> ingredientAmounts;
+    static ArrayList<String> ingredientUnits;
     LinearLayout ingredientHolder;
 
     public RecipeCreator() { }
+
+
 
     @Nullable
     @Override
@@ -70,7 +81,6 @@ public class RecipeCreator extends BaseFragment {
                 List<Ingredient> ingredients = new ArrayList<Ingredient>();
                 for (int i = 0; i < ingredientHolder.getChildCount() - 1; i++) {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
-
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
                     Spinner amountType = (Spinner) ingredientRow.findViewById(R.id.spinner_amountType);
@@ -87,31 +97,61 @@ public class RecipeCreator extends BaseFragment {
                     ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount),
                             (String) amountType.getSelectedItem()));
                 }
+                if (name != null && !name.equals("")) {
+                    //TODO edit recipe API comes here
+                }else {
+                    Recipe recipe = new Recipe(recipe_name, directions, ingredients);
 
-                Recipe recipe = new Recipe(recipe_name, directions, ingredients);
-
-                API.createRecipe(RecipeCreator.class.getSimpleName(), recipe,
-                        new Response.Listener<Recipe>() {
-                            @Override
-                            public void onResponse(Recipe response) {
-                                if (context instanceof MainActivity) {
-                                    MainActivity main = (MainActivity) context;
-                                    main.onBackPressed();
+                    API.createRecipe(RecipeCreator.class.getSimpleName(), recipe,
+                            new Response.Listener<Recipe>() {
+                                @Override
+                                public void onResponse(Recipe response) {
+                                    if (context instanceof MainActivity) {
+                                        MainActivity main = (MainActivity) context;
+                                        main.onBackPressed();
+                                    }
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, context.getString(R.string.error_createRecipe),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, context.getString(R.string.error_createRecipe),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             }
         });
 
         addIngredientRow();
+        if (name != null && !name.equals("")) {
 
+            recipeName.setText(name);
+            howTo.setText(description);
+            submit.setText("Save Changes");
+            for (int i = ingredientNames.size() - 1; i > -1; i--) {
+                ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(ingredientNames.size() - 1 - i);
+                EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
+                EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                Spinner amountType = (Spinner) ingredientRow.findViewById(R.id.spinner_amountType);
+                ingredientName.setText(ingredientNames.get(i));
+                ingredientAmount.setText(ingredientAmounts.get(i).toString());
+                if (ingredientUnits.get(i).equals("gr"))
+                    amountType.setSelection(0);
+                else if (ingredientUnits.get(i).equals("kg"))
+                    amountType.setSelection(1);
+                else if (ingredientUnits.get(i).equals("tsp"))
+                    amountType.setSelection(2);
+                else if (ingredientUnits.get(i).equals("tbsp"))
+                    amountType.setSelection(3);
+                else
+                    amountType.setSelection(4);
+                if (i != 0) {
+                    addIngredientRow();
+                }
+
+            }
+        }
         return recipeCreationView;
     }
 
@@ -165,6 +205,12 @@ public class RecipeCreator extends BaseFragment {
     public static RecipeCreator getFragment(Bundle bundle) {
         RecipeCreator recipeCreationFragment = new RecipeCreator();
         recipeCreationFragment.setArguments(bundle);
+        name = bundle.getString("name");
+        description = bundle.getString("description");
+        ingredientNames = bundle.getStringArrayList("ingredientsName");
+        ingredientAmounts = bundle.getIntegerArrayList("ingredientsAmount");
+        ingredientUnits = bundle.getStringArrayList("ingredientsUnit");
         return recipeCreationFragment;
     }
+
 }

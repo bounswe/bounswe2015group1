@@ -1,8 +1,12 @@
 package com.boun.swe.wawwe.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -13,20 +17,32 @@ import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Mert on 31/10/15.
  */
 
 public class RecipeDetail extends BaseFragment {
-
+    static String name = "";
+    static String description = "";
+    static ArrayList<String> ingredientsName;
+    static ArrayList<Integer> ingredientsAmount;
+    static ArrayList<String> ingredientsUnit;
     public RecipeDetail() { }
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
-
+        ingredientsName = new ArrayList<String>();
+        ingredientsAmount = new ArrayList<Integer>();
+        ingredientsUnit = new ArrayList<String>();
         Recipe recipe = getArguments().getParcelable("recipe");
 
         TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
@@ -35,11 +51,15 @@ public class RecipeDetail extends BaseFragment {
                 .findViewById(R.id.ingredient_item_holder);
 
         recipeName.setText(recipe.getName());
+        name = recipe.getName();
         directions.setText(recipe.getDescription());
-
-        for (Ingredient ingredient: recipe.getIngredients())
+        description = recipe.getDescription();
+        for (Ingredient ingredient: recipe.getIngredients()){
             addIngredientRow(ingredientHolder, ingredient);
-
+            ingredientsName.add(ingredient.getName());
+            ingredientsAmount.add(ingredient.getAmount());
+            ingredientsUnit.add(ingredient.getUnit());
+        }
         return recipeCreationView;
     }
 
@@ -73,5 +93,34 @@ public class RecipeDetail extends BaseFragment {
         RecipeDetail recipeDetailFragment = new RecipeDetail();
         recipeDetailFragment.setArguments(bundle);
         return recipeDetailFragment;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            menu.findItem(R.id.menu_profile_add).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_profile_editDone:
+                if (context instanceof MainActivity) {
+                    MainActivity main = (MainActivity) context;
+                    Bundle bundle = new Bundle();
+                    bundle.putString("name",name );
+                    bundle.putString("description",description);
+                    bundle.putStringArrayList("ingredientsName", ingredientsName);
+                    bundle.putIntegerArrayList("ingredientsAmount",ingredientsAmount);
+                    bundle.putStringArrayList("ingredientsUnit",ingredientsUnit);
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(bundle));
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
