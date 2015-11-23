@@ -10,7 +10,7 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.oauth.OAuthFactory;
-import io.dropwizard.client.HttpClientBuilder;
+import io.dropwizard.client.JerseyClientBuilder;
 
 import org.skife.jdbi.v2.DBI;
 
@@ -24,66 +24,71 @@ import bounswegroup1.db.RecipeDAO;
 import bounswegroup1.db.UserDAO;
 import bounswegroup1.model.AccessToken;
 
-import org.apache.http.client.HttpClient;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration.Dynamic;
+import javax.ws.rs.client.Client;
 
 /**
  * Hello world!
  *
  */
-public class App extends Application<AppConfig>
-{
-    public static void main( String[] args ) throws Exception {
+public class App extends Application<AppConfig> {
+    public static void main(String[] args) throws Exception {
         new App().run(args);
     }
 
     @Override
-    public String getName(){
+    public String getName() {
         return "We are what we eat";
     }
 
     @Override
-    public void initialize(Bootstrap<AppConfig> bootstrap){
+    public void initialize(Bootstrap<AppConfig> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
-        
-        bootstrap.addBundle(new MigrationsBundle<AppConfig>(){
-			@Override
-			public DataSourceFactory getDataSourceFactory(AppConfig config) {
-				return config.getDatabase();
-			}
+
+        bootstrap.addBundle(new MigrationsBundle<AppConfig>() {
+            @Override
+            public DataSourceFactory getDataSourceFactory(AppConfig config) {
+                return config.getDatabase();
+            }
         });
     }
 
     @Override
-    public void run(AppConfig config, Environment env){
+    public void run(AppConfig config, Environment env) {
         configureCors(env);
 
+        // Connect to db
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(env, config.getDatabase(), "postgresql");
-        
+
         jdbi.registerContainerFactory(new OptionalContainerFactory());
+
+        // create dao's and clients
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
         final AccessTokenDAO accessTokenDAO = jdbi.onDemand(AccessTokenDAO.class);
         final RecipeDAO recipeDAO = jdbi.onDemand(RecipeDAO.class);
-        
-        final HttpClient httpClient = new HttpClientBuilder(env).using(config.getHttpClient()).build("httpClient");
-        
+
+        final Client httpClient = new JerseyClientBuilder(env).using(config.getHttpClient())
+                .build("httpClient");
+
+        // create resources
         final UserResource userResource = new UserResource(userDAO);
         final SessionResource sessionResource = new SessionResource(accessTokenDAO, userDAO);
         final RecipeResource recipeResource = new RecipeResource(recipeDAO);
-        
-        final String nutritionixId = config.getNutritionixAppId();
-        final String nutritionixKey = config.getNutritionixAppKey();
-        
-        final IngredientResource ingredientResource = new IngredientResource(httpClient, nutritionixId, nutritionixKey);
-        
-        
-        env.jersey().register(AuthFactory.binder(new OAuthFactory<AccessToken>(new OAuthAuthenticator(accessTokenDAO), 
-        		              config.getBearerRealm(), AccessToken.class)));
-        
+
+        final IngredientResource ingredientResource = new IngredientResource(httpClient,
+                config.getNutritionixAppId(), config.getNutritionixAppKey());
+
+        // register resources
+        env.jersey()
+                .register(AuthFactory.binder(
+                        new OAuthFactory<AccessToken>(new OAuthAuthenticator(accessTokenDAO),
+                                config.getBearerRealm(), AccessToken.class)));
+
         env.jersey().register(userResource);
         env.jersey().register(sessionResource);
         env.jersey().register(recipeResource);
@@ -93,11 +98,13 @@ public class App extends Application<AppConfig>
     private void configureCors(Environment environment) {
         Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
-        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
+                "GET,PUT,POST,DELETE,OPTIONS");
         filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
         filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
-        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowedHeaders",
+                "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
         filter.setInitParameter("allowCredentials", "true");
-      }
-      
+    }
+
 }

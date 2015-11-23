@@ -17,31 +17,32 @@ import io.dropwizard.auth.Auth;
 @Path("/recipe")
 @Produces(MediaType.APPLICATION_JSON)
 public class RecipeResource {
-	private final RecipeDAO recipeDAO;
-	
-	public RecipeResource(RecipeDAO recipeDAO) {
-		super();
-		this.recipeDAO = recipeDAO;
-	}
+    private final RecipeDAO recipeDAO;
 
-	@Path("/user/:id")
-	@GET
-	public List<Recipe> getRecipesForUser(@PathParam("id") Long userId){
-		System.out.println("giriyon mu buraa");
-		return recipeDAO.getRecipesForUser(userId);
-	}
-	
-	@Path("/all")
-	@GET
-	public List<Recipe> getAllRecipes(){
-		return recipeDAO.getRecipes();
-	}
-	
-	@POST
-	public Recipe addRecipe(@Auth AccessToken accessToken, Recipe recipe){		
-		recipe.setUserId(accessToken.getUserId());
-		recipeDAO.createRecipe(recipe);
-		
-		return recipe;
-	}
+    public RecipeResource(RecipeDAO recipeDAO) {
+        super();
+        this.recipeDAO = recipeDAO;
+    }
+
+    @Path("/user/:id")
+    @GET
+    public List<Recipe> getRecipesForUser(@PathParam("id") Long userId) {
+        System.out.println("giriyon mu buraa");
+        return recipeDAO.getRecipesForUser(userId);
+    }
+
+    @Path("/all")
+    @GET
+    public List<Recipe> getAllRecipes() {
+        return recipeDAO.getRecipes();
+    }
+
+    @POST
+    public Recipe addRecipe(@Auth AccessToken accessToken, Recipe recipe) {
+        recipe.setUserId(accessToken.getUserId());
+        recipeDAO.createRecipe(recipe);
+
+        return recipe;
+    }
+
 }

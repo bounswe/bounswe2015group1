@@ -22,7 +22,7 @@ import java.util.List;
 public class UserResource {
     private UserDAO dao;
 
-    public UserResource(UserDAO dao){
+    public UserResource(UserDAO dao) {
         this.dao = dao;
     }
 
@@ -32,25 +32,25 @@ public class UserResource {
     }
 
     @POST
-    public User addUser(@Valid User user){
+    public User addUser(@Valid User user) {
         Long id = dao.addUser(user);
         user.setId(id);
         return user;
     }
-    
+
     @POST
     @Path("/update")
-    public User updateUser(@Auth AccessToken token, User user){
-    	if(token.getUserId() == user.getId()){
-    		dao.updateUser(user);
-    	}
-    	
-    	return user;
+    public User updateUser(@Auth AccessToken token, User user) {
+        if (token.getUserId() == user.getId()) {
+            dao.updateUser(user);
+        }
+
+        return user;
     }
-    
+
     @GET
     @Path("/{id}")
-    public Optional<User> getUser(@PathParam("id") Long id){
-    	return Optional.fromNullable(dao.getUserById(id));
+    public Optional<User> getUser(@PathParam("id") Long id) {
+        return Optional.fromNullable(dao.getUserById(id));
     }
 }

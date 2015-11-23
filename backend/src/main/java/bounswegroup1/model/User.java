@@ -16,134 +16,134 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 public class User {
-	private Long id;
-	
+    private Long id;
 
-	@NotNull
+    @NotNull
     private String email;
-	
-	@NotNull
+
+    @NotNull
     private String passwordHash;
-	
-	@NotNull
+
+    @NotNull
     private String passwordSalt;
-	
+
     private String fullName;
     private String location;
     private Date dateOfBirth;
-    
 
-    public User(){
-    	this.id = -1l;
+    public User() {
+        this.id = -1l;
     }
 
-	public User(Long id, String email, String passwordHash, String passwordSalt, String fullName,
-			String location, Date dateOfBirth) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.passwordHash = passwordHash;
-		this.passwordSalt = passwordSalt;
-		this.fullName = fullName;
-		this.location = location;
-		this.dateOfBirth = dateOfBirth;
-	}
-	
-	@JsonSetter("password")
-	public void setPassword(String password) throws InvalidKeySpecException, NoSuchAlgorithmException{		
-		final Random r = new SecureRandom();
-		byte[] salt = new byte[16];
-		r.nextBytes(salt);
-		
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-		
-		SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		
-		byte[] hash = fac.generateSecret(spec).getEncoded();
-		
-		this.passwordSalt = Base64.encodeBase64String(salt);
-		this.passwordHash = Base64.encodeBase64String(hash);
-	}
-	
-	public boolean checkPassword(String password) throws InvalidKeySpecException, NoSuchAlgorithmException{
-		if(password == null) return false;
-		
-		byte[] salt = Base64.decodeBase64(this.passwordSalt);
-		
-		System.out.println(this.passwordSalt);
-		System.out.println(this.passwordHash);
-		
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-		
-		SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		
-		byte[] hash = fac.generateSecret(spec).getEncoded();
-		
-		System.out.println(Base64.encodeBase64String(hash));
-		
-		return Base64.encodeBase64String(hash).equals(this.passwordHash);
-	}
+    public User(Long id, String email, String passwordHash, String passwordSalt, String fullName,
+            String location, Date dateOfBirth) {
+        super();
+        this.id = id;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.passwordSalt = passwordSalt;
+        this.fullName = fullName;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
+    }
 
-	@JsonGetter("email")
-	public String getEmail() {
-		return email;
-	}
+    @JsonSetter("password")
+    public void setPassword(String password)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        final Random r = new SecureRandom();
+        byte[] salt = new byte[16];
+        r.nextBytes(salt);
 
-	@JsonGetter("fullName")
-	public String getFullName() {
-		return fullName;
-	}
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
 
-	@JsonGetter("location")
-	public String getLocation() {
-		return location;
-	}
+        SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
-	@JsonGetter("dateOfBirth")
-	public Date getDateOfBirth() {
-		return dateOfBirth;
-	}
+        byte[] hash = fac.generateSecret(spec).getEncoded();
 
-	@JsonSetter("email")
-	public void setEmail(String email) {
-		this.email = email;
-	}
+        this.passwordSalt = Base64.encodeBase64String(salt);
+        this.passwordHash = Base64.encodeBase64String(hash);
+    }
 
-	@JsonSetter("fullName")
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-		
-	}
+    public boolean checkPassword(String password)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+        if (password == null)
+            return false;
 
-	@JsonSetter("location")
-	public void setLocation(String location) {
-		this.location = location;
-	}
+        byte[] salt = Base64.decodeBase64(this.passwordSalt);
 
-	@JsonSetter("dateOfBirth")
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
+        System.out.println(this.passwordSalt);
+        System.out.println(this.passwordHash);
 
-	@JsonIgnore
-	public String getPasswordHash() {
-		return passwordHash;
-	}
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
 
-	@JsonIgnore
-	public String getPasswordSalt() {
-		return passwordSalt;
-	}
-	
-	@JsonGetter("id")
-	public Long getId() {
-		return id;
-	}
+        SecretKeyFactory fac = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
-	@JsonSetter("id")
-	public void setId(Long id) {
-		this.id = id;
-	}
+        byte[] hash = fac.generateSecret(spec).getEncoded();
+
+        System.out.println(Base64.encodeBase64String(hash));
+
+        return Base64.encodeBase64String(hash).equals(this.passwordHash);
+    }
+
+    @JsonGetter("email")
+    public String getEmail() {
+        return email;
+    }
+
+    @JsonGetter("fullName")
+    public String getFullName() {
+        return fullName;
+    }
+
+    @JsonGetter("location")
+    public String getLocation() {
+        return location;
+    }
+
+    @JsonGetter("dateOfBirth")
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    @JsonSetter("email")
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @JsonSetter("fullName")
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+
+    }
+
+    @JsonSetter("location")
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @JsonSetter("dateOfBirth")
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    @JsonIgnore
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    @JsonIgnore
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    @JsonGetter("id")
+    public Long getId() {
+        return id;
+    }
+
+    @JsonSetter("id")
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
