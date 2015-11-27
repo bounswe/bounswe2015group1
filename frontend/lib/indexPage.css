@@ -77,3 +77,15 @@
 .login-block #buttonSubmit:hover {
     background: #ff7b81;
 }
+
+#searchForm{
+    /* The search form. */
+    background-color:#4C5A65;
+    padding:50px 50px 30px;
+    margin:10px 0;
+    position:relative;
+
+    -moz-border-radius:16px;
+    -webkit-border-radius:16px;
+    border-radius:16px;
+}
