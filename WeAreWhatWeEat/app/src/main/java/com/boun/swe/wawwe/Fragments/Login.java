@@ -74,8 +74,8 @@ public class Login extends BaseFragment {
                                                 });
                                         if (rememberMe.isChecked()) {
                                             App.setRememberMe(true);
-                                            App.setUser(user);
                                         }
+                                        App.setUser(user);
                                         exitLoginFragment();
                                     }
                                 },
@@ -113,8 +113,8 @@ public class Login extends BaseFragment {
                                                         App.setAccessValues(response);
                                                         if (rememberMe.isChecked()) {
                                                             App.setRememberMe(true);
-                                                            App.setUser(user);
                                                         }
+                                                        App.setUser(user);
                                                         exitLoginFragment();
                                                     }
                                                 },
