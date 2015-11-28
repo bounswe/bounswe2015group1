@@ -18,6 +18,7 @@ import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.Feeds;
 import com.boun.swe.wawwe.Fragments.Login;
 import com.boun.swe.wawwe.Fragments.Profile;
+import com.boun.swe.wawwe.Fragments.Search;
 import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
@@ -88,9 +89,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         resideMenu.attachToActivity(this);
 
         // Create and add menu items
-        String titles[] = { "Feed", "Profile" };
-        int icon[] = { R.mipmap.ic_whatshot_black_24dp, R.mipmap.ic_person_black_24dp };
-        int ids[] = { R.id.menu_feeds, R.id.menu_profile };
+        String titles[] = { "Feed", "Profile", "Search" };
+        int icon[] = { R.mipmap.ic_whatshot_black_24dp, R.mipmap.ic_person_black_24dp, R.mipmap.ic_add_black_24dp };
+        int ids[] = { R.id.menu_feeds, R.id.menu_profile, R.id.menu_search };
 
         for (int i = 0; i < titles.length; i++){
             MenuItem item = new MenuItem(this, icon[i], titles[i]);
@@ -189,6 +190,10 @@ public class MainActivity extends BaseActivity implements OnClickListener {
             case R.id.menu_profile:
                 makeFragmentTransaction(Profile.getFragment(new Bundle()));
                 resideMenu.closeMenu();
+                break;
+            case R.id.menu_search:
+                makeFragmentTransaction(Search.getFragment(new Bundle()));
+                resideMenu.closeMenu();;
                 break;
         }
     }

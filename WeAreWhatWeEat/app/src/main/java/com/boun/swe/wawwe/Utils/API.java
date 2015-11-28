@@ -125,6 +125,15 @@ public class API {
                 BASE_URL + "/user/update", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+    //Not Tested and No Api yet
+    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe> successListener,
+                                    Response.ErrorListener failureListener) {
+        //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
+        //String postBody = null;
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/recipe/search/%s",srchTxt),
+                Recipe.class, successListener, failureListener).setTag(tag));
+    }
 
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {

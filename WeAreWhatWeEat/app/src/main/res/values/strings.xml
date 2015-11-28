@@ -43,6 +43,7 @@
     <string name="action_menu_add">Add</string>
     <string name="title_menu_feeds">Feeds</string>
     <string name="title_menu_profile">Profile</string>
+    <string name="title_menu_search">Search</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
     <string name="title_menu_myRecipe">My Recipes</string>
