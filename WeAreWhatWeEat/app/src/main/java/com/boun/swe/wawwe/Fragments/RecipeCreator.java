@@ -30,17 +30,19 @@ import com.boun.swe.wawwe.Utils.API;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.gujun.android.taggroup.TagGroup;
+
 /**
  * Created by Mert on 31/10/15.
  */
 
 public class RecipeCreator extends BaseFragment {
 
-    static String name = "";
-    static String description  = "";
-    static ArrayList<String> ingredientNames;
-    static ArrayList<Integer> ingredientAmounts;
-    static ArrayList<String> ingredientUnits;
+    private String name = "";
+    private String description  = "";
+    private ArrayList<String> ingredientNames;
+    private ArrayList<Integer> ingredientAmounts;
+    private ArrayList<String> ingredientUnits;
     LinearLayout ingredientHolder;
 
     public RecipeCreator() { }
@@ -53,11 +55,19 @@ public class RecipeCreator extends BaseFragment {
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_creation,
                 container, false);
 
+        name = getArguments().getString("name");
+        description = getArguments().getString("description");
+        ingredientNames = getArguments().getStringArrayList("ingredientsName");
+        ingredientAmounts = getArguments().getIntegerArrayList("ingredientsAmount");
+        ingredientUnits = getArguments().getStringArrayList("ingredientsUnit");
+
         final EditText recipeName = (EditText) recipeCreationView.findViewById(R.id.recipeName);
         ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
         final EditText howTo = (EditText) recipeCreationView.findViewById(R.id.description);
         final Button addIngredients = (Button) recipeCreationView.findViewById(R.id.add_new_ingredient);
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
+
+        final TagGroup tagGroup = (TagGroup) recipeCreationView.findViewById(R.id.tag_group);
 
         addIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +81,7 @@ public class RecipeCreator extends BaseFragment {
             public void onClick(View view) {
                 String recipe_name = recipeName.getText().toString();
                 String directions = howTo.getText().toString();
+                String []alltags = tagGroup.getTags();
 
                 if (recipe_name.equals("") || directions.equals("")) {
                     Toast.makeText(App.getInstance(), "Some fields are missing",
@@ -205,11 +216,6 @@ public class RecipeCreator extends BaseFragment {
     public static RecipeCreator getFragment(Bundle bundle) {
         RecipeCreator recipeCreationFragment = new RecipeCreator();
         recipeCreationFragment.setArguments(bundle);
-        name = bundle.getString("name");
-        description = bundle.getString("description");
-        ingredientNames = bundle.getStringArrayList("ingredientsName");
-        ingredientAmounts = bundle.getIntegerArrayList("ingredientsAmount");
-        ingredientUnits = bundle.getStringArrayList("ingredientsUnit");
         return recipeCreationFragment;
     }
 

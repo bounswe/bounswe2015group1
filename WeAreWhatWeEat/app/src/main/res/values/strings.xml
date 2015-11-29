@@ -11,6 +11,7 @@
     <!-- Recipe Creation -->
     <string name="title_recipe">Recipe Creation</string>
     <string name="title_ingredients">Ingredients</string>
+    <string name="title_tags">Tags</string>
     <string name="title_directions">How To?</string>
     <string name="button_submit_recipe">Submit</string>
 
