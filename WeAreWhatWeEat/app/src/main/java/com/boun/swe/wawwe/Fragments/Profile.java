@@ -15,10 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,8 +27,6 @@ import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Mert on 09/11/15.
@@ -152,12 +148,6 @@ public class Profile extends BaseFragment {
         }
     }
 
-    public static Profile getFragment(Bundle bundle) {
-        Profile profileFragment = new Profile();
-        profileFragment.setArguments(bundle);
-        return profileFragment;
-    }
-
     private void setUserInfo(User user) {
         if (user == null) return;
         if (user.getFullName() != null)
@@ -165,7 +155,12 @@ public class Profile extends BaseFragment {
         if (user.getLocation() != null)
             location.setText(user.getLocation());
         if (user.getDateOfBirth() != null)
-            dateOfBirth.setText(new SimpleDateFormat("dd MM yyyy")
-                    .format(user.getDateOfBirth()));
+            dateOfBirth.setText(user.getDateOfBirth());
+    }
+
+    public static Profile getFragment(Bundle bundle) {
+        Profile profileFragment = new Profile();
+        profileFragment.setArguments(bundle);
+        return profileFragment;
     }
 }

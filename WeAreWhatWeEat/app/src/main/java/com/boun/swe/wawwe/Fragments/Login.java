@@ -64,6 +64,7 @@ public class Login extends BaseFragment {
                                                     public void onResponse(User response) {
                                                         response.setPassword(password);
                                                         App.setUser(response);
+                                                        exitLoginFragment();
                                                     }
                                                 },
                                                 new Response.ErrorListener() {
@@ -72,11 +73,9 @@ public class Login extends BaseFragment {
 
                                                     }
                                                 });
-                                        if (rememberMe.isChecked()) {
+                                        if (rememberMe.isChecked())
                                             App.setRememberMe(true);
-                                        }
                                         App.setUser(user);
-                                        exitLoginFragment();
                                     }
                                 },
                                 new Response.ErrorListener() {

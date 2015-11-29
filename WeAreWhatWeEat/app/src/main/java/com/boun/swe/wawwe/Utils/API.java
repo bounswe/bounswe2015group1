@@ -217,7 +217,7 @@ public class API {
             this.responseClazz = responseClazz;
             this.listener = listener;
 
-            Log.d((String) getTag(), url + ", method: " +
+            Log.v((String) getTag(), url + ", method: " +
                     (method == Request.Method.GET ? "GET" : "POST"));
         }
 
@@ -279,7 +279,7 @@ public class API {
                 String json = new String(
                         response.data,
                         HttpHeaderParser.parseCharset(response.headers));
-                Log.v("Request", json);
+                Log.v("Response", json);
                 return Response.success(
                         responseClazz.equals(Void.class) ? null :
                                 gson.fromJson(json, responseClazz),

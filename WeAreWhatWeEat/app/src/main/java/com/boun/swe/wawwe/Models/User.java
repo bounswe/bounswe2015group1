@@ -16,24 +16,19 @@ import java.util.Date;
  */
 public class User implements Parcelable {
 
-    // Service has saved user names with
-    // "username" string this is to meet
-    // that usage and also java conventions
-    // fullName...
-
     private int id;
     private String email;
     private String password;
     private String fullName;
     private String location;
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public User(int id, String email, String password, String fullName, String location, Date dateOfBirth) {
+    public User(int id, String email, String password, String fullName, String location, String dateOfBirth) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -74,11 +69,11 @@ public class User implements Parcelable {
         this.location = location;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
