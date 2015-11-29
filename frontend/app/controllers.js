@@ -65,6 +65,7 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 		});
 	}).controller('AddRecipeCtrl', function($scope, recipeService) {
 			$scope.ingredients=[];
+			$scope.taglist = [];
 			$scope.isEmpty = true;
 			var makeid =function() {
     			var text = "";
@@ -77,11 +78,14 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 			};
 
 			$scope.addRecipe = function() {
-				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc);
+				$scope.taglist = $scope.taglist.concat($scope.userTags.split());
+				console.log("TAGS: " + JSON.stringify($scope.taglist));
+				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc, taglist);
 			};
 			$scope.addIngredient = function() {
 				var ing = { "ingredientId": makeid(), "name": $scope.newIngredientName, "amount": parseInt($scope.newIngredientAmount), "unit": $scope.newIngredientUnit};
 				$scope.ingredients.push(ing);
+				$scope.taglist.push($scope.newIngredientName);
 				console.log(JSON.stringify($scope.ingredients));
 			};
 

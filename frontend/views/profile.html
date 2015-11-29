@@ -1,21 +1,18 @@
 <div ng-controller="ProfileCtrl">
 	
+  <div class="col-md-3" >
+    <img src="img/usermale.png" class="img-thumbnail" >
+    <h3>{{userName}}</h3>
+  </div>
+  <div class="col-md-9">
 	<uib-tabset>
-    	<uib-tab heading="Last Viewed"></uib-tab>
-    	<uib-tab heading="My Favorites"></uib-tab>
-    	<uib-tab heading="New Restaurants"></uib-tab>
+    	<uib-tab heading="Profile"></uib-tab>
+    	<uib-tab heading="My Recipes"></uib-tab>
+    	<uib-tab heading="Followed Users"></uib-tab>
+      <uib-tab heading="Options"></uib-tab>
+      <uib-tab heading="Messages"></uib-tab>
   	</uib-tabset>
-
-	
-	<uib-tabset vertical="true" type="pills" style="width : 50%; margin-left : -50%">
-		<h3>{{userName}}</h3>
-   		<uib-tab heading="My Recipes"></uib-tab>
-   		<uib-tab heading="Followed Users"></uib-tab>
-   		<uib-tab heading="Food Preferences"></uib-tab>
-   		<uib-tab heading="Messages"></uib-tab>
-   		<uib-tab heading="Address"></uib-tab>
-   		<uib-tab heading="Options"></uib-tab>
-  	</uib-tabset>
+  </div>
 
 
 </div>

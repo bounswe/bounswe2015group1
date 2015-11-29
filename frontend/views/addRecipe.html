@@ -1,11 +1,16 @@
 <div ng-controller="AddRecipeCtrl" class="row">
+	<div class="col-md-3">
+			<img src="img/chefhat.png" class="img-thumbnail" >
+			<input type="file">
+	</div>
+	<div class="col-md-9">
 	<form name="AddRecipe" role="form">
 		<h3>Create a recipe</h3>
 		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9" >
 			<label>Recipe Name</label>
 			<input type="text" class="form-control" placeholder="Recipe name" ng-model="recipeName">
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-9">
 			<label>Ingredients</label>
 		</div>
 		<div ng-show="ingredients.length > 0">
@@ -14,29 +19,35 @@
 			<div class="col-md-3"><label>Unit</label></div>
 		</div>
 		<div class="form-group form-inline" ng-repeat="ingredient in ingredients">
-			<div class="col-md-12">
+			<div class="col-md-9">
 			<input type="text" class="form-control" ng-model="ingredient.name"  required>
 			<input type="text" class="form-control" ng-model="ingredient.amount"  required>
 			<input type="text" class="form-control" ng-model="ingredient.unit"  required>
 			</div>
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-9">
 			<label>Add a new ingredient</label>
 		</div>
-		<div class="form-group form-inline col-xs-12 col-sm-12 col-md-12 col-lg-12	">
-			<input type="text" class="form-control col-md-3 col-lg-3 col-xs-12"  ng-model="newIngredientName" placeholder="Name" required>
-			<input type="text" class="form-control col-md-3 col-lg-3 col-xs-12" ng-model="newIngredientAmount" placeholder="Amount" required>
-			<input type="text" class="form-control col-md-3 col-lg-3 col-xs-12" ng-model="newIngredientUnit" placeholder="Unit" required>
-			<button class="form-control btn btn-default col-md-3 col-lg-3 col-xs-12" ng-click="addIngredient()" aria-label="Add Ingredient">
+		<div class="form-group form-inline col-xs-12 col-sm-12 col-md-9 col-lg-9	">
+			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12"  ng-model="newIngredientName" placeholder="Name" required>
+			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12" ng-model="newIngredientAmount" placeholder="Amount" required>
+			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12" ng-model="newIngredientUnit" placeholder="Unit" required>
+			<button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-click="addIngredient()" aria-label="Add Ingredient">
   			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
 		</div>
-		<div class="col-md-12">
+				<div class="col-md-9">
+			<label>Tags</label>
+			<input type="text" class="form-control" ng-model="userTags" placeholder="Tags">
+		</div>
+		<div class="col-md-9">
 			<label>Description</label>
 			<textarea rows="10" class="form-control" style="resize:none" ng-model="recipeDesc"></textarea>
 		</div>
-		<div class="col-md-12">
+
+		<div class="col-md-9">
 			<button type="submit" class="btn btn-default" ng-click="addRecipe()">Create Recipe</button>
 		</div>
 
 	</form>
+	</div>
 </div>
