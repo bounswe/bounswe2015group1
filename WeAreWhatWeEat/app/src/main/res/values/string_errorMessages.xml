@@ -12,4 +12,6 @@
     <string name="error_updateUser">User values could not be updated!</string>
 
     <string name="error_createRecipe">Could not add this recipe.</string>
+
+    <string name="error_editRecipe">Could not edit this recipe.</string>
 </resources>

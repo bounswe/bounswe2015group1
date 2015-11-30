@@ -134,6 +134,22 @@ public class API {
                 BASE_URL + String.format("/recipe/search/%s",srchTxt),
                 Recipe.class, successListener, failureListener).setTag(tag));
     }
+    //Not Tested and No Api yet
+    public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
+                                  Response.ErrorListener failureListener){
+        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                return f.getName().equals("id") || f.getName().equals("userId");
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) { return false; }
+        }).create().toJson(recipe, Recipe.class);
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+    }
 
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {

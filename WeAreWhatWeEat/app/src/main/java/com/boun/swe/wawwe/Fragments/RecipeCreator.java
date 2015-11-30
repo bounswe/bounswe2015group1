@@ -38,6 +38,7 @@ import me.gujun.android.taggroup.TagGroup;
 
 public class RecipeCreator extends BaseFragment {
 
+    private int recipeId;
     private String name = "";
     private String description  = "";
     private ArrayList<String> ingredientNames;
@@ -54,7 +55,7 @@ public class RecipeCreator extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_creation,
                 container, false);
-
+        recipeId = getArguments().getInt("recipeId");
         name = getArguments().getString("name");
         description = getArguments().getString("description");
         ingredientNames = getArguments().getStringArrayList("ingredientsName");
@@ -113,7 +114,24 @@ public class RecipeCreator extends BaseFragment {
                             (String) amountType.getSelectedItem()));
                 }
                 if (name != null && !name.equals("")) {
-                    //TODO edit recipe API comes here
+                    Recipe recipe = new Recipe(name, description, ingredients);
+                    API.editRecipe(RecipeCreator.class.getSimpleName(), recipe, recipeId,
+                            new Response.Listener<Recipe>() {
+                                @Override
+                                public void onResponse(Recipe response) {
+                                    if (context instanceof MainActivity) {
+                                        MainActivity main = (MainActivity) context;
+                                        main.onBackPressed();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, context.getString(R.string.error_editRecipe),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }else {
                     Recipe recipe = new Recipe(recipe_name, directions, ingredients);
 

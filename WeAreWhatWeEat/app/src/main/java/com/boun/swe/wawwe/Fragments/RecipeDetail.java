@@ -27,6 +27,7 @@ import me.gujun.android.taggroup.TagGroup;
  */
 
 public class RecipeDetail extends BaseFragment {
+    static int recipeId;
     static String name = "";
     static String description = "";
     static ArrayList<String> ingredientsName;
@@ -62,6 +63,7 @@ public class RecipeDetail extends BaseFragment {
                 .findViewById(R.id.ingredient_item_holder);
 
         recipeName.setText(recipe.getName());
+        recipeId = recipe.getId();
         name = recipe.getName();
         directions.setText(recipe.getDescription());
         description = recipe.getDescription();
@@ -121,6 +123,7 @@ public class RecipeDetail extends BaseFragment {
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
                     Bundle bundle = new Bundle();
+                    bundle.putInt("recipeId",recipeId);
                     bundle.putString("name",name );
                     bundle.putString("description",description);
                     bundle.putStringArrayList("ingredientsName", ingredientsName);

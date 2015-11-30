@@ -29,6 +29,8 @@ public class Recipe implements Parcelable {
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
     }
 
+    public int getId() { return id; }
+
     public String getName() {
         return name;
     }
