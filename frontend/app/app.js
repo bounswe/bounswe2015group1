@@ -182,7 +182,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 angular.module('FoodApp').factory('recipeService', function($http, $rootScope, userService) {
 	var recipes = [];
 	var recipeAddStatus = 0;
-	var addRecipe = function(name,ingredients,desc) {
+	var addRecipe = function(name,ingredients,desc,tags) {
 			var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/recipe',
