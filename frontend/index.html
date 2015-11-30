@@ -104,8 +104,23 @@
                   </div>
                   <div class="btn-group input-group" data-toggle="buttons" style="margin-top: 10px;">
                         <div>
-                            <label class="active" style="color:#DDDDDD;"><input type="radio" name="options"  autocomplete="off" ng-model="simpleSearch" checked /> Search</label>
-                            <label style="color:#DDDDDD; margin-left: 10px;"><input type="radio" name="options" autocomplete="off" ng-model="advanceSearch" /> Advance Search</label>
+                            <label class="active" style="color:#DDDDDD;" ng-click="isCollapsed = !isCollapsed">Advanced Options</label>
+                                  <div uib-collapse="isCollapsed">
+                                    <div class="well well-lg">
+                                      <div>
+                                        <label>Excludes</label>
+                                        <input type="text" ng-model="excludesText" placeholder="Excluding Ingredients">
+                                      </div>
+                                      <div>
+                                        <label>Provider</label>
+                                        <input type="text" ng-model="providerName" placeholder="Provider Name">
+                                      </div>
+                                      <div>
+                                        <label>Location</label>
+                                        <input type="text" ng-model="location" placeholder="Location">
+                                      </div>
+                                    </div>
+                                  </div>
                         </div>
                   </div>
                         
