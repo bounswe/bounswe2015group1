@@ -40,12 +40,22 @@
                 </ul>
                     
             </div>
-            <div ng-show="loggedIn">
-                  <ul class="nav navbar-nav navbar-right">
-                        <li><a ui-sref="addRecipe" > Create A Recipe </a></li>
-                        <li><a ui-sref="profile" > {{user.fullName}} </a></li>
-                        <li><a href="#" ng-click="logout()">Logout</a></li>
-                  </ul>
+            <div ng-show="loggedIn" style="float: right;margin-right: 20px;">
+                  <div style="margin-top:8px;">
+                        <button type="button" class="btn btn-info" style="background-color: #E85180;
+                          color: #690707;" ui-sref="addRecipe">Create A Recipe</button>
+                        <div class="dropdown" style="float:right;">
+                              <button class="btn btn-default dropdown-toggle" style="background-color: #4EABD9;" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                  {{user.fullName}}
+                                  <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <li><a ui-sref="profile" > {{user.fullName}} </a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#" ng-click="logout()">Logout</a></li>
+                              </ul>
+                        </div>
+                  </div>
             </div>
       </div>
 
