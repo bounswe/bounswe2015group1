@@ -9,7 +9,7 @@
     <string name="action_sign_in_short">Sign in</string>
 
     <!-- Recipe Creation -->
-    <string name="title_recipe">Recipe Creation</string>
+    <string name="title_recipe">Recipe Name</string>
     <string name="title_ingredients">Ingredients</string>
     <string name="title_tags">Tags</string>
     <string name="title_directions">How To?</string>
