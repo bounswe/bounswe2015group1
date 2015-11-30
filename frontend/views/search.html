@@ -1,0 +1,15 @@
+<div ng-controller="SearchCtrl">
+	<div ng-repeat="result in results" class="well well-lg row"> 
+		<div class="col-md-2">
+			<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%">
+		</div>
+		<div class="col-md-10">
+				<h3><a href="#" ng-click="viewRecipe(result.id)"> {{ result.name }} </a></h3>
+				<p>
+					<div ng-repeat="ingredient in result.ingredients">
+ 						{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
+					</div>
+				</p>
+		</div>
+	</div>
+</div>

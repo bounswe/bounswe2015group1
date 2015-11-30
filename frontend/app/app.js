@@ -25,6 +25,10 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 		url : '/viewRecipe/:recipeID',
 		controller : 'ViewRecipeCtrl',
 		templateUrl : '/views/viewRecipe.html'
+	}).state('search', {
+		url : '/search',
+		controller : 'SearchCtrl',
+		templateUrl : '/views/search.html'
 	});
 	$urlRouterProvider.otherwise('/');
 	/*$stateProvider.state('main', {
@@ -229,6 +233,34 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 			for (var i = 0; i < arrLen; i++) {
     			if(recipes[i].id == id) {
     				return recipes[i];
+    			}
+			}
+		}
+	};
+});
+
+angular.module('FoodApp').factory('searchService', function($http, $rootScope, userService) {
+	var results = [];
+	var start = 0;
+	var length = 5;
+	var tags = []
+	var search = function(query, begin, end) {
+		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
+			results = response.data;
+			console.log(JSON.stringify(results));
+		});
+
+		};
+	return {
+		search : search,
+		getResults : function() {
+			return results;
+		},
+		getResultWithID : function(id) {
+			var arrLen = results.length;
+			for (var i = 0; i < arrLen; i++) {
+    			if(results[i].id == id) {
+    				return results[i];
     			}
 			}
 		}

@@ -22,7 +22,7 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 				$scope.passRegister, $scope.birthDateRegister, $scope.locationRegister);
 		}
 
-	}).controller('NavBarCtrl', function($scope, $http, $window, $state, userService) {
+	}).controller('NavBarCtrl', function($scope, $http, $window, $state, userService, searchService) {
 		$scope.loggedIn = false;
 		$scope.login= function() {
 				userService.login($scope.emailLogin, $scope.passLogin);
@@ -37,6 +37,11 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 			$scope.user = userService.getUser();
 			$scope.token = userService.getToken();
 		});
+
+		$scope.search = function() {
+			searchService.search($scope.searchText,0,5);
+			$state.go('search');
+		};
 
 	}).controller('ProfileCtrl', function($scope,userService) {
 		var init = function() {
@@ -101,4 +106,15 @@ angular.module('FoodApp.Controllers', []).controller('MainCtrl', function($scope
 		$scope.back = function() {
 			$state.go($rootScope.previousState, $rootScope.previousParams);
 		}
+	}).controller('SearchCtrl', function($scope, $rootScope, $state, $stateParams, searchService) {
+		$scope.results = searchService.getResults();
+
+		$scope.viewRecipe = function(id) {
+			$state.go('viewRecipe', { recipeID : id});
+		};
+
+		$scope.$watch(searchService.getResults, function() {
+				$scope.results = searchService.getResults();
+				console.log('Results Fetched');
+		});
 	});
