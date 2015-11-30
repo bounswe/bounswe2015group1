@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,8 @@ import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 
 import java.util.ArrayList;
+
+import me.gujun.android.taggroup.TagGroup;
 
 /**
  * Created by Mert on 31/10/15.
@@ -29,6 +32,8 @@ public class RecipeDetail extends BaseFragment {
     static ArrayList<String> ingredientsName;
     static ArrayList<Integer> ingredientsAmount;
     static ArrayList<String> ingredientsUnit;
+
+
     public RecipeDetail() { }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class RecipeDetail extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
         ingredientsName = new ArrayList<String>();
@@ -45,6 +51,11 @@ public class RecipeDetail extends BaseFragment {
         ingredientsUnit = new ArrayList<String>();
         Recipe recipe = getArguments().getParcelable("recipe");
 
+        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+
+        tagGroupStatic.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
+
+        ImageView recipeImage = (ImageView) recipeCreationView.findViewById(R.id.recipeImage);
         TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
         TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
         LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
