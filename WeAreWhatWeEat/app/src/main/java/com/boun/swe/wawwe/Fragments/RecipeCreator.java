@@ -68,6 +68,9 @@ public class RecipeCreator extends BaseFragment {
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
 
         final TagGroup tagGroup = (TagGroup) recipeCreationView.findViewById(R.id.tag_group);
+        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+
+        tagGroupStatic.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
 
         addIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +84,8 @@ public class RecipeCreator extends BaseFragment {
             public void onClick(View view) {
                 String recipe_name = recipeName.getText().toString();
                 String directions = howTo.getText().toString();
-                String []alltags = tagGroup.getTags();
+                String []alltagsUserGenerated = tagGroup.getTags();
+                String []alltagsStatic = tagGroupStatic.getTags();
 
                 if (recipe_name.equals("") || directions.equals("")) {
                     Toast.makeText(App.getInstance(), "Some fields are missing",

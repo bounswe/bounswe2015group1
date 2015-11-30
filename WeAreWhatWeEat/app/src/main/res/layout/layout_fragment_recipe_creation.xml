@@ -70,6 +70,16 @@
                 android:layout_marginTop="20dp" />
 
             <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group_static"
+                style="@style/TagGroup.Large"
+                app:atg_borderColor="@color/colorAccent"
+                app:atg_textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+            <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group"
                 style="@style/TagGroup.Large"
                 app:atg_isAppendMode="true"
