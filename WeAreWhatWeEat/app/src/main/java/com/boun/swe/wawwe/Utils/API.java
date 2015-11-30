@@ -182,6 +182,24 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void searchIngredients(String tag, String query, Response.Listener<Ingredient[]> successListener,
+                                         Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/search/%s",
+                query), Ingredient[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void autocompleteIngredients(String tag, String query, Response.Listener<Ingredient[]> successListener,
+                                                Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/autocomplete/%s",
+                query), Ingredient[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getIngredientItems(String tag, int itemId, Response.Listener<Ingredient[]> successListener,
+                                               Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/item/%d",
+                itemId), Ingredient[].class, successListener, failureListener).setTag(tag));
+    }
+
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
