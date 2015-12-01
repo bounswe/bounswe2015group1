@@ -1,5 +1,6 @@
 myApp.controller('NavBarCtrl', function($scope, $http, $window, $state, userService, searchService) {
 		$scope.loggedIn = false;
+		$scope.isCollapsed = true;
 		$scope.login= function() {
 				userService.login($scope.emailLogin, $scope.passLogin);
 		};

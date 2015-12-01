@@ -1,4 +1,4 @@
-myApp.controller('AddRecipeCtrl', function($scope, recipeService) {
+myApp.controller('AddRecipeCtrl', function($scope, $http, recipeService) {
 			$scope.ingredients=[];
 			$scope.taglist = [];
 			$scope.isEmpty = true;
@@ -28,5 +28,11 @@ myApp.controller('AddRecipeCtrl', function($scope, recipeService) {
 				$scope.ingredients = [];
 				console.log('Add Recipe Successful');
 			});
+
+			$scope.getLocation = function(val) {
+    			return $http.get('http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080/api/ingredient/autocomplete/' + val + '*').then(function(response){
+      				return response.data;
+      			});
+  			};
 
 	});
