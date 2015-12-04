@@ -16,8 +16,8 @@ myApp.controller('NavBarCtrl', function($scope, $http, $window, $state, userServ
 		});
 
 		$scope.search = function() {
-			searchService.search($scope.searchText,0,5);
-			$state.go('search');
+			//searchService.search($scope.searchText,0,5);
+			$state.go('search', {query : $scope.searchText});
 		};
 
 	});

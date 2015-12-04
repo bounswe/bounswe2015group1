@@ -11,25 +11,23 @@
 		<button type="button" ng-click="addRating()" class="btn">Rate</button></p>
 	</div>
 	<div class="col-md-7">
-		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ recipe.name }} </h3>
+		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ menu.name }} </h3>
 		<br/>
-		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Ingredients</u></h4>
+		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Included Recipes</u></h4>
 		<table class="table table-bordered">
-			<tr ng-repeat="ingredient in recipe.ingredients">
-				<td class="success">{{ ingredient.amount }}</td>
-				<td class="danger">{{ ingredient.unit }}</td>
-				<td class="info">{{ ingredient.name  }}</td>
+			<tr ng-repeat="recipe in menu.recipes">
+				<td><a href="#" ng-click="viewRecipe(recipe.id)">{{ recipe.name }}</td>
 			</tr>
 		</table>
 		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Description</u></h4>
-		{{ recipe.description }}
+		{{ menu.description }}
 		<br/>
 		<div>
 			<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Comments</u></h4>
 			<div ng-repeat="(id,comment) in comments">
 				{{comment.body}}
 				<br />
-				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.id)">Delete</a>  {{comment.owner}} on {{comment.date}}</span>
+				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.id)">{{comment.owner}} on {{comment.date}}</span>
 			</div>
 		</div>
 		
