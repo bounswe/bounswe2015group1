@@ -18,11 +18,11 @@
 			<div class="col-md-3"><label>Amount</label></div>
 			<div class="col-md-3"><label>Unit</label></div>
 		</div>
-		<div class="form-group form-inline" ng-repeat="ingredient in ingredients">
+		<div class="form-group form-inline" ng-repeat="(index,ingredient) in ingredients">
 			<div class="col-md-9">
-			<input type="text" class="form-control" ng-model="ingredient.ingredient.item_name"  required>
+			<input type="text" class="form-control" ng-model="ingredient.name"  required>
 			<input type="text" class="form-control" ng-model="ingredient.amount"  required>
-			<input type="text" class="form-control" ng-model="ingredient.ingredient.nf_serving_size_unit"  required>
+			<input type="text" class="form-control" ng-model="ingredientUnits[index]"  required>
 			</div>
 		</div>
 		<div class="col-md-9">

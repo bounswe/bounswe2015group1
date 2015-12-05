@@ -1,5 +1,6 @@
 myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeService) {
 			$scope.ingredients=[];
+			$scope.ingredientUnits = [];
 			$scope.taglist = [];
 			$scope.userTags = ""
 			$scope.isEmpty = true;
@@ -18,11 +19,11 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 				$scope.taglist = [];
 				for(var i=0 ; i<$scope.ingredients.length; i++) {
 					var ing = $scope.ingredients[i];
-					var multiplier = ing.amount / ing.ingredient.nf_serving_size_qty;
+					//var multiplier = ing.amount / ing.ingredient.nf_serving_size_qty;
 					$scope.taglist = $scope.taglist.concat(ing.tags);
 
 					//DEBUG
-					console.log("Cal: " +ing.ingredient.nf_calories );
+					/*console.log("Cal: " +ing.ingredient.nf_calories );
 					console.log("Carbo" +  ing.ingredient.nf_total_carbohydrate);
 					console.log("Fat " + ing.ingredient.nf_total_fat) ;
 					console.log("Protein " +  ing.ingredient.nf_protein );
@@ -30,10 +31,10 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 					console.log("Fiber " + ing.ingredient.nf_dietary_fiber);
 					console.log("Cholest " + ing.ingredient.nf_cholesterol);
 					console.log("Sugars " +  ing.ingredient.nf_sugars);
-					console.log("Iron " + ing.ingredient.nf_iron_dv);
+					console.log("Iron " + ing.ingredient.nf_iron_dv);*/
 					//NODEBUG
 
-					nutrition.calories += ing.ingredient.nf_calories  * multiplier;
+					/*nutrition.calories += ing.ingredient.nf_calories  * multiplier;
 					nutrition.carbohydrate = ing.ingredient.nf_total_carbohydrate * multiplier;
 					nutrition.fats = ing.ingredient.nf_total_fat * multiplier;
 					nutrition.proteins = ing.ingredient.nf_protein * multiplier;
@@ -41,7 +42,16 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 					nutrition.fiber = ing.ingredient.nf_dietary_fiber * multiplier;
 					nutrition.cholesterol = ing.ingredient.nf_cholesterol * multiplier;
 					nutrition.sugars = ing.ingredient.nf_sugars * multiplier;
-					nutrition.iron = ing.ingredient.nf_iron_dv * multiplier;
+					nutrition.iron = ing.ingredient.nf_iron_dv * multiplier;*/
+					nutrition.calories += ing.nutritions.calories;
+					nutrition.carbohydrate += ing.nutritions.carbohydrate;
+					nutrition.fats += ing.nutritions.fats;
+					nutrition.proteins += ing.nutritions.proteins;
+					nutrition.sodium += ing.nutritions.sodium;
+					nutrition.fiber += ing.nutritions.fiber;
+					nutrition.cholesterol += ing.nutritions.cholesterol;
+					nutrition.sugars += ing.nutritions.sugars;
+					nutrition.iron += ing.nutritions.iron;
 				}
 				if($scope.userTags != "")
 					$scope.taglist = $scope.taglist.concat($scope.userTags.split());
@@ -55,10 +65,28 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 				$scope.newIngredientFullData = null;
 			};
 			$scope.addIngredient = function() {
-				var ing = { "ingredient" : $scope.newIngredientFullData, "amount": parseInt($scope.newIngredientAmount), "tags": $scope.newIngredientFullData.item_name.split()};
-				$scope.ingredients.push(ing);
+				console.log("CURR INGREDIENT: " + JSON.stringify($scope.newIngredientFullData));
+				var nutrition = { "calories" : 0, "carbohydrate" : 0, "fats" : 0, "proteins" : 0, "sodium" : 0, "fiber" : 0, "cholesterol" : 0, "sugars" : 0, "iron" : 0};
+				var ing = $scope.newIngredientFullData;
+				var amount = parseInt($scope.newIngredientAmount);
+				var multiplier = amount / ing.nf_serving_size_qty;
+
+				nutrition.calories += ing.nf_calories  * multiplier;
+				nutrition.carbohydrate = ing.nf_total_carbohydrate * multiplier;
+				nutrition.fats = ing.nf_total_fat * multiplier;
+				nutrition.proteins = ing.nf_protein * multiplier;
+				nutrition.sodium = ing.nf_sodium * multiplier;
+				nutrition.fiber = ing.nf_dietary_fiber * multiplier;
+				nutrition.cholesterol = ing.nf_cholesterol * multiplier;
+				nutrition.sugars = ing.nf_sugars * multiplier;
+				nutrition.iron = ing.nf_iron_dv * multiplier;
+
+				var ingredient = {"ingredientId" : $scope.newIngredientFullData.item_id , "name" : $scope.newIngredientFullData.item_name, "amount": amount, "nutritions" : nutrition }
+				//var ing = { "ingredient" : $scope.newIngredientFullData, "amount": parseInt($scope.newIngredientAmount), "tags": $scope.newIngredientFullData.item_name.split()};
+				$scope.ingredients.push(ingredient);
+				$scope.ingredientUnits.push(ing.nf_serving_size_unit);
 				//$scope.taglist.concat();
-				console.log(JSON.stringify($scope.ingredients));
+				console.log("INGREDIENTS: " + JSON.stringify($scope.ingredients));
 				$scope.newIngredientName = "";
 				$scope.newIngredientAmount = "";
 				$scope.newIngredientFullData = null;

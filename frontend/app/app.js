@@ -167,7 +167,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 	var recipes = [];
 	var recipeAddStatus = 0;
 	var recipe = null;
-	var addRecipe = function(name,ingredients,desc,tags) {
+	var addRecipe = function(name,ingredients,desc,tags, nutrition) {
 			var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/recipe',
@@ -175,9 +175,9 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 			   'Authorization': 'Bearer ' + userService.getToken().accessToken,
 			   'Content-Type': 'application/json'
 			 },
-			 data : { "name" : name, "ingredients" : ingredients, "description": desc }
+			 data : { "name" : name, "ingredients" : ingredients, "description": desc, "tags" : tags , "nutritions" : nutrition}
 			};
-			console.log("Recipe Obj: " + JSON.stringify({ "name" : name, "ingredients" : ingredients}));
+			console.log("Recipe Obj: " + JSON.stringify({ "name" : name, "ingredients" : ingredients, "description": desc, "tags" : tags, "nutritions" : nutrition }));
 			console.log('auth: ' + userService.getToken().accessToken );
 			$http(req).then(function(response){
 				recipeAddStatus = 200;
@@ -266,7 +266,10 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, u
 
 	var menuSearch = function(query) {
 		//return $http.get($rootScope.baseUrl + '/api/search/menu/' + query);
-		return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		return $http.get($rootScope.baseUrl + '/api/recipe/all').then(function(){
+			return response.data;
+		});
 	};
 	return {
 		recipeSearch : recipeSearch,

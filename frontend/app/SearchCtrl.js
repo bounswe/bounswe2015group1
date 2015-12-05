@@ -17,7 +17,6 @@ myApp.controller('SearchCtrl', function($scope, $rootScope, $state, $stateParams
 			});
 		}
 
-
 		$scope.search($stateParams.query);
 		/*$scope.$watch(searchService.getResults, function() {
 				$scope.results = searchService.getResults();
