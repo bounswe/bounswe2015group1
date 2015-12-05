@@ -40,7 +40,9 @@ public class Profile extends BaseFragment {
 
     RecyclerView myFeeds;
 
-    public Profile() { }
+    public Profile() {
+        TAG = App.getInstance().getString(R.string.title_menu_profile);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class Profile extends BaseFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         myFeeds.setAdapter(adapter);
 
-        API.getAllRecipes(Profile.class.getSimpleName(),
+        API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
@@ -89,7 +91,9 @@ public class Profile extends BaseFragment {
                 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
+                    // TODO gives IllegalStateException on fragment removal
+//                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
+                    int diameter = 144;
                     outline.setOval(0, 0, diameter, diameter);
                 }
             });
@@ -101,22 +105,13 @@ public class Profile extends BaseFragment {
                         public void onClick(View v) {
                             if (context instanceof MainActivity) {
                                 MainActivity main = (MainActivity) context;
-                                main.makeFragmentTransaction(RecipeCreator.getFragment(new Bundle()));
+                                main.makeFragmentTransaction(RecipeCreator.getFragment(null));
                             }
                         }
                     });
         }
 
         return profileView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity)
-            ((MainActivity) context).getSupportActionBar()
-                    .setTitle(R.string.title_menu_profile);
     }
 
     @Override
@@ -140,7 +135,7 @@ public class Profile extends BaseFragment {
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
 
-                    main.makeFragmentTransaction(RecipeCreator.getFragment(new Bundle()));
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(null));
                 }
                 return true;
             default:

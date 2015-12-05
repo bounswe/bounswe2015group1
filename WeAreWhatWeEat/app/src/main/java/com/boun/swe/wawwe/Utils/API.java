@@ -41,6 +41,8 @@ public class API {
 
     private static String UUID;
 
+    private static boolean isTest = true;
+
     public static void init() {
         if (instance == null) {
             instance = new API();
@@ -150,6 +152,14 @@ public class API {
                 BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+    //Not Tested and No Api yet
+    public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
+                                  Response.ErrorListener failureListener) {
+        if (isTest) successListener.onResponse(new String[] { "Tag1", "Tag2", "Tag3" });
+        else mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + String.format("/recipe/tags/%d", recipeId),
+                String[].class, successListener, failureListener).setTag(tag));
+    }
 
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {
@@ -251,7 +261,7 @@ public class API {
             this.responseClazz = responseClazz;
             this.listener = listener;
 
-            Log.v((String) getTag(), url + ", method: " +
+            Log.v("Request", url + ", method: " +
                     (method == Request.Method.GET ? "GET" : "POST"));
         }
 
@@ -284,7 +294,6 @@ public class API {
 
         @Override
         protected void deliverResponse(T response) {
-            Log.v("Request", new Gson().toJson(response));
             if (listener != null)
                 listener.onResponse(response);
         }

@@ -14,14 +14,7 @@
     <string name="title_tags">Tags</string>
     <string name="title_directions">How To?</string>
     <string name="button_submit_recipe">Submit</string>
-
-    <string-array name="amount_type">
-        <item>gr</item>
-        <item>kg</item>
-        <item>tsp</item>
-        <item>tbsp</item>
-        <item>cups</item>
-    </string-array>
+    <string name="button_edit_recipe">Save Changes</string>
 
     <!-- Profile -->
     <string name="title_fullName">Name</string>
@@ -47,5 +40,6 @@
     <string name="title_menu_search">Search</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
+    <string name="title_menu_recipeDetail">Recipe Detail</string>
     <string name="title_menu_myRecipe">My Recipes</string>
 </resources>

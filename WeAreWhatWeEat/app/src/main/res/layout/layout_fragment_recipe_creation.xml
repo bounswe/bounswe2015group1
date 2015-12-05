@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <ScrollView
@@ -12,17 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" >
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_recipe"
-                android:id="@+id/textView" />
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rCreation_header_rName"
+                style="@style/CustomTitle" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -30,20 +26,14 @@
                 android:id="@+id/recipeName"
                 android:hint="Enter the name of the recipe here"
                 android:background="@drawable/border_style"
-                android:layout_marginTop="20dp"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" />
+                android:padding="@dimen/activity_horizontal_margin" >
 
+                <requestFocus/>
+            </EditText>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_ingredients"
-                android:id="@+id/textView2"
-                android:layout_marginTop="20dp" />
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rCreation_header_rIngredients"
+                style="@style/CustomTitle" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -60,43 +50,9 @@
                     android:background="@mipmap/plus" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_tags"
-                android:id="@+id/textView4"
-                android:layout_marginTop="20dp" />
-
-            <me.gujun.android.taggroup.TagGroup
-                android:id="@+id/tag_group_static"
-                style="@style/TagGroup.Large"
-                app:atg_borderColor="@color/colorAccent"
-                app:atg_textColor="@color/colorAccent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <me.gujun.android.taggroup.TagGroup
-                android:id="@+id/tag_group"
-                style="@style/TagGroup.Large"
-                app:atg_isAppendMode="true"
-                app:atg_borderColor="@color/colorPrimaryDark"
-                app:atg_textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_directions"
-                android:id="@+id/textView3"
-                android:layout_marginTop="20dp" />
-
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rCreation_header_rHowTo"
+                style="@style/CustomTitle" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -104,16 +60,33 @@
                 android:id="@+id/description"
                 android:hint="Enter the recipe here"
                 android:background="@drawable/border_style"
-                android:layout_marginTop="20dp"
                 android:padding="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:minLines="3" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rCreation_header_rTags"
+                style="@style/CustomTitle" />
+
+            <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group_static"
+                style="@style/TagGroup.Large"
+
+                app:atg_borderColor="@color/colorAccent"
+                app:atg_textColor="@color/colorAccent"
+                android:layout_margin="10dp"/>
+
+            <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group"
+                style="@style/TagGroup.Large"
+                app:atg_isAppendMode="true"
+                app:atg_borderColor="@color/colorPrimaryDark"
+                app:atg_textColor="@color/colorPrimaryDark" />
 
             <Button
                 android:layout_gravity="center_horizontal"
                 style="@style/CustomButton"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:text="@string/button_submit_recipe"
                 android:id="@+id/button_recipe_submit" />
 

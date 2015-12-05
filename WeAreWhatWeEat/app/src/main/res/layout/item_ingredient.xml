@@ -5,7 +5,7 @@
     android:weightSum="100"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    >
+    android:paddingTop="15dp">
 
     <EditText
         android:layout_width="0dp"
@@ -15,40 +15,24 @@
         android:ems="10"
         android:id="@+id/ingredient_amount"
         android:hint="Amt."
-        android:background="@drawable/border_style"
-        android:layout_marginTop="15dp"
-        />
-
-    <Spinner
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="25"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/spinner_amountType"
-        android:background="@drawable/border_style"
-        android:layout_marginTop="15dp"
-        />
+        android:background="@drawable/border_style" />
 
     <EditText
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="55"
+        android:layout_weight="80"
         android:layout_marginLeft="5dp"
         android:id="@+id/ingredient_name"
         android:hint="Enter ingredient"
-        android:background="@drawable/border_style"
-        android:layout_marginTop="15dp"
-
-        />
+        android:background="@drawable/border_style" />
 
     <ImageButton
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
         android:layout_gravity="center_vertical"
         android:id="@+id/button_ingredient_delete"
-        android:background="@mipmap/minus"
-        />
+        android:background="@mipmap/minus" />
+
 </LinearLayout>

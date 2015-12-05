@@ -18,6 +18,7 @@ public class User implements Parcelable {
 
     private int id;
     private String email;
+    private boolean isRestaurant;
     private String password;
     private String fullName;
     private String location;
@@ -59,6 +60,14 @@ public class User implements Parcelable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isRestaurant() {
+        return isRestaurant;
+    }
+
+    public void setIsRestaurant(boolean isRestaurant) {
+        this.isRestaurant = isRestaurant;
     }
 
     public String getLocation() {

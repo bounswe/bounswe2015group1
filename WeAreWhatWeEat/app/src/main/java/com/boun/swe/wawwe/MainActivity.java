@@ -2,6 +2,7 @@ package com.boun.swe.wawwe;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.CustomViews.MenuItem;
 import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.Feeds;
+import com.boun.swe.wawwe.Fragments.LeafFragment;
 import com.boun.swe.wawwe.Fragments.Login;
 import com.boun.swe.wawwe.Fragments.Profile;
 import com.boun.swe.wawwe.Fragments.Search;
@@ -65,6 +67,21 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                     });
         else
             makeFragmentTransaction(Login.getFragment(new Bundle()));
+
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment fr = getSupportFragmentManager().findFragmentById(R.id.container);
+                if (fr != null) {
+                    if (fr instanceof LeafFragment)
+                        setDisplayHomeAsUp();
+                    else
+                        setDisplayHomeAsNavigator();
+                    toolbar.setTitle(((BaseFragment) fr).TAG);
+                }
+            }
+        });
     }
 
     @Override
@@ -102,7 +119,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-    public void setDisplayHomeAsUp() {
+    private void setDisplayHomeAsUp() {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
@@ -112,7 +129,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         });
     }
 
-    public void setDisplayHomeAsNavigator() {
+    private void setDisplayHomeAsNavigator() {
         toolbar.setNavigationIcon(R.mipmap.ic_menu_black_24dp);
         toolbar.setNavigationOnClickListener(new OnClickListener() {
             @Override
@@ -129,7 +146,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                transaction.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
+                transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                        android.R.anim.slide_in_left,  android.R.anim.slide_out_right);
+                transaction.replace(R.id.container, fragment, fragment.TAG);
                 transaction.addToBackStack(fragment.getClass().getSimpleName());
                 transaction.commit();
             }
@@ -150,8 +169,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_main_subSettings:
-                return true;
             case R.id.menu_main_subLogout:
                 API.logout(MainActivity.class.getSimpleName(),
                         new Response.Listener<User>() {
@@ -181,6 +198,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     }
 
     @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+            finish();
+        else super.onBackPressed();
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.menu_feeds:
@@ -193,7 +217,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.menu_search:
                 makeFragmentTransaction(Search.getFragment(new Bundle()));
-                resideMenu.closeMenu();;
+                resideMenu.closeMenu();
                 break;
         }
     }

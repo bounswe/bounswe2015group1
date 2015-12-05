@@ -31,7 +31,7 @@ import java.util.Calendar;
 /**
  * Created by Mert on 09/11/15.
  */
-public class ProfileEdit extends BaseFragment implements DatePickerDialog.OnDateSetListener {
+public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDateSetListener {
 
     private String DATEPICKER_TAG = "date_picker";
 
@@ -48,6 +48,7 @@ public class ProfileEdit extends BaseFragment implements DatePickerDialog.OnDate
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        TAG = App.getInstance().getString(R.string.title_menu_profileEdit);
     }
 
     @Nullable
@@ -92,18 +93,6 @@ public class ProfileEdit extends BaseFragment implements DatePickerDialog.OnDate
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, 0, 0);
         dateOfBirth.setText(String.format("%d-%02d-%02d", year, month, day));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-            main.getSupportActionBar()
-                .setTitle(R.string.title_menu_profileEdit);
-            main.setDisplayHomeAsUp();
-        }
     }
 
     @Override

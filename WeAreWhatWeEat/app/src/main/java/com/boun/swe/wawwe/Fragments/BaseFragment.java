@@ -19,6 +19,7 @@ import com.boun.swe.wawwe.Utils.API;
  */
 public class BaseFragment extends Fragment {
 
+    public String TAG;
     protected Context context;
 
     @Override
