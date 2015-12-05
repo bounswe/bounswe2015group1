@@ -223,6 +223,11 @@ public class API {
                 successListener, failureListener).setTag(tag));
     }
 
+    public static void getMenu(String tag, int menuID, Response.Listener<Menu> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d",
+                menuID), Menu.class, successListener, failureListener).setTag(tag));
+    }
 
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
