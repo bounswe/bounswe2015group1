@@ -13,12 +13,14 @@
     <script src="app/app.js"> </script>
     <script src="app/controllers.js"> </script>
     <script src="app/AddRecipeCtrl.js"> </script>
+    <script src="app/AddMenuCtrl.js"> </script>
     <script src="app/LoginCtrl.js"> </script>
     <script src="app/NavBarCtrl.js"> </script>
     <script src="app/ProfileCtrl.js"> </script>
     <script src="app/RegisterCtrl.js"> </script>
     <script src="app/SearchCtrl.js"> </script>
     <script src="app/ViewRecipeCtrl.js"> </script>
+    <script src="app/ViewMenuCtrl.js"> </script>
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
   </head>
 
@@ -49,6 +51,8 @@
                   </div>
                   <div ng-show="loggedIn" style="float: right;margin-right: 20px;">
                         <div style="margin-top:8px;">
+                              <button type="button" class="btn btn-info" style="background-color: #E85180;
+                                color: #690707;" ui-sref="addMenu">Create A Menu</button>
                               <button type="button" class="btn btn-info" style="background-color: #E85180;
                                 color: #690707;" ui-sref="addRecipe">Create A Recipe</button>
                               <div class="dropdown" style="float:right;">

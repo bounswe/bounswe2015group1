@@ -1,15 +1,45 @@
 <div ng-controller="SearchCtrl">
-	<div ng-repeat="result in results" class="well well-lg row"> 
-		<div class="col-md-2">
-			<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%">
-		</div>
-		<div class="col-md-10">
-				<h3><a href="#" ng-click="viewRecipe(result.id)"> {{ result.name }} </a></h3>
-				<p>
-					<div ng-repeat="ingredient in result.ingredients">
- 						{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
-					</div>
-				</p>
-		</div>
-	</div>
+	<uib-tabset>
+    	<uib-tab heading="Recipes">
+    		<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+				<div class="row" ng-repeat=" recipe in recipeResults.slice(((recipesCurrentPage-1)*maxSize+1),recipesCurrentPage*maxSize)">
+					<div class="col-md-3">
+		              	<img src="img/chefhat.png" class="img-thumbnail">
+	            	</div>
+	            	<div class="col-md-9">
+	            		<h3><a href="#"  ng-click="viewRecipe(recipe.id)">{{ recipe.name }} </a></h3>
+	       				<p>{{ recipe.description}}</p>
+	            	</div>
+				</div>
+			<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+    	</uib-tab>
+    		<!--
+    		<div ng-repeat="result in menuResults" class="well well-lg row"> 
+				<div class="col-md-2">
+					<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%">
+				</div>
+				<div class="col-md-10">
+					<h3><a href="#" ng-click="viewRecipe(result.id)"> {{ result.name }} </a></h3>
+					<p>
+						<div ng-repeat="ingredient in result.ingredients">
+		 					{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
+						</div>
+					</p>
+				</div>
+			</div>-->
+    	<uib-tab heading="Menus">
+    	    <uib-pagination total-items="menuResults.length" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+				<div class="row" ng-repeat=" menu in menuResults.slice(((menusCurrentPage-1)*maxSize+1),menusCurrentPage*maxSize)">
+					<div class="col-md-3">
+		              	<img src="img/chefhat.png" class="img-thumbnail">
+	            	</div>
+	            	<div class="col-md-9">
+	            		<h3><a href="#"  ng-click="viewMenu(menu.id)">{{ menu.name }} </a></h3>
+	       				<p>{{ menu.description}}</p>
+	            	</div>
+				</div>
+			<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+    	</uib-tab>
+  	</uib-tabset>
+	
 </div>
