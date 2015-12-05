@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.google.gson.ExclusionStrategy;
@@ -40,6 +41,8 @@ public class API {
     private static API instance;
 
     private static String UUID;
+
+    private static boolean isTest = true;
 
     public static void init() {
         if (instance == null) {
@@ -150,6 +153,20 @@ public class API {
                 BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+    //Not Tested and No Api yet
+    public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
+                                  Response.ErrorListener failureListener) {
+        if (isTest) successListener.onResponse(new String[] { "Tag1", "Tag2", "Tag3" });
+        else mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + String.format("/recipe/tags/%d", recipeId),
+                String[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getRecipe(String tag, int recipeID, Response.Listener<Recipe> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/view/%d",
+                recipeID), Recipe.class, successListener, failureListener).setTag(tag));
+    }
 
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {
@@ -200,6 +217,45 @@ public class API {
                 itemId), Ingredient[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void getAllMenusforUser(String tag, Response.Listener<Menu> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +"/menu", Menu.class,
+                successListener, failureListener).setTag(tag));
+    }
+
+    public static void getMenu(String tag, int menuID, Response.Listener<Menu> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d",
+                menuID), Menu.class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getRecipesforMenu(String tag, int menuID, Response.Listener<Recipe[]> successListener,
+                               Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d/recipes",
+                menuID), Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void createMenu(String tag, Menu menu, Response.Listener<Menu> successListener,
+                             Response.ErrorListener failureListener) {
+        if (isTest) {
+            successListener.onResponse(menu);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return f.getName().equals("id");
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(menu, Menu.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/menu", Menu.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -251,7 +307,7 @@ public class API {
             this.responseClazz = responseClazz;
             this.listener = listener;
 
-            Log.v((String) getTag(), url + ", method: " +
+            Log.v("Request", url + ", method: " +
                     (method == Request.Method.GET ? "GET" : "POST"));
         }
 
@@ -284,7 +340,6 @@ public class API {
 
         @Override
         protected void deliverResponse(T response) {
-            Log.v("Request", new Gson().toJson(response));
             if (listener != null)
                 listener.onResponse(response);
         }

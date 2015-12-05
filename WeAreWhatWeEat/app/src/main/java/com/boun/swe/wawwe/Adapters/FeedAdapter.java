@@ -49,7 +49,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.UserViewHolder
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View userItemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_user, parent, false);
+                .inflate(R.layout.item_recipe, parent, false);
         return new UserViewHolder(userItemView);
     }
 
@@ -69,10 +69,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.UserViewHolder
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
-                    Bundle recipeBundle = new Bundle();
-                    recipeBundle.putParcelable("recipe", recipe);
-                    main.makeFragmentTransaction(RecipeDetail
-                            .getFragment(recipeBundle));
+                    main.makeFragmentTransaction(RecipeDetail.getFragment(recipe));
                 }
             }
         });
@@ -82,12 +79,19 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.UserViewHolder
 
         public ImageView recipePic;
         public TextView recipeName;
+        public TextView type;
+        public TextView calories;
+        public TextView score;
 
         public UserViewHolder(View itemView) {
             super(itemView);
 
             recipePic = (ImageView) itemView.findViewById(R.id.recipePic_small);
-            recipeName = (TextView) itemView.findViewById(R.id.userEmail);
+            recipeName = (TextView) itemView.findViewById(R.id.itemRecipeName);
+
+            type = (TextView) itemView.findViewById(R.id.type);
+            calories = (TextView) itemView.findViewById(R.id.calories);
+            score = (TextView) itemView.findViewById(R.id.score);
         }
     }
 }

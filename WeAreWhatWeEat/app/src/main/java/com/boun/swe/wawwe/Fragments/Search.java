@@ -47,6 +47,7 @@ public class Search extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        TAG = context.getString(R.string.title_menu_search);
     }
 
     @Nullable
@@ -68,7 +69,7 @@ public class Search extends BaseFragment {
             public void onClick(View v) {
                 String searchText = searchBox.getText().toString();
 
-                API.getAllRecipes(Search.class.getSimpleName(),
+                API.getAllRecipes(getTag(),
                         new Response.Listener<Recipe[]>() {
                             @Override
                             public void onResponse(Recipe[] response) {
@@ -89,15 +90,6 @@ public class Search extends BaseFragment {
 
 
         return searchView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity)
-            ((MainActivity) context).getSupportActionBar()
-                    .setTitle(R.string.title_menu_search);
     }
 
     @Override

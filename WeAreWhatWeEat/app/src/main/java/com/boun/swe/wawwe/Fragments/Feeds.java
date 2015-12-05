@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
@@ -25,7 +26,9 @@ public class Feeds extends BaseFragment {
 
     private RecyclerView feeds;
 
-    public Feeds() { }
+    public Feeds() {
+        TAG = App.getInstance().getString(R.string.title_menu_feeds);
+    }
 
     @Nullable
     @Override
@@ -39,7 +42,7 @@ public class Feeds extends BaseFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         feeds.setAdapter(adapter);
 
-        API.getAllRecipes(Feeds.class.getSimpleName(),
+        API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
@@ -56,15 +59,6 @@ public class Feeds extends BaseFragment {
                 });
 
         return feedsView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity)
-            ((MainActivity) context).getSupportActionBar()
-                    .setTitle(R.string.title_menu_feeds);
     }
 
     public static Feeds getFragment(Bundle bundle) {

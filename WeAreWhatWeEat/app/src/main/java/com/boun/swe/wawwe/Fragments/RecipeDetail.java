@@ -13,10 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
+import com.boun.swe.wawwe.Utils.API;
 
 import java.util.ArrayList;
 
@@ -26,20 +30,19 @@ import me.gujun.android.taggroup.TagGroup;
  * Created by Mert on 31/10/15.
  */
 
-public class RecipeDetail extends BaseFragment {
-    static int recipeId;
-    static String name = "";
-    static String description = "";
-    static ArrayList<String> ingredientsName;
-    static ArrayList<Integer> ingredientsAmount;
-    static ArrayList<String> ingredientsUnit;
+public class RecipeDetail extends LeafFragment {
 
+    private Recipe recipe;
 
-    public RecipeDetail() { }
+    public RecipeDetail() {
+        TAG = App.getInstance().getString(R.string.title_menu_recipeDetail);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        TAG = context.getString(R.string.title_menu_recipeDetail);
     }
     @Nullable
     @Override
@@ -47,14 +50,7 @@ public class RecipeDetail extends BaseFragment {
 
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
-        ingredientsName = new ArrayList<String>();
-        ingredientsAmount = new ArrayList<Integer>();
-        ingredientsUnit = new ArrayList<String>();
-        Recipe recipe = getArguments().getParcelable("recipe");
-
-        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
-
-        tagGroupStatic.setTags(new String[]{"Tag1", "Tag2", "Tag3"});
+        recipe = getArguments().getParcelable("recipe");
 
         ImageView recipeImage = (ImageView) recipeCreationView.findViewById(R.id.recipeImage);
         TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
@@ -62,28 +58,25 @@ public class RecipeDetail extends BaseFragment {
         LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
                 .findViewById(R.id.ingredient_item_holder);
 
+        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+        API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
+            @Override
+            public void onResponse(String[] response) {
+                tagGroupStatic.setTags(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
         recipeName.setText(recipe.getName());
-        recipeId = recipe.getId();
-        name = recipe.getName();
         directions.setText(recipe.getDescription());
-        description = recipe.getDescription();
-        for (Ingredient ingredient: recipe.getIngredients()){
+        for (Ingredient ingredient: recipe.getIngredients())
             addIngredientRow(ingredientHolder, ingredient);
-            ingredientsName.add(ingredient.getName());
-            ingredientsAmount.add(ingredient.getAmount());
-            ingredientsUnit.add(ingredient.getUnit());
-        }
+
         return recipeCreationView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-//            main.setDisplayHomeAsUp();
-        }
     }
 
     private void addIngredientRow(LinearLayout ingredientHolder, Ingredient ingredient) {
@@ -97,13 +90,16 @@ public class RecipeDetail extends BaseFragment {
         text.setTextColor(context.getResources().getColor(R.color.black));
         text.setTextAppearance(context, android.R.style.TextAppearance_Large);
         text.setLayoutParams(params);
-        text.setText(String.format(" - %d %s, %s", ingredient.getAmount(),
-                ingredient.getUnit(), ingredient.getName()));
+        text.setText(String.format(" - %d %s", ingredient.getAmount(), ingredient.getName()));
         ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);
     }
 
-    public static RecipeDetail getFragment(Bundle bundle) {
+    public static RecipeDetail getFragment(Recipe recipe) {
         RecipeDetail recipeDetailFragment = new RecipeDetail();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("recipe", recipe);
+
         recipeDetailFragment.setArguments(bundle);
         return recipeDetailFragment;
     }
@@ -122,14 +118,7 @@ public class RecipeDetail extends BaseFragment {
             case R.id.menu_profile_editDone:
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("recipeId",recipeId);
-                    bundle.putString("name",name );
-                    bundle.putString("description",description);
-                    bundle.putStringArrayList("ingredientsName", ingredientsName);
-                    bundle.putIntegerArrayList("ingredientsAmount",ingredientsAmount);
-                    bundle.putStringArrayList("ingredientsUnit",ingredientsUnit);
-                    main.makeFragmentTransaction(RecipeCreator.getFragment(bundle));
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(recipe));
                 }
                 return true;
 

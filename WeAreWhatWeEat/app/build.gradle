@@ -21,6 +21,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -35,4 +36,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.0'
     compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
     compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'com.github.elevenetc:textsurface:0.9.0'
 }
