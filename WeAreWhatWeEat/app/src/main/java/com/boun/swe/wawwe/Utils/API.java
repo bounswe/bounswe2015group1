@@ -235,6 +235,27 @@ public class API {
                 menuID), Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void createMenu(String tag, Menu menu, Response.Listener<Menu> successListener,
+                             Response.ErrorListener failureListener) {
+        if (isTest) {
+            successListener.onResponse(menu);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return f.getName().equals("id");
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(menu, Menu.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/menu", Menu.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
