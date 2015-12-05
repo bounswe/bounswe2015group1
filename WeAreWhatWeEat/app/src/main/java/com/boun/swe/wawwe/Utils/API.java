@@ -229,6 +229,12 @@ public class API {
                 menuID), Menu.class, successListener, failureListener).setTag(tag));
     }
 
+    public static void getRecipesforMenu(String tag, int menuID, Response.Listener<Recipe[]> successListener,
+                               Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d/recipes",
+                menuID), Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
