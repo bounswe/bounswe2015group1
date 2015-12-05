@@ -161,6 +161,12 @@ public class API {
                 String[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void getRecipe(String tag, int recipeID, Response.Listener<Recipe> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/view/%d",
+                recipeID), Recipe.class, successListener, failureListener).setTag(tag));
+    }
+
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
