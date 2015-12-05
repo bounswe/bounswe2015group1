@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.google.gson.ExclusionStrategy;
@@ -215,6 +216,13 @@ public class API {
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/item/%d",
                 itemId), Ingredient[].class, successListener, failureListener).setTag(tag));
     }
+
+    public static void getAllMenusforUser(String tag, Response.Listener<Menu> successListener,
+                                      Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +"/menu", Menu.class,
+                successListener, failureListener).setTag(tag));
+    }
+
 
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
