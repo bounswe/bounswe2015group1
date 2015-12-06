@@ -12,14 +12,23 @@ public class Menu implements Parcelable {
 
     private int id;
     private int userId;
-    private String period;//(Can be "daily" | "weekly" | "monthly")
+    private String name;
+    private String period;  //(Can be "daily" | "weekly" | "monthly")
     private List<Integer> recipeIds;
     private List<String> recipeNames;
     private String description;
     private int createdAt;
 
+    public Menu(String name, String period, List<Integer> recipeIds, String description){
+        this.name = name;
+        this.period = period;
+        this.recipeIds = recipeIds;
+        this.description = description;
+    }
+
     protected Menu(Parcel in) {
         id = in.readInt();
+        name = in.readString();
         userId = in.readInt();
         period = in.readString();
         recipeNames = in.createStringArrayList();

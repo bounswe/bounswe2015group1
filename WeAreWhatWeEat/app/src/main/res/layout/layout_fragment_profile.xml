@@ -53,6 +53,18 @@
         tools:listitem="@layout/item_recipe" />
 
     <ImageButton
+        android:id="@+id/profile_button_newMenu"
+        android:layout_width="@dimen/diameter"
+        android:layout_height="@dimen/diameter"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/oval_ripple"
+        android:stateListAnimator="@anim/button_elevation"
+        android:layout_marginBottom="@dimen/add_button_margin"
+        android:layout_marginRight="72dp"
+        android:src="@mipmap/ic_add_black_24dp"/>
+
+    <ImageButton
         android:id="@+id/profile_button_feed"
         android:layout_width="@dimen/diameter"
         android:layout_height="@dimen/diameter"

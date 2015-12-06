@@ -109,6 +109,31 @@ public class Profile extends BaseFragment {
                             }
                         }
                     });
+
+            //Menu Add Button
+            View addMenuButton = profileView.findViewById(R.id.profile_button_newMenu);
+            addMenuButton.setOutlineProvider(new ViewOutlineProvider() {
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    // TODO gives IllegalStateException on fragment removal
+//                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
+                    int diameter = 144;
+                    outline.setOval(0, 0, diameter, diameter);
+                }
+            });
+            addMenuButton.setClipToOutline(true);
+
+            addMenuButton.findViewById(R.id.profile_button_newMenu)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (context instanceof MainActivity) {
+                                MainActivity main = (MainActivity) context;
+                                main.makeFragmentTransaction(MenuCreator.getFragment(null));
+                            }
+                        }
+                    });
         }
 
         return profileView;
