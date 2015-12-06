@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -56,7 +57,7 @@ public class MenuCreator extends LeafFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View menuView = inflater.inflate(R.layout.layout_fragment_menu,
+        View menuView = inflater.inflate(R.layout.layout_fragment_menu_creation,
                 container, false);
 
         final EditText menuName = (EditText) menuView.findViewById(R.id.menuName);
@@ -83,6 +84,7 @@ public class MenuCreator extends LeafFragment{
                                 userSpecificRecipes.add(response[i]);
                             }
                         }
+                        addRecipeRow(recipeHolder);
                     }
                 },
                 new Response.ErrorListener() {
@@ -124,11 +126,38 @@ public class MenuCreator extends LeafFragment{
                 String name = menuName.getText().toString();
                 String period = periodSpinner.getSelectedItem().toString();
                 String description = menuDesc.getText().toString();
-                List<Integer> recipeIds;
+                List<Integer> recipeIds = new ArrayList<Integer>();
+
+                int count = recipeHolder.getChildCount();
+                for(int i=0;i<count;i++){
+                    View view = recipeHolder.getChildAt(i);
+                    if(view instanceof Spinner){
+                        int itemPos = ((Spinner) view).getSelectedItemPosition();
+                        recipeIds.add(userSpecificRecipes.get(itemPos).getId());
+                    }
+                }
+
+                com.boun.swe.wawwe.Models.Menu menu = new com.boun.swe.wawwe.Models.Menu(name,period,recipeIds,description);
+
+                API.createMenu(getTag(), menu,
+                        new Response.Listener<com.boun.swe.wawwe.Models.Menu>() {
+                            @Override
+                            public void onResponse(com.boun.swe.wawwe.Models.Menu response) {
+                                if (context instanceof MainActivity) {
+                                    MainActivity main = (MainActivity) context;
+                                    main.onBackPressed();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(context, context.getString(R.string.error_createMenu),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
-
-        addRecipeRow(recipeHolder);
 
         return menuView;
     }

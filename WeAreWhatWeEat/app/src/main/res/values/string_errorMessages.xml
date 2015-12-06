@@ -16,4 +16,6 @@
     <string name="error_editRecipe">Could not edit this recipe.</string>
 
     <string name="error_getUserRecipes">Could not get user recipes.</string>
+
+    <string name="error_createMenu">Could not create menu.</string>
 </resources>
