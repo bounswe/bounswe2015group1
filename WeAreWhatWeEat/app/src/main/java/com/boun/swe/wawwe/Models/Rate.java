@@ -17,6 +17,13 @@ public class Rate implements Parcelable {
     private float rating;
     private Date createdAt;
 
+    public Rate(String type, int parentId, float rating, Date createdAt){
+        this.type = type;
+        this.parentId = parentId;
+        this.rating = rating;
+        this.createdAt = createdAt;
+    }
+
     protected Rate(Parcel in) {
         id = in.readInt();
         userId = in.readInt();

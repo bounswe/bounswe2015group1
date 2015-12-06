@@ -13,6 +13,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
@@ -42,6 +43,7 @@ public class API {
 
     private static String UUID;
 
+    private static boolean underDev = true;
     private static boolean isTest = true;
 
     public static void init() {
@@ -153,6 +155,7 @@ public class API {
                 BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+
     //Not Tested and No Api yet
     public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
                                   Response.ErrorListener failureListener) {
@@ -256,6 +259,66 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
+
+    public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
+                                      Response.ErrorListener failureListener) {
+        if(isTest){
+            //Comment c = new Comment();
+        }
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
+                type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
+                                             Response.Listener<Comment[]> successListener, Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d/%d",
+                type, parentID, userID), Comment[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void comment(String tag, Comment comment, Response.Listener<Comment> successListener,
+                               Response.ErrorListener failureListener) {
+        if(isTest) {
+            successListener.onResponse(comment);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return (f.getName().equals("id") || f.getName().equals("userFullName") || f.getName().equals("userId"));
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(comment, Comment.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/comment", Comment.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void deleteComment(String tag, Comment comment, Response.Listener<Comment> successListener,
+                                     Response.ErrorListener failureListener) {
+        if(isTest) {
+            successListener.onResponse(comment);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return f.getName().equals("userId");
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(comment, Comment.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/comment/delete", Comment.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {

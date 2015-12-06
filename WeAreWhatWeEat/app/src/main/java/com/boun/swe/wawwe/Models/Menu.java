@@ -18,6 +18,13 @@ public class Menu implements Parcelable {
     private String description;
     private int createdAt;
 
+    public Menu(String period, List<String> recipeNames, String description, int createdAt){
+        this.period = period;
+        this.recipeNames = recipeNames;
+        this.description = description;
+        this.createdAt = createdAt;
+    }
+
     protected Menu(Parcel in) {
         id = in.readInt();
         userId = in.readInt();
