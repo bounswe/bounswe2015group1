@@ -141,10 +141,10 @@ public class API {
                                     Response.ErrorListener failureListener) {
         //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
         if (isTest) {
-            String postBody1 = Resources.getSystem().getString(R.string.test_recipe1);
-            String postBody2 = Resources.getSystem().getString(R.string.test_recipe2);
-            Recipe testRecipe1 = new GsonBuilder().create().fromJson(postBody1, Recipe.class);
-            Recipe testRecipe2 = new GsonBuilder().create().fromJson(postBody2, Recipe.class);
+            String postBody1 = Commons.getString(R.string.test_recipe1);
+            String postBody2 = Commons.getString(R.string.test_recipe2);
+            Recipe testRecipe1 = new GsonBuilder().create().fromJson(postBody1, Recipe.class); //not working for now
+            Recipe testRecipe2 = new GsonBuilder().create().fromJson(postBody2, Recipe.class); //not working for now
             Recipe[] searchResults = {testRecipe1, testRecipe2};
             successListener.onResponse(searchResults);
 
@@ -155,6 +155,18 @@ public class API {
 
         }
     }
+
+    public static  void searchMenus(String tag, String srchTxt, Response.Listener<Menu[]> successListener,
+                                    Response.ErrorListener failureListener) {
+        if(isTest){
+
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/search/menu/%s", srchTxt),
+                    Menu[].class, successListener, failureListener).setTag(tag));
+        }
+    }
+
     //Not Tested and No Api yet
     public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
                                   Response.ErrorListener failureListener){
@@ -284,10 +296,10 @@ public class API {
             Comment c3;
             Comment c4;
 //            if(type.equals("recipe")) {
-                c1 = new Comment("Onur Guler", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe1));
-                c2 = new Comment("Cagla Balcik", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe2));
-                c3 = new Comment("Mert Tiftikci", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe3));
-                c4 = new Comment("Gorkem Onder", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe4));
+                c1 = new Comment("Onur Guler", type, parentID, Commons.getString(R.string.test_comment_recipe1));
+                c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
+                c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
+                c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
 //            } else if (type.equals("menu")){
 //
 //            } else if (type.equals("user")){

@@ -12,36 +12,7 @@
         disgust in their faces. I hate my life.</string>
 
     <!-- Recipe Data -->
-    <string name="test_recipe1">{
-            "id": 12,
-            "userId": 10,
-            "name": "Omelette",
-            "ingredients": [
-                {
-                    "ingredientId": "6Zu5uMfW",
-                    "name": "Egg",
-                    "amount": 2,
-                },
-                {
-                    "ingredientId": "BB4dlGTZ",
-                    "name": "Pinch of salt",
-                    "amount": 1,
-                },
-                {
-                    "ingredientId": "pbpY1ep3",
-                    "name": "Pinch of pepper",
-                    "amount": 1,
-                }
-        ],
-        "description": "Crack the eggs into a mixing bowl with a pinch of salt and pepper.
-        Beat well with a fork.\n\nPut a small frying pan on a low heat and let it get hot.
-        Add a small knob of butter. When the butter has melted and is bubbling,
-        add your eggs and move the pan around to spread them out evenly.
-        When the omelette begins to cook and firm up, but still has a little raw egg on top,
-        sprinkle over the cheese, if using (I sometimes grate mine directly on to the omelette).
-        \n\nUsing a spatula, ease around the edges of the omelette, then fold it over in half.
-        When it starts to turn golden brown underneath, remove the pan from the heat and slide the omelette on to a plate."
-    }</string>
+    <string name="test_recipe1">{"id":12,"userId":10,"name":"Omelette","description": "Crack the eggs into a mixing bowl with a pinch of salt and pepper.Beat well with a fork.\n\nPut a small frying pan on a low heat and let it get hot.Add a small knob of butter. When the butter has melted and is bubbling,add your eggs and move the pan around to spread them out evenly. When the omelette begins to cook and firm up, but still has a little raw egg on top, sprinkle over the cheese, if using (I sometimes grate mine directly on to the omelette).\n\nUsing a spatula, ease around the edges of the omelette, then fold it over in half.When it starts to turn golden brown underneath, remove the pan from the heat and slide the omelette on to a plate.","ingredients": [{"ingredientId":"Placeholder","name": "Egg","amount": 2}]}</string>
     <string name="test_recipe2">{
             "id": 31,
             "userId": 20,
@@ -49,6 +20,57 @@
             "ingredients": [
                 {
                     "ingredientId": "PlaceHolder",
+                    "name": "Apple",
+                    "amount": 8,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Double crust pie",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of white sugar",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of unsalted butter",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Spoon of flour",
+                    "amount": 3,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of water",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of packed brown sugar",
+                    "amount": 1,
+                }
+        ],
+        "description": "Preheat oven to 425 degrees F (220 degrees C). Melt the butter in a saucepan.
+        Stir in flour to form a paste. Add water, white sugar and brown sugar, and bring to a boil.
+        Reduce temperature and let simmer.
+        Place the bottom crust in your pan. Fill with apples, mounded slightly. Cover with a lattice
+        work crust. Gently pour the sugar and butter liquid over the crust. Pour slowly so that it
+        does not run off.
+        Bake 15 minutes in the preheated oven. Reduce the temperature to 350 degrees F (175 degrees C).
+        Continue baking for 35 to 45 minutes, until apples are soft."
+    }</string>
+
+    <!-- Menu Data -->
+    <string name="test_menu1">{
+            "id": 1,
+            "userId": 20,
+            "name": "Apple pie",
+            "ingredients": [
+                {
                     "name": "Apple",
                     "amount": 8,
                 },

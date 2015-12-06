@@ -29,4 +29,8 @@ public class Commons {
                 .setPosition(Align.SURFACE_CENTER)
                 .build();
     }
+
+    public static String getString(int resourceId){
+        return App.getInstance().getString(resourceId);
+    }
 }
