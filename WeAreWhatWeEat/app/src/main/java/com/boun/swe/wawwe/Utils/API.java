@@ -1,6 +1,9 @@
 package com.boun.swe.wawwe.Utils;
 
+import android.content.res.Resources;
 import android.util.Log;
+
+import android.content.Context;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -19,6 +22,7 @@ import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Rate;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
+import com.boun.swe.wawwe.R;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -28,6 +32,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Mert on 16/10/15.
@@ -136,7 +141,13 @@ public class API {
                                     Response.ErrorListener failureListener) {
         //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
         if (isTest) {
-            
+            String postBody1 = Resources.getSystem().getString(R.string.test_recipe1);
+            String postBody2 = Resources.getSystem().getString(R.string.test_recipe2);
+            Recipe testRecipe1 = new GsonBuilder().create().fromJson(postBody1, Recipe.class);
+            Recipe testRecipe2 = new GsonBuilder().create().fromJson(postBody2, Recipe.class);
+            Recipe[] searchResults = {testRecipe1, testRecipe2};
+            successListener.onResponse(searchResults);
+
         } else {
             mQueue.add(new GeneralRequest<>(Request.Method.GET,
                     BASE_URL + String.format("/search/recipe/%s", srchTxt),
@@ -268,7 +279,23 @@ public class API {
     public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
                                       Response.ErrorListener failureListener) {
         if(isTest){
-            //Comment c = new Comment();
+            Comment c1;
+            Comment c2;
+            Comment c3;
+            Comment c4;
+//            if(type.equals("recipe")) {
+                c1 = new Comment("Onur Guler", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe1));
+                c2 = new Comment("Cagla Balcik", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe2));
+                c3 = new Comment("Mert Tiftikci", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe3));
+                c4 = new Comment("Gorkem Onder", type, parentID, Resources.getSystem().getString(R.string.test_comment_recipe4));
+//            } else if (type.equals("menu")){
+//
+//            } else if (type.equals("user")){
+//
+//            }
+            Comment[] cArray = {c1, c2, c3, c4};
+
+            successListener.onResponse(cArray);
         } else {
             mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
                     type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
@@ -350,7 +377,8 @@ public class API {
     public static void getAverageRating (String tag, Rate rate, String type, int parentId, Response.Listener<Rate> successListener,
                                          Response.ErrorListener failureListener) {
         if(isTest){
-            //successListener.onResponse();
+            Rate r1 = new Rate(type, parentId, 4.2f);
+            successListener.onResponse(r1);
         } else{
             String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
             mQueue.add(new GeneralRequest<>(Request.Method.GET,
@@ -362,7 +390,11 @@ public class API {
     public static void getRatingByUser (String tag, Rate rate, String type, int parentId, int userId, Response.Listener<Rate> successListener,
                                        Response.ErrorListener failureListener) {
         if(isTest){
-            //successListener.onResponse();
+            float min = 0.0f; float max = 5.0f;
+            Random rand = new Random();
+            float avg = rand.nextFloat()*(max-min);
+            Rate r1 = new Rate(type, parentId, avg);
+            successListener.onResponse(r1);
         } else{
             String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
             mQueue.add(new GeneralRequest<>(Request.Method.GET,
