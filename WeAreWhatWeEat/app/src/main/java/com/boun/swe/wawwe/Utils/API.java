@@ -16,6 +16,7 @@ import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Menu;
+import com.boun.swe.wawwe.Models.Rate;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.google.gson.ExclusionStrategy;
@@ -131,13 +132,17 @@ public class API {
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
     //Not Tested and No Api yet
-    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe> successListener,
+    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
         //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
-        //String postBody = null;
-        mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("/recipe/search/%s",srchTxt),
-                Recipe.class, successListener, failureListener).setTag(tag));
+        if (isTest) {
+            
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/search/recipe/%s", srchTxt),
+                    Recipe[].class, successListener, failureListener).setTag(tag));
+
+        }
     }
     //Not Tested and No Api yet
     public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
@@ -264,9 +269,10 @@ public class API {
                                       Response.ErrorListener failureListener) {
         if(isTest){
             //Comment c = new Comment();
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
+                    type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
         }
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
-                type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
     }
 
     public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
@@ -319,6 +325,51 @@ public class API {
         }
     }
 
+    public static void rate(String tag, Rate rate, Response.Listener<Rate> successListener,
+                            Response.ErrorListener failureListener) {
+        if(isTest){
+            successListener.onResponse(rate);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return (f.getName().equals("id") || f.getName().equals("userId"));
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/rate", Rate.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void getAverageRating (String tag, Rate rate, String type, int parentId, Response.Listener<Rate> successListener,
+                                         Response.ErrorListener failureListener) {
+        if(isTest){
+            //successListener.onResponse();
+        } else{
+            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + (String.format("/rate/%s/%d", type, parentId)), Rate.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void getRatingByUser (String tag, Rate rate, String type, int parentId, int userId, Response.Listener<Rate> successListener,
+                                       Response.ErrorListener failureListener) {
+        if(isTest){
+            //successListener.onResponse();
+        } else{
+            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)), Rate.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
