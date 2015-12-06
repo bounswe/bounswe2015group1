@@ -6,13 +6,17 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		$scope.recipe =  recipeService.getRecipeWithID(parseInt($stateParams.recipeID));
 		console.log("Recipe view: " + JSON.stringify($scope.recipe));
 
+		/*
 		$scope.comments=[{"id" : 1, "body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"},
 						{"id" : 7, "body":"Uzuncana bir text Uzuncana Çok Uzun Çok Çok", "owner" : "Jane Doe", "date" : "12/2/2009"},
-						{"id" : 1, "body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"}];
+						{"id" : 1, "body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"}];*/
+
+		$scope.comments = []
 
 		$scope.getComments = function() {
 			communityService.getComments("recipe",$scope.recipeId).then(function(response) {
 				comments = response.data;
+				console.log("COMMENTS :" + JSON.stringify(comments));
 				comments.sort(function(a,b) {
 					if(a.createdAt < b.createdAt) return -1;
 					if(a.createdAt > b.createdAt) return 1;
@@ -24,33 +28,34 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 
 		$scope.getAvgRating = function() {
 			communityService.getAvgRating("recipe", $scope.recipeId).then(function(response) {
+				console.log("Average Rating " + response.data.rating);
 				$scope.avgRate = response.data.rating;
 			});
 		};
 
 		$scope.getRatingByCurrentUser = function() {
 			communityService.getRatingByCurrentUser("recipe", $scope.recipeId).then(function(response) {
-				$scope.rate = response.data.rating;
+				if(response.data !== null) $scope.rate = response.data.rating;
 			});
 		}
 		// CALL INIT WHEN API IS READY
 		var init = function() {
-			recipeService.getRecipeWithIDNew($scope.recipeId).then(
+			recipeService.getRecipeWithID($scope.recipeId).then(
 				function(response){
 					$scope.recipe = response.data;
 				}
 			);
-			/*
+			
 			$scope.getComments();
 			$scope.getAvgRating();
 			$scope.getRatingByCurrentUser();
-			*/
+			
 
 		};
 
 		$scope.addRating = function() {
 			communityService.rate("recipe", $scope.recipeId, $scope.rate).then(function(response) {
-				$scope.avgRating = response.data.rating;
+				//$scope.avgRating = response.data.rating;
 				$scope.getAvgRating();
 			});
 		}
@@ -73,6 +78,9 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		}
 
 		$scope.back = function() {
+			console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
 			$state.go($rootScope.previousState, $rootScope.previousParams);
 		};
+
+		init();
 	});

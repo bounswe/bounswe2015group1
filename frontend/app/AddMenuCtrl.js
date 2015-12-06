@@ -36,12 +36,12 @@ myApp.controller('AddMenuCtrl', function($rootScope, $scope, $http, userService,
 
 				$scope.recipes = $scope.recipes.concat($scope.recipesToBeRemoved);
 			}
-			$scope.getRecipes = function(val) {
+			$scope.getRecipes = function() {
 				// API CALL
     			/*return $http.get($rootScope.baseUrl + '/api/recipe/user/' + userService.getUser().id).then(function(response){
       				$scope.userRecipes = response.data;
       			});*/
-				recipeService.fetchAllRecipes().then(function(response){
+				recipeService.getUserRecipes(userService.getUser().id).then(function(response){
 					$scope.recipes = response.data;
 				})
   			};

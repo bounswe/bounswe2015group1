@@ -42,12 +42,14 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 });
 
 angular.module('FoodApp').run(function($rootScope) {
+		$rootScope.saveTheDay = true;
+		$rootScope.saveTheDelay = 10;
 		$rootScope.baseUrl = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080";
 		$rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
    			$rootScope.previousState = from.name;
     		$rootScope.previousParams = fromParams;
     		console.log('Previous state:'+$rootScope.previousState);
-    		console.log('Previous Params state:'+$rootScope.previousParams);
+    		console.log('Previous Params state:'+ JSON.stringify($rootScope.previousParams));
 		});
 });
 
@@ -163,11 +165,18 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 	}
 });
 
-angular.module('FoodApp').factory('recipeService', function($http, $rootScope, userService) {
+angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $q, userService, standinDB) {
 	var recipes = [];
 	var recipeAddStatus = 0;
 	var recipe = null;
 	var addRecipe = function(name,ingredients,desc,tags, nutrition) {
+			if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.addRecipe(userService.getUser().id,name,ingredients,desc,tags,nutrition)});
+					},$rootScope.saveTheDelay)
+				});
+			}
 			var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/recipe',
@@ -194,13 +203,24 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 		// DELETE WHEN API IS READY
 		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
 				recipes = response.data;
-				console.log(JSON.stringify(recipes));
+				//console.log(JSON.stringify(recipes));
 		});
 		return $http.get($rootScope.baseUrl + '/api/recipe/all');
 	};
+	var getUserRecipes = function(id) {
+		if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.getUserRecipes(id)});
+					},$rootScope.saveTheDelay)
+				});
+		}
+		else return $http.get($rootScope.baseUrl + '/api/recipe/user/' + id);
+	}
 	return {
 		addRecipe : addRecipe,
 		fetchAllRecipes : fetchAllRecipes,
+		getUserRecipes : getUserRecipes,
 		getRecipes : function() {
 			return recipes;
 		},
@@ -212,12 +232,14 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 			} else return 0;
 		},
 		getRecipeWithID : function(id) {
-			var arrLen = recipes.length;
-			for (var i = 0; i < arrLen; i++) {
-    			if(recipes[i].id == id) {
-    				return recipes[i];
-    			}
+			if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.getRecipeWithID(id)});
+					},$rootScope.saveTheDelay)
+				});
 			}
+			else return $http.get($rootScope.baseUrl + '/api/recipe/view/' + id);
 		},
 		getRecipeWithIDNew : function(id) {
 			return $http.get($rootScope.baseUrl + '/api/recipe/all');
@@ -226,8 +248,15 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, u
 });
 
 
-angular.module('FoodApp').factory('menuService', function($http, $rootScope, userService) {
+angular.module('FoodApp').factory('menuService', function($http, $rootScope, $q,  userService, standinDB) {
 	var addMenu = function(name,recipeIds,period,desc) {
+			if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.addMenu(userService.getUser().id,name,recipeIds,period,desc)});
+					},$rootScope.saveTheDelay)
+				});
+			}
 			var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/menu',
@@ -241,35 +270,68 @@ angular.module('FoodApp').factory('menuService', function($http, $rootScope, use
 
 		};
 	var fetchAllMenus = function() {
-		return $http.get($rootScope.baseUrl + '/api/menu');
+		if($rootScope.saveTheDay) {
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : standinDB.getMenus()});
+				},$rootScope.saveTheDelay)
+			});
+		}
+		else return $http.get($rootScope.baseUrl + '/api/menu');
 	};
+
+	var	getMenuWithID = function(id) {
+		if($rootScope.saveTheDay) {
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : standinDB.getMenuWithID(id)});
+				},$rootScope.saveTheDelay)
+			});
+		}
+		else return $http.get($rootScope.baseUrl + '/api/menu/' + id);
+	}
 	return {
 		addMenu : addMenu,
 		fetchAllMenus : fetchAllMenus,
-		getMenuWithID : function(id) {
-			return $http.get($rootScope.baseUrl + '/api/menu/' + id);
-		}
+		getMenuWithID : getMenuWithID
 	};
 });
 
 
-angular.module('FoodApp').factory('searchService', function($http, $rootScope, userService) {
+angular.module('FoodApp').factory('searchService', function($http, $rootScope, $q, userService, standinDB) {
 	/*var recipeResults = [];
 	var menuResults = [];
 	var lastRecipeQuery = '';
 	var lastMenuQuery = '';
 	var tags = [];*/
 	var recipeSearch = function(query) {
-		//return $http.get($rootScope.baseUrl + '/api/search/recipe/' + query);
-		return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		if($rootScope.saveTheDay) {
+			var recipes = standinDB.searchRecipes(query);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : recipes});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
+		else return $http.get($rootScope.baseUrl + '/api/search/recipe/' + query);
+		//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 	};
 
 	var menuSearch = function(query) {
-		//return $http.get($rootScope.baseUrl + '/api/search/menu/' + query);
-		//return $http.get($rootScope.baseUrl + '/api/recipe/all');
-		return $http.get($rootScope.baseUrl + '/api/recipe/all').then(function(){
+		if($rootScope.saveTheDay) {
+			var menus = standinDB.searchMenus(query);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : menus});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
+		else return $http.get($rootScope.baseUrl + '/api/search/menu/' + query);
+		/*return $http.get($rootScope.baseUrl + '/api/recipe/all').then(function(){
 			return response.data;
-		});
+		});*/
 	};
 	return {
 		recipeSearch : recipeSearch,
@@ -288,13 +350,30 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, u
 	};
 });
 
-angular.module('FoodApp').factory('communityService', function($http, $rootScope, userService) {
-	var getAllComments = function(type, parentId) {
+angular.module('FoodApp').factory('communityService', function($http, $rootScope, $q, userService, standinDB) {
+	var getComments = function(type, parentId) {
 		//return $http.get($rootScope.baseUrl + '/api/search/recipe/' + query);
+		if($rootScope.saveTheDay) {
+			var comments = standinDB.getComments(type, parentId);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : comments});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
 		return $http.get($rootScope.baseUrl + '/api/comment/' + type + "/" + parentId);
 	};
 
 	var makeComment = function(type,parentId,body) {
+		if($rootScope.saveTheDay) {
+			var rating = standinDB.makeComment(userService.getUser().id, type, parentId, body);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : rating});
+				},$rootScope.saveTheDelay)
+			});
+		}
 		var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/comment',
@@ -308,6 +387,14 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 	};
 
 	var deleteComment = function(id,type,parentId) {
+		if($rootScope.saveTheDay) {
+			var rating = standinDB.deleteComment(id, type, parentId);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : rating});
+				},$rootScope.saveTheDelay)
+			});
+		}
 		var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/comment/delete',
@@ -321,10 +408,29 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 	};
 
 	var getAvgRating = function(type,parentId) {
-		return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId);
+		console.log("Requesting avg rating of" + type + " " + parentId)
+		if($rootScope.saveTheDay) {
+			var rating = standinDB.getAvgRate(type, parentId);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : rating});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
+		else return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId);
 	};
 
 	var rate = function(type,parentId, rating) {
+		if($rootScope.saveTheDay) {
+			var rating = standinDB.rate(userService.getUser().id, type, parentId,rating);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : rating});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
 		var req = {
 			 method: 'POST',
 			 url: $rootScope.baseUrl + '/api/rate',
@@ -338,11 +444,20 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 	};
 
 	var getRatingByCurrentUser = function(type,parentId) {
-		return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId + "/" + userService.getUser().id);
+		if($rootScope.saveTheDay) {
+			var rating = standinDB.getRateByUser(type, parentId,userService.getUser().id);
+			return $q(function(resolve,reject) {
+				setTimeout(function() {
+					resolve({"data" : rating});
+				},$rootScope.saveTheDelay)
+			});
+			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
+		}
+		else return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId + "/" + userService.getUser().id);
 	}
 
 	return {
-		getAllComments : getAllComments,
+		getComments : getComments,
 		makeComment : makeComment,
 		getAvgRating : getAvgRating,
 		rate : rate,

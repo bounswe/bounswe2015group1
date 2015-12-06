@@ -8,11 +8,16 @@ myApp.controller('SearchCtrl', function($scope, $rootScope, $state, $stateParams
 			$state.go('viewRecipe', { recipeID : id});
 		};
 
+		$scope.viewMenu = function(id) {
+			$state.go('viewMenu', { menuID : id});
+		};
+
 		$scope.search = function(query) {
 			searchService.recipeSearch(query).then(function(response) {
 				$scope.recipeResults = response.data;
 			});
 			searchService.menuSearch(query).then(function(response) {
+				console.log("SearchCtrl Menu Results: " + JSON.stringify(response.data));
 				$scope.menuResults = response.data;
 			});
 		}

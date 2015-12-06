@@ -53,8 +53,10 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 					nutrition.sugars += ing.nutritions.sugars;
 					nutrition.iron += ing.nutritions.iron;
 				}
+				$scope.taglist = $scope.taglist.concat($scope.recipeName.split());
 				if($scope.userTags != "")
 					$scope.taglist = $scope.taglist.concat($scope.userTags.split());
+				$scope.taglist = $scope.taglist.filter(function(e) { return e !== null; });
 				console.log("TAGS: " + JSON.stringify($scope.taglist));
 				console.log("NUTRITIONS: " + JSON.stringify(nutrition));
 				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.taglist, nutrition);

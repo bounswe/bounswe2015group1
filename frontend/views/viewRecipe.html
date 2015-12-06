@@ -1,6 +1,6 @@
 <div ng-controller="ViewRecipeCtrl">
 	<div class="col-xs-12 col-sm-12 col-md-12">
-		<button type="button" ui-sref="main" class="btn btn-success">
+		<button type="button" ng-click="back()" class="btn btn-success">
 		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back</button>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-12">
@@ -29,7 +29,7 @@
 			<div ng-repeat="(id,comment) in comments">
 				{{comment.body}}
 				<br />
-				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.id)">Delete</a>  {{comment.owner}} on {{comment.date}}</span>
+				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.userId)">Delete</a>  {{comment.userFullName}} on {{comment.createdAt}}</div>
 			</div>
 		</div>
 		

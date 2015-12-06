@@ -6,7 +6,7 @@ myApp.controller('MainCtrl', function($scope, $state, $http, $rootScope, recipeS
 		var init = function() {
 			recipeService.fetchAllRecipes().then(function(response) {
 				$scope.recipes = response.data;
-				console.log(JSON.stringify($scope.recipes));
+				//console.log(JSON.stringify($scope.recipes));
 			});
 		};
 
