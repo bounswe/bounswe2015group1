@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" >
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/menuCreationNamelbl"
+                style="@style/CustomTitle" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/menuName"
+                android:hint="Enter the name of the menu here"
+                android:background="@drawable/border_style"
+                android:padding="@dimen/activity_horizontal_margin" >
+
+            </EditText>
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/menuCreationDesclbl"
+                style="@style/CustomTitle" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/menuDesc"
+                android:hint="Enter the description here"
+                android:background="@drawable/border_style"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:minLines="3" >
+
+            </EditText>
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/menuCreationPeriodlbl"
+                style="@style/CustomTitle" />
+
+            <Spinner
+                android:id="@+id/menuPeriodSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></Spinner>
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/menuCreationRecipeIdslbl"
+                style="@style/CustomTitle" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recipe_item_holder" >
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/addNewRecipeToMenu"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/plus" />
+            </LinearLayout>
+
+            <Button
+                android:layout_gravity="center_horizontal"
+                style="@style/CustomButton"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="Submit"
+                android:id="@+id/button_menu_submit" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
