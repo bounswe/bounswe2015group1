@@ -125,4 +125,9 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

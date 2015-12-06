@@ -1,0 +1,117 @@
+<resources>
+    <!-- Comment Data -->
+    <string name="test_comment_recipe1">This is by far the best recipe I\'ve ever made and it turned out perfect!</string>
+    <string name="test_comment_recipe2">A++ Decadently Delicious! I\'ve tried many recipes from this site, all of them pleasing.
+        But this is the first time I\'ve ever been so inspired by one to write a review!</string>
+    <string name="test_comment_recipe3">Believe the hype. I made this for the first time for a dinner party I had last week -
+        mostly because I wanted to see what all the fuss was about. And it did not disappoint. Some people were begging for the recipe.
+        The others were saying it was the best thing they had ever tasted. There were riots over who was going to get the last piece.
+        Truly spectacular.</string>
+    <string name="test_comment_recipe4">I followed this recipe as it\'s written, and it came out awful for me.
+        And unfortunately it was for my first thanksgiving dinner. My guests pretended to like it but I saw the
+        disgust in their faces. I hate my life.</string>
+
+    <!-- Recipe Data -->
+    <string name="test_recipe1">{"id":12,"userId":10,"name":"Omelette","description": "Crack the eggs into a mixing bowl with a pinch of salt and pepper.Beat well with a fork.\n\nPut a small frying pan on a low heat and let it get hot.Add a small knob of butter. When the butter has melted and is bubbling,add your eggs and move the pan around to spread them out evenly. When the omelette begins to cook and firm up, but still has a little raw egg on top, sprinkle over the cheese, if using (I sometimes grate mine directly on to the omelette).\n\nUsing a spatula, ease around the edges of the omelette, then fold it over in half.When it starts to turn golden brown underneath, remove the pan from the heat and slide the omelette on to a plate.","ingredients": [{"ingredientId":"Placeholder","name": "Egg","amount": 2}]}</string>
+    <string name="test_recipe2">{
+            "id": 31,
+            "userId": 20,
+            "name": "Apple pie",
+            "ingredients": [
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Apple",
+                    "amount": 8,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Double crust pie",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of white sugar",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of unsalted butter",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Spoon of flour",
+                    "amount": 3,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of water",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of packed brown sugar",
+                    "amount": 1,
+                }
+        ],
+        "description": "Preheat oven to 425 degrees F (220 degrees C). Melt the butter in a saucepan.
+        Stir in flour to form a paste. Add water, white sugar and brown sugar, and bring to a boil.
+        Reduce temperature and let simmer.
+        Place the bottom crust in your pan. Fill with apples, mounded slightly. Cover with a lattice
+        work crust. Gently pour the sugar and butter liquid over the crust. Pour slowly so that it
+        does not run off.
+        Bake 15 minutes in the preheated oven. Reduce the temperature to 350 degrees F (175 degrees C).
+        Continue baking for 35 to 45 minutes, until apples are soft."
+    }</string>
+
+    <!-- Menu Data -->
+    <string name="test_menu1">{
+            "id": 1,
+            "userId": 20,
+            "name": "Apple pie",
+            "ingredients": [
+                {
+                    "name": "Apple",
+                    "amount": 8,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Double crust pie",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of white sugar",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of unsalted butter",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Spoon of flour",
+                    "amount": 3,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of water",
+                    "amount": 1,
+                },
+                {
+                    "ingredientId": "PlaceHolder",
+                    "name": "Cup of packed brown sugar",
+                    "amount": 1,
+                }
+        ],
+        "description": "Preheat oven to 425 degrees F (220 degrees C). Melt the butter in a saucepan.
+        Stir in flour to form a paste. Add water, white sugar and brown sugar, and bring to a boil.
+        Reduce temperature and let simmer.
+        Place the bottom crust in your pan. Fill with apples, mounded slightly. Cover with a lattice
+        work crust. Gently pour the sugar and butter liquid over the crust. Pour slowly so that it
+        does not run off.
+        Bake 15 minutes in the preheated oven. Reduce the temperature to 350 degrees F (175 degrees C).
+        Continue baking for 35 to 45 minutes, until apples are soft."
+    }</string>
+</resources>

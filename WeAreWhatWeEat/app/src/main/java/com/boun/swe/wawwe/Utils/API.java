@@ -1,6 +1,9 @@
 package com.boun.swe.wawwe.Utils;
 
+import android.content.res.Resources;
 import android.util.Log;
+
+import android.content.Context;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -13,10 +16,13 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Menu;
+import com.boun.swe.wawwe.Models.Rate;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
+import com.boun.swe.wawwe.R;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -26,6 +32,7 @@ import com.google.gson.JsonSyntaxException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Mert on 16/10/15.
@@ -42,6 +49,7 @@ public class API {
 
     private static String UUID;
 
+    private static boolean underDev = true;
     private static boolean isTest = true;
 
     public static void init() {
@@ -129,14 +137,36 @@ public class API {
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
     //Not Tested and No Api yet
-    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe> successListener,
+    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
         //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
-        //String postBody = null;
-        mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("/recipe/search/%s",srchTxt),
-                Recipe.class, successListener, failureListener).setTag(tag));
+        if (isTest) {
+            String postBody1 = Commons.getString(R.string.test_recipe1);
+            String postBody2 = Commons.getString(R.string.test_recipe2);
+            Recipe testRecipe1 = new GsonBuilder().create().fromJson(postBody1, Recipe.class); //not working for now
+            Recipe testRecipe2 = new GsonBuilder().create().fromJson(postBody2, Recipe.class); //not working for now
+            Recipe[] searchResults = {testRecipe1, testRecipe2};
+            successListener.onResponse(searchResults);
+
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/search/recipe/%s", srchTxt),
+                    Recipe[].class, successListener, failureListener).setTag(tag));
+
+        }
     }
+
+    public static  void searchMenus(String tag, String srchTxt, Response.Listener<Menu[]> successListener,
+                                    Response.ErrorListener failureListener) {
+        if(isTest){
+
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/search/menu/%s", srchTxt),
+                    Menu[].class, successListener, failureListener).setTag(tag));
+        }
+    }
+
     //Not Tested and No Api yet
     public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
                                   Response.ErrorListener failureListener){
@@ -153,6 +183,7 @@ public class API {
                 BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+
     //Not Tested and No Api yet
     public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
                                   Response.ErrorListener failureListener) {
@@ -253,6 +284,133 @@ public class API {
             }).create().toJson(menu, Menu.class);
             mQueue.add(new GeneralRequest<>(Request.Method.POST,
                     BASE_URL + "/menu", Menu.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
+                                      Response.ErrorListener failureListener) {
+        if(isTest){
+            Comment c1;
+            Comment c2;
+            Comment c3;
+            Comment c4;
+//            if(type.equals("recipe")) {
+                c1 = new Comment("Onur Guler", type, parentID, Commons.getString(R.string.test_comment_recipe1));
+                c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
+                c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
+                c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
+//            } else if (type.equals("menu")){
+//
+//            } else if (type.equals("user")){
+//
+//            }
+            Comment[] cArray = {c1, c2, c3, c4};
+
+            successListener.onResponse(cArray);
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
+                    type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
+        }
+    }
+
+    public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
+                                             Response.Listener<Comment[]> successListener, Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d/%d",
+                type, parentID, userID), Comment[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void comment(String tag, Comment comment, Response.Listener<Comment> successListener,
+                               Response.ErrorListener failureListener) {
+        if(isTest) {
+            successListener.onResponse(comment);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return (f.getName().equals("id") || f.getName().equals("userFullName") || f.getName().equals("userId"));
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(comment, Comment.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/comment", Comment.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void deleteComment(String tag, Comment comment, Response.Listener<Comment> successListener,
+                                     Response.ErrorListener failureListener) {
+        if(isTest) {
+            successListener.onResponse(comment);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return f.getName().equals("userId");
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(comment, Comment.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/comment/delete", Comment.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void rate(String tag, Rate rate, Response.Listener<Rate> successListener,
+                            Response.ErrorListener failureListener) {
+        if(isTest){
+            successListener.onResponse(rate);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return (f.getName().equals("id") || f.getName().equals("userId"));
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + "/rate", Rate.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void getAverageRating (String tag, Rate rate, String type, int parentId, Response.Listener<Rate> successListener,
+                                         Response.ErrorListener failureListener) {
+        if(isTest){
+            Rate r1 = new Rate(type, parentId, 4.2f);
+            successListener.onResponse(r1);
+        } else{
+            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + (String.format("/rate/%s/%d", type, parentId)), Rate.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
+    }
+
+    public static void getRatingByUser (String tag, Rate rate, String type, int parentId, int userId, Response.Listener<Rate> successListener,
+                                       Response.ErrorListener failureListener) {
+        if(isTest){
+            float min = 0.0f; float max = 5.0f;
+            Random rand = new Random();
+            float avg = rand.nextFloat()*(max-min);
+            Rate r1 = new Rate(type, parentId, avg);
+            successListener.onResponse(r1);
+        } else{
+            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)), Rate.class, successListener, failureListener)
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }

@@ -18,6 +18,13 @@ public class Comment implements Parcelable {
     private String body;
     private Date createdAt;
 
+    public Comment(String userFullName, String type, int parentId, String body){
+        this.userFullName = userFullName;
+        this.type = type;
+        this.parentId = parentId;
+        this.body = body;
+    }
+
     protected Comment(Parcel in) {
         id = in.readInt();
         userId = in.readInt();
