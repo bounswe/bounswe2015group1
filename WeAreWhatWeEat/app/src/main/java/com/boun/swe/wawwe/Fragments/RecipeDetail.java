@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.CustomViews.CommentRatingView;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Nutrition;
@@ -62,17 +63,17 @@ public class RecipeDetail extends LeafFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
+        View recipeDetailView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
         recipe = getArguments().getParcelable("recipe");
 
-        ImageView recipeImage = (ImageView) recipeCreationView.findViewById(R.id.recipeImage);
-        TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
-        TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
-        LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
+        ImageView recipeImage = (ImageView) recipeDetailView.findViewById(R.id.recipeImage);
+        TextView recipeName = (TextView) recipeDetailView.findViewById(R.id.recipeName);
+        TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
+        LinearLayout ingredientHolder = (LinearLayout) recipeDetailView
                 .findViewById(R.id.ingredient_item_holder);
 
-        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+        final TagGroup tagGroupStatic = (TagGroup) recipeDetailView.findViewById(R.id.tag_group_static);
         API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
             @Override
             public void onResponse(String[] response) {
@@ -85,7 +86,7 @@ public class RecipeDetail extends LeafFragment {
             }
         });
 
-        TextView deneme = (TextView) recipeCreationView.findViewById(R.id.calories);
+        TextView deneme = (TextView) recipeDetailView.findViewById(R.id.calories);
         recipeName.setText(recipe.getName());
         directions.setText(recipe.getDescription());
         for (Ingredient ingredient: recipe.getIngredients()) {
@@ -93,17 +94,17 @@ public class RecipeDetail extends LeafFragment {
             //deneme.setText(String.format(" %d", ingredient.getNutritions().getId()));
         }
 
-        TextSurface nutritionHolder = (TextSurface) recipeCreationView.findViewById(R.id.nutritions);
+        TextSurface nutritionHolder = (TextSurface) recipeDetailView.findViewById(R.id.nutritions);
         String[] names = new String[] {
-                "Calories : %f",
-                "Carbonhydrate : %f",
-                "Fats : %f",
-                "Proteins : %f",
-                "Sodium : %f",
-                "Fiber : %f",
-                "Cholesterol : %f",
-                "Sugar : %f",
-                "Iron : %f"
+                "Calories : %.2f",
+                "Carbonhydrate : %.2f",
+                "Fats : %.2f",
+                "Proteins : %.2f",
+                "Sodium : %.2f",
+                "Fiber : %.2f",
+                "Cholesterol : %.2f",
+                "Sugar : %.2f",
+                "Iron : %.2f"
         };
 
         int c = 0;
@@ -130,7 +131,13 @@ public class RecipeDetail extends LeafFragment {
         nutritionHolder.getCamera().setTransY(-nutritionHeight / 2);
         nutritionHolder.setLayoutParams(params);
 
-        return recipeCreationView;
+        LinearLayout holder = (LinearLayout) recipeDetailView.findViewById(R.id.recipeDetail_holder);
+        View commentView = new CommentRatingView.Builder(context, this)
+                .setParent(recipe)
+                .create();
+        holder.addView(commentView);
+
+        return recipeDetailView;
     }
 
     private void addIngredientRow(LinearLayout ingredientHolder, Ingredient ingredient) {
@@ -147,22 +154,6 @@ public class RecipeDetail extends LeafFragment {
         text.setText(String.format(" - %d %s", ingredient.getAmount(), ingredient.getName()));
         ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);
     }
-
-//    private void addNutrition(LinearLayout nutritionHolder, Nutrition nutrition) {
-//        TextView text = new TextView(context);
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT);
-//        int margin = (int) context.getResources().
-//                getDimension(R.dimen.activity_horizontal_margin);
-//        params.setMargins(margin, margin, margin, margin);
-//        text.setTextColor(context.getResources().getColor(R.color.black));
-//        text.setTextAppearance(context, android.R.style.TextAppearance_Large);
-//        text.setLayoutParams(params);
-//        text.setText(String.format(" - %d %d", nutrition.getId(), nutrition.getCalories()));
-//        nutritionHolder.addView(text, nutritionHolder.getChildCount() - 1);
-//    }
-
 
     public static RecipeDetail getFragment(Recipe recipe) {
         RecipeDetail recipeDetailFragment = new RecipeDetail();
