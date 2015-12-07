@@ -94,6 +94,7 @@ public class Login extends BaseFragment {
                     public void onClick(View v) {
                         if (context instanceof MainActivity) {
                             MainActivity main = (MainActivity) context;
+                            main.getSupportActionBar().show();
                             main.makeFragmentTransaction(Signup.getFragment(new Bundle()));
                         }
                         /*final String email = emailEditText.getText().toString();
@@ -143,6 +144,15 @@ public class Login extends BaseFragment {
                 });
 
         return loginView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (context instanceof MainActivity) {
+            MainActivity main = (MainActivity) context;
+            main.getSupportActionBar().hide();
+        }
     }
 
     @Override
