@@ -58,4 +58,8 @@
     <string name="title_menu_recipeDetail">Recipe Detail</string>
     <string name="title_menu_myRecipe">My Recipes</string>
     <string name="title_menu_signup">Sign up</string>
+
+    <!-- Comment Rating -->
+    <string name="prompt_makeComment">Write Comment…</string>
+
 </resources>

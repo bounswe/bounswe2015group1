@@ -18,4 +18,7 @@
     <string name="error_getUserRecipes">Could not get user recipes.</string>
 
     <string name="error_createMenu">Could not create menu.</string>
+
+    <string name="error_makeComment">Could not send comment :(</string>
+    <string name="error_doRate">Could not send your rate :(</string>
 </resources>
