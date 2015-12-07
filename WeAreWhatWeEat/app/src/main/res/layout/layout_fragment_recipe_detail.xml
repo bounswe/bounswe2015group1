@@ -96,27 +96,10 @@
                 android:text="@string/title_nutrition"
                 android:layout_marginTop="20dp" />
 
-            <LinearLayout
-                android:orientation="vertical"
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritions"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/nutrition_item_holder" >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:layout_marginTop="20dp"
-                    android:text="asdf"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAppearance="?android:attr/textAppearance"
-                    android:layout_marginTop="20dp"
-                    android:text="asdf2"/>
-
-            </LinearLayout>
+                android:layout_height="0dp"/>
         </LinearLayout>
 
     </ScrollView>

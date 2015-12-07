@@ -37,9 +37,7 @@ public class Ingredient implements Parcelable {
         return amount;
     }
 
-    public Nutrition getNutritions() {
-        return nutritions;
-    }
+    public Nutrition getNutritions() { return nutritions; }
 
     public void setAmount(int amount) {
         this.amount = amount;

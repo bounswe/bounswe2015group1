@@ -13,16 +13,24 @@ import su.levenetc.android.textsurface.contants.Side;
 public class Commons {
 
     public static Text generateHeader(int resTextId) {
-        return  generateText(resTextId, 30, android.R.color.white);
+        return generateText(getString(resTextId), 30, android.R.color.white);
+    }
+
+    public static Text generateHeader(String text) {
+        return generateText(text, 30, android.R.color.white);
     }
 
     public static Text generateText(int resTextId) {
-        return  generateText(resTextId, 14, android.R.color.black);
+        return generateText(getString(resTextId), 14, android.R.color.black);
     }
 
-    private static Text generateText(int resTextId, int textSize, int resColor) {
+    public static Text generateText(String text) {
+        return generateText(text, 14, android.R.color.black);
+    }
+
+    private static Text generateText(String resText, int textSize, int resColor) {
         return TextBuilder
-                .create(App.getInstance().getString(resTextId))
+                .create(resText)
                 .setSize(textSize)
                 .setAlpha(0)
                 .setColor(App.getInstance().getResources().getColor(resColor))

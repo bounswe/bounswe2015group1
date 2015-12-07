@@ -22,10 +22,23 @@ import com.boun.swe.wawwe.Models.Nutrition;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 
 import java.util.ArrayList;
 
 import me.gujun.android.taggroup.TagGroup;
+import su.levenetc.android.textsurface.Text;
+import su.levenetc.android.textsurface.TextSurface;
+import su.levenetc.android.textsurface.animations.ChangeColor;
+import su.levenetc.android.textsurface.animations.Delay;
+import su.levenetc.android.textsurface.animations.Parallel;
+import su.levenetc.android.textsurface.animations.Sequential;
+import su.levenetc.android.textsurface.animations.Slide;
+import su.levenetc.android.textsurface.animations.TransSurface;
+import su.levenetc.android.textsurface.common.Position;
+import su.levenetc.android.textsurface.contants.Align;
+import su.levenetc.android.textsurface.contants.Pivot;
+import su.levenetc.android.textsurface.contants.Side;
 
 /**
  * Created by Mert on 31/10/15.
@@ -58,8 +71,6 @@ public class RecipeDetail extends LeafFragment {
         TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
         LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
                 .findViewById(R.id.ingredient_item_holder);
-        LinearLayout nutritionHolder = (LinearLayout) recipeCreationView
-                .findViewById(R.id.nutrition_item_holder);
 
         final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
         API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
@@ -74,12 +85,50 @@ public class RecipeDetail extends LeafFragment {
             }
         });
 
-
+        TextView deneme = (TextView) recipeCreationView.findViewById(R.id.calories);
         recipeName.setText(recipe.getName());
         directions.setText(recipe.getDescription());
-        for (Ingredient ingredient: recipe.getIngredients())
+        for (Ingredient ingredient: recipe.getIngredients()) {
             addIngredientRow(ingredientHolder, ingredient);
+            //deneme.setText(String.format(" %d", ingredient.getNutritions().getId()));
+        }
 
+        TextSurface nutritionHolder = (TextSurface) recipeCreationView.findViewById(R.id.nutritions);
+        String[] names = new String[] {
+                "Calories : %f",
+                "Carbonhydrate : %f",
+                "Fats : %f",
+                "Proteins : %f",
+                "Sodium : %f",
+                "Fiber : %f",
+                "Cholesterol : %f",
+                "Sugar : %f",
+                "Iron : %f"
+        };
+
+        int c = 0;
+        float nutritionHeight = 0;
+        Text previous = null;
+        for (float value: new Float[] { 1f,1f,1f,1f,1f,1f,1f,1f,1f }) {//recipe.getNutritions().getNutritionsAsArray()) {
+            Text text = Commons.generateText(String.format(names[c], value));
+            if (previous != null)
+                text.setPosition(new Position(Align.BOTTOM_OF, previous));
+            nutritionHeight = text.getHeight() * 9;
+            nutritionHolder.play(new Sequential(
+                    Delay.duration(c * 100),
+                    new Parallel(
+                            Slide.showFrom(Side.LEFT, text, 500),
+                            ChangeColor.to(text, 750, context.getResources()
+                                    .getColor(R.color.colorAccent))
+                    )));
+
+            previous = text;
+            c++;
+        }
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) nutritionHolder.getLayoutParams();
+        params.height = (int) (nutritionHeight + nutritionHeight / 4.5f);
+        nutritionHolder.getCamera().setTransY(-nutritionHeight / 2);
+        nutritionHolder.setLayoutParams(params);
 
         return recipeCreationView;
     }
