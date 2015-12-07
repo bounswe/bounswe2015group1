@@ -42,7 +42,7 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 });
 
 angular.module('FoodApp').run(function($rootScope) {
-		$rootScope.saveTheDay = true;
+		$rootScope.saveTheDay = false;
 		$rootScope.saveTheDelay = 10;
 		$rootScope.baseUrl = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080";
 		$rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
