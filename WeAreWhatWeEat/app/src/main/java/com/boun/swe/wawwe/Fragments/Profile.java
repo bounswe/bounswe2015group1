@@ -84,7 +84,7 @@ public class Profile extends BaseFragment {
 
         User user = App.getUser();
         setUserInfo(user);
-
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             View addButton = profileView.findViewById(R.id.profile_button_feed);
             addButton.setOutlineProvider(new ViewOutlineProvider() {
@@ -134,7 +134,29 @@ public class Profile extends BaseFragment {
                             }
                         }
                     });
-        }
+        }*/
+
+        profileView.findViewById(R.id.action_recipe_create)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.makeFragmentTransaction(RecipeCreator.getFragment(null));
+                        }
+                    }
+                });
+
+        profileView.findViewById(R.id.action_menu_create)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.makeFragmentTransaction(MenuCreator.getFragment(null));
+                        }
+                    }
+                });
 
         return profileView;
     }
