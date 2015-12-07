@@ -1,0 +1,24 @@
+{
+  "id":12,
+  "userId":10,
+  "name":"Omelette",
+  "ingredients":[
+    {
+      "ingredientId":"Placeholder",
+      "name": "Egg",
+      "amount": 2
+    },
+    {
+      "ingredientId": "Placeholder",
+      "name": "Pinch of salt",
+      "amount": 1
+    },
+    {
+      "ingredientId": "Placeholder",
+      "name": "Pinch of pepper",
+      "amount": 1
+    }
+  ],
+  "description": "Crack the eggs into a mixing bowl with a pinch of salt and pepper.Beat well with a fork.\n\nPut a small frying pan on a low heat and let it get hot.Add a small knob of butter. When the butter has melted and is bubbling,add your eggs and move the pan around to spread them out evenly. When the omelette begins to cook and firm up, but still has a little raw egg on top, sprinkle over the cheese, if using (I sometimes grate mine directly on to the omelette).\n\nUsing a spatula, ease around the edges of the omelette, then fold it over in half.When it starts to turn golden brown underneath, remove the pan from the heat and slide the omelette on to a plate.",
+  "tags":["Egg","Salty","Breakfast","Pepper"]
+}
