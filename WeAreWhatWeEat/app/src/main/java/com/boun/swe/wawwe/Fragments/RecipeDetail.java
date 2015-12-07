@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Nutrition;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -57,6 +58,8 @@ public class RecipeDetail extends LeafFragment {
         TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
         LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
                 .findViewById(R.id.ingredient_item_holder);
+        LinearLayout nutritionHolder = (LinearLayout) recipeCreationView
+                .findViewById(R.id.nutrition_item_holder);
 
         final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
         API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
@@ -71,10 +74,12 @@ public class RecipeDetail extends LeafFragment {
             }
         });
 
+
         recipeName.setText(recipe.getName());
         directions.setText(recipe.getDescription());
         for (Ingredient ingredient: recipe.getIngredients())
             addIngredientRow(ingredientHolder, ingredient);
+
 
         return recipeCreationView;
     }
@@ -88,11 +93,27 @@ public class RecipeDetail extends LeafFragment {
                 getDimension(R.dimen.activity_horizontal_margin);
         params.setMargins(margin, margin, margin, margin);
         text.setTextColor(context.getResources().getColor(R.color.black));
-        text.setTextAppearance(context, android.R.style.TextAppearance_Large);
+        text.setTextAppearance(context, android.R.style.TextAppearance);
         text.setLayoutParams(params);
         text.setText(String.format(" - %d %s", ingredient.getAmount(), ingredient.getName()));
         ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);
     }
+
+//    private void addNutrition(LinearLayout nutritionHolder, Nutrition nutrition) {
+//        TextView text = new TextView(context);
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT);
+//        int margin = (int) context.getResources().
+//                getDimension(R.dimen.activity_horizontal_margin);
+//        params.setMargins(margin, margin, margin, margin);
+//        text.setTextColor(context.getResources().getColor(R.color.black));
+//        text.setTextAppearance(context, android.R.style.TextAppearance_Large);
+//        text.setLayoutParams(params);
+//        text.setText(String.format(" - %d %d", nutrition.getId(), nutrition.getCalories()));
+//        nutritionHolder.addView(text, nutritionHolder.getChildCount() - 1);
+//    }
+
 
     public static RecipeDetail getFragment(Recipe recipe) {
         RecipeDetail recipeDetailFragment = new RecipeDetail();

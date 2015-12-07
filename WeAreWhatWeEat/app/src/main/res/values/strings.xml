@@ -27,6 +27,9 @@
     <string name="button_submit_recipe">Submit</string>
     <string name="button_edit_recipe">Save Changes</string>
 
+    <!-- Recipe Detail -->
+    <string name="title_nutrition">Nutritions</string>
+
     <!-- Profile -->
     <string name="title_fullName">Name</string>
     <string name="title_location">Location</string>

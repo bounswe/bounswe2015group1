@@ -19,9 +19,14 @@ import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Mert on 09/11/15.
  */
+
 public class Feeds extends BaseFragment {
 
     private RecyclerView feeds;
@@ -34,7 +39,7 @@ public class Feeds extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View feedsView = inflater.inflate(R.layout.layout_fragment_feeds,
-            container, false);
+                container, false);
 
         feeds = (RecyclerView) feedsView.findViewById(R.id.feeds);
         feeds.setItemAnimator(new DefaultItemAnimator());
