@@ -111,7 +111,7 @@ public class API {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                return !(f.getName().equals("email") || f.getName().equals("password"));
+                return f.getName().equals("id");
             }
 
             @Override

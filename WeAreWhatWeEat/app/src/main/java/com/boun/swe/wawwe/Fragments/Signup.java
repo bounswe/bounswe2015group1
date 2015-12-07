@@ -26,7 +26,7 @@ import java.util.Calendar;
 /**
  * Created by onurguler on 07/12/15.
  */
-public class Signup extends BaseFragment implements DatePickerDialog.OnDateSetListener {
+public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetListener {
 
     private String DATEPICKER_TAG = "date_picker";
 
@@ -34,11 +34,20 @@ public class Signup extends BaseFragment implements DatePickerDialog.OnDateSetLi
 
     public Signup() { }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setHasOptionsMenu(true);
+        TAG = App.getInstance().getString(R.string.title_menu_signup);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View signupView = inflater.inflate(R.layout.layout_fragment_signup,
                 container, false);
+
+
 
         final EditText emailEditText = (EditText) signupView.findViewById(R.id.userEmail);
         final EditText passwordEditText = (EditText) signupView.findViewById(R.id.password);
@@ -90,7 +99,10 @@ public class Signup extends BaseFragment implements DatePickerDialog.OnDateSetLi
                         new Response.Listener<User>() {
                             @Override
                             public void onResponse(User response) {
-
+                                if (context instanceof MainActivity) {
+                                    MainActivity main = (MainActivity) context;
+                                    main.makeFragmentTransaction(Login.getFragment(new Bundle()));
+                                }
                             }
                         },
                         new Response.ErrorListener() {
@@ -127,28 +139,12 @@ public class Signup extends BaseFragment implements DatePickerDialog.OnDateSetLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-            main.getSupportActionBar().show();
-        }
     }
 
     public static Signup getFragment(Bundle bundle) {
         Signup signupFragment = new Signup();
         signupFragment.setArguments(bundle);
         return signupFragment;
-    }
-
-    private void exitSignupFragment() {
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-//            main.getSupportFragmentManager().beginTransaction()
-//                    .remove(Login.this).commit();
-//            main.findViewById(R.id.container).invalidate();
-            main.removeFragment(this);
-            main.makeFragmentTransaction(Feeds.getFragment(new Bundle()));
-        }
     }
 
     @Override
