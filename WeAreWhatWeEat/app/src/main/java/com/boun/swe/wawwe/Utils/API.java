@@ -2,7 +2,11 @@ package com.boun.swe.wawwe.Utils;
 
 import android.content.res.Resources;
 import android.util.Log;
+import com.google.gson.stream.JsonReader;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
@@ -141,11 +145,22 @@ public class API {
                                     Response.ErrorListener failureListener) {
         //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
         if (isTest) {
-            String postBody1 = Commons.getString(R.string.test_recipe1);
-            String postBody2 = Commons.getString(R.string.test_recipe2);
-            Recipe testRecipe1 = new GsonBuilder().create().fromJson(postBody1, Recipe.class); //not working for now
-            Recipe testRecipe2 = new GsonBuilder().create().fromJson(postBody2, Recipe.class); //not working for now
-            Recipe[] searchResults = {testRecipe1, testRecipe2};
+            String file1 = "test_recipe1.json";
+            String file2 = "test_recipe2.json";
+            String postBody1 = loadJSONFromAsset(file1);
+            String postBody2 = loadJSONFromAsset(file2);
+
+            Gson gson1 = new Gson();
+            Gson gson2 = new Gson();
+            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+            JsonReader reader2 = new JsonReader(new StringReader(postBody2));
+            reader1.setLenient(true);
+            reader2.setLenient(true);
+
+            Recipe testRcp1 = gson1.fromJson(postBody1, Recipe.class);
+            Recipe testRcp2 = gson2.fromJson(postBody2, Recipe.class);
+
+            Recipe[] searchResults = {testRcp1, testRcp2};
             successListener.onResponse(searchResults);
 
         } else {
@@ -169,25 +184,32 @@ public class API {
 
     //Not Tested and No Api yet
     public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
-                                  Response.ErrorListener failureListener){
-        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes f) {
-                return f.getName().equals("id") || f.getName().equals("userId");
-            }
+                                  Response.ErrorListener failureListener) {
 
-            @Override
-            public boolean shouldSkipClass(Class<?> clazz) { return false; }
-        }).create().toJson(recipe, Recipe.class);
-        mQueue.add(new GeneralRequest<>(Request.Method.POST,
-                BASE_URL + String.format("/recipe/edit/%d",recipeId), Recipe.class, successListener, failureListener)
-                .setPostBodyInJSONForm(postBody).setTag(tag));
+        if (isTest) {
+            successListener.onResponse(recipe);
+        } else {
+            String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return f.getName().equals("id") || f.getName().equals("userId");
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            }).create().toJson(recipe, Recipe.class);
+            mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                    BASE_URL + String.format("/recipe/edit/%d", recipeId), Recipe.class, successListener, failureListener)
+                    .setPostBodyInJSONForm(postBody).setTag(tag));
+        }
     }
 
     //Not Tested and No Api yet
     public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
                                   Response.ErrorListener failureListener) {
-        if (isTest) successListener.onResponse(new String[] { "Tag1", "Tag2", "Tag3" });
+        if (isTest) successListener.onResponse(new String[] { "Egg", "Salty", "Breakfast" });
         else mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + String.format("/recipe/tags/%d", recipeId),
                 String[].class, successListener, failureListener).setTag(tag));
@@ -201,6 +223,9 @@ public class API {
 
     public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                      Response.ErrorListener failureListener) {
+        if(isTest){
+            successListener.onResponse(recipe);
+        }
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
@@ -316,6 +341,10 @@ public class API {
 
     public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
                                              Response.Listener<Comment[]> successListener, Response.ErrorListener failureListener) {
+        if(isTest){
+            Comment c1 = new Comment(App.getUser().getFullName(), type, App.getUserId(), Commons.getString(R.string.test_comment_recipe1));
+
+        }
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d/%d",
                 type, parentID, userID), Comment[].class, successListener, failureListener).setTag(tag));
     }
@@ -389,7 +418,10 @@ public class API {
     public static void getAverageRating (String tag, Rate rate, String type, int parentId, Response.Listener<Rate> successListener,
                                          Response.ErrorListener failureListener) {
         if(isTest){
-            Rate r1 = new Rate(type, parentId, 4.2f);
+            float min = 0.0f; float max = 5.0f;
+            Random rand = new Random();
+            float avg = rand.nextFloat()*(max-min);
+            Rate r1 = new Rate(type, parentId, avg);
             successListener.onResponse(r1);
         } else{
             String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
@@ -438,6 +470,23 @@ public class API {
                 BASE_URL + "/session/logout", User.class,
                 successListener, failureListener).setTag(tag));
     }
+
+    public static String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
+            InputStream is = App.getInstance().getApplicationContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
 
     /**
      * This is a generic request class which have designed from volley and

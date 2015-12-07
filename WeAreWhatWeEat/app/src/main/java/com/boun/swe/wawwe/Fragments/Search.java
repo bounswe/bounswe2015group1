@@ -69,7 +69,7 @@ public class Search extends BaseFragment {
             public void onClick(View v) {
                 String searchText = searchBox.getText().toString();
 
-                API.getAllRecipes(getTag(),
+                API.searchRecipe(getTag(), searchText,
                         new Response.Listener<Recipe[]>() {
                             @Override
                             public void onResponse(Recipe[] response) {
