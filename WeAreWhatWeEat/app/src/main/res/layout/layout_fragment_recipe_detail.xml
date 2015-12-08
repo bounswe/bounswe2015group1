@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView" >
+
         <LinearLayout
+            android:id="@+id/recipeDetail_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -78,7 +80,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearance"
                 android:text="test"
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"
@@ -88,6 +90,18 @@
                 android:minLines="3"
                 android:layout_weight="1"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/title_nutrition"
+                android:layout_marginTop="20dp" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritions"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
         </LinearLayout>
 
     </ScrollView>

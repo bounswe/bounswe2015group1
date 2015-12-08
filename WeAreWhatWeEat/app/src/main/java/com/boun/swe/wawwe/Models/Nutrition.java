@@ -19,7 +19,7 @@ public class Nutrition implements Parcelable {
     private float sugars;
     private float iron;
 
-    protected Nutrition(Parcel in) {
+    public Nutrition(Parcel in) {
         id = in.readInt();
         calories = in.readFloat();
         carbohydrate = in.readFloat();
@@ -30,6 +30,20 @@ public class Nutrition implements Parcelable {
         cholesterol = in.readFloat();
         sugars = in.readFloat();
         iron = in.readFloat();
+    }
+
+    public float[] getNutritionsAsArray() {
+        return new float[] {
+            calories,
+            carbohydrate,
+            fats,
+            proteins,
+            sodium,
+            fiber,
+            cholesterol,
+            sugars,
+            iron
+        };
     }
 
     public int getId() {

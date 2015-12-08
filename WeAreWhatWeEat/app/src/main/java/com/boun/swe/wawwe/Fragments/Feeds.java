@@ -13,15 +13,21 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.boun.swe.wawwe.Adapters.NewFeedAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Mert on 09/11/15.
  */
+
 public class Feeds extends BaseFragment {
 
     private RecyclerView feeds;
@@ -34,12 +40,14 @@ public class Feeds extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View feedsView = inflater.inflate(R.layout.layout_fragment_feeds,
-            container, false);
+                container, false);
 
         feeds = (RecyclerView) feedsView.findViewById(R.id.feeds);
         feeds.setItemAnimator(new DefaultItemAnimator());
         feeds.setLayoutManager(new LinearLayoutManager(context));
-        final FeedAdapter adapter = new FeedAdapter(context);
+        //TODO You can change the adapter to old one by uncommenting this and commenting the next one.
+        //final FeedAdapter adapter = new FeedAdapter(context);
+        final NewFeedAdapter adapter = new NewFeedAdapter(context);
         feeds.setAdapter(adapter);
 
         API.getAllRecipes(getTag(),

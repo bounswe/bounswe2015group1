@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/onurguler/Desktop/cmpe451github2/bounswe2015group1/WeAreWhatWeEat/app/build/intermediates/exploded-aar/com.getbase/floatingactionbutton/1.10.1/jars/classes.jar"
+        jar="/Users/akintoksan/Desktop/bounswe2015group1/WeAreWhatWeEat/app/build/intermediates/exploded-aar/com.getbase/floatingactionbutton/1.10.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="f40cf334cdc8b098b74312e21c7741c6eefbeb0e">
-        <dex dex="/Users/onurguler/Desktop/cmpe451github2/bounswe2015group1/WeAreWhatWeEat/app/build/intermediates/pre-dexed/debug/classes-962de843f4a4076717ea8a7fdcc9f31cbb77e4a9.jar" />
+        <dex dex="/Users/akintoksan/Desktop/bounswe2015group1/WeAreWhatWeEat/app/build/intermediates/pre-dexed/debug/classes-12603090f166a82bb732b12ac53a15b0e4bbd44c.jar" />
     </item>
 
 </items>

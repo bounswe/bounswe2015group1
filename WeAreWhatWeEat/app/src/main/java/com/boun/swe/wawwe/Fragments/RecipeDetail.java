@@ -16,15 +16,30 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.CustomViews.CommentRatingView;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Nutrition;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 
 import java.util.ArrayList;
 
 import me.gujun.android.taggroup.TagGroup;
+import su.levenetc.android.textsurface.Text;
+import su.levenetc.android.textsurface.TextSurface;
+import su.levenetc.android.textsurface.animations.ChangeColor;
+import su.levenetc.android.textsurface.animations.Delay;
+import su.levenetc.android.textsurface.animations.Parallel;
+import su.levenetc.android.textsurface.animations.Sequential;
+import su.levenetc.android.textsurface.animations.Slide;
+import su.levenetc.android.textsurface.animations.TransSurface;
+import su.levenetc.android.textsurface.common.Position;
+import su.levenetc.android.textsurface.contants.Align;
+import su.levenetc.android.textsurface.contants.Pivot;
+import su.levenetc.android.textsurface.contants.Side;
 
 /**
  * Created by Mert on 31/10/15.
@@ -48,17 +63,17 @@ public class RecipeDetail extends LeafFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
+        View recipeDetailView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
         recipe = getArguments().getParcelable("recipe");
 
-        ImageView recipeImage = (ImageView) recipeCreationView.findViewById(R.id.recipeImage);
-        TextView recipeName = (TextView) recipeCreationView.findViewById(R.id.recipeName);
-        TextView directions = (TextView) recipeCreationView.findViewById(R.id.description);
-        LinearLayout ingredientHolder = (LinearLayout) recipeCreationView
+        ImageView recipeImage = (ImageView) recipeDetailView.findViewById(R.id.recipeImage);
+        TextView recipeName = (TextView) recipeDetailView.findViewById(R.id.recipeName);
+        TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
+        LinearLayout ingredientHolder = (LinearLayout) recipeDetailView
                 .findViewById(R.id.ingredient_item_holder);
 
-        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+        final TagGroup tagGroupStatic = (TagGroup) recipeDetailView.findViewById(R.id.tag_group_static);
         API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
             @Override
             public void onResponse(String[] response) {
@@ -71,12 +86,58 @@ public class RecipeDetail extends LeafFragment {
             }
         });
 
+        TextView deneme = (TextView) recipeDetailView.findViewById(R.id.calories);
         recipeName.setText(recipe.getName());
         directions.setText(recipe.getDescription());
-        for (Ingredient ingredient: recipe.getIngredients())
+        for (Ingredient ingredient: recipe.getIngredients()) {
             addIngredientRow(ingredientHolder, ingredient);
+            //deneme.setText(String.format(" %d", ingredient.getNutritions().getId()));
+        }
 
-        return recipeCreationView;
+        TextSurface nutritionHolder = (TextSurface) recipeDetailView.findViewById(R.id.nutritions);
+        String[] names = new String[] {
+                "Calories : %.2f",
+                "Carbonhydrate : %.2f",
+                "Fats : %.2f",
+                "Proteins : %.2f",
+                "Sodium : %.2f",
+                "Fiber : %.2f",
+                "Cholesterol : %.2f",
+                "Sugar : %.2f",
+                "Iron : %.2f"
+        };
+
+        int c = 0;
+        float nutritionHeight = 0;
+        Text previous = null;
+        for (float value: new Float[] { 1f,1f,1f,1f,1f,1f,1f,1f,1f }) {//recipe.getNutritions().getNutritionsAsArray()) {
+            Text text = Commons.generateText(String.format(names[c], value));
+            if (previous != null)
+                text.setPosition(new Position(Align.BOTTOM_OF, previous));
+            nutritionHeight = text.getHeight() * 9;
+            nutritionHolder.play(new Sequential(
+                    Delay.duration(c * 100),
+                    new Parallel(
+                            Slide.showFrom(Side.LEFT, text, 500),
+                            ChangeColor.to(text, 750, context.getResources()
+                                    .getColor(R.color.colorAccent))
+                    )));
+
+            previous = text;
+            c++;
+        }
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) nutritionHolder.getLayoutParams();
+        params.height = (int) (nutritionHeight + nutritionHeight / 4.5f);
+        nutritionHolder.getCamera().setTransY(-nutritionHeight / 2);
+        nutritionHolder.setLayoutParams(params);
+
+        LinearLayout holder = (LinearLayout) recipeDetailView.findViewById(R.id.recipeDetail_holder);
+        View commentView = new CommentRatingView.Builder(context, this)
+                .setParent(recipe)
+                .create();
+        holder.addView(commentView);
+
+        return recipeDetailView;
     }
 
     private void addIngredientRow(LinearLayout ingredientHolder, Ingredient ingredient) {
@@ -88,7 +149,7 @@ public class RecipeDetail extends LeafFragment {
                 getDimension(R.dimen.activity_horizontal_margin);
         params.setMargins(margin, margin, margin, margin);
         text.setTextColor(context.getResources().getColor(R.color.black));
-        text.setTextAppearance(context, android.R.style.TextAppearance_Large);
+        text.setTextAppearance(context, android.R.style.TextAppearance);
         text.setLayoutParams(params);
         text.setText(String.format(" - %d %s", ingredient.getAmount(), ingredient.getName()));
         ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);

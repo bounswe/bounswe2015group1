@@ -3,4 +3,5 @@
     <item name="menu_feeds" type="id"/>
     <item name="menu_profile" type="id"/>
     <item name="menu_search" type="id"/>
+    <item name="layout_profile_child" type="id" />
 </resources>

@@ -195,7 +195,7 @@ public class RecipeCreator extends LeafFragment {
                 EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
 
                 ingredientName.setText(ingredient.getName());
-                ingredientAmount.setText(ingredient.getAmount());
+                ingredientAmount.setText(""+ingredient.getAmount());
             }
         }
         else addIngredientRow(ingredientHolder);

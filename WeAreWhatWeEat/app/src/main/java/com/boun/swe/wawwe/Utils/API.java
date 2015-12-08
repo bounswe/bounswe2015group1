@@ -34,6 +34,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -110,7 +111,7 @@ public class API {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                return !(f.getName().equals("email") || f.getName().equals("password"));
+                return f.getName().equals("id");
             }
 
             @Override
@@ -325,6 +326,11 @@ public class API {
                 c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
                 c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
                 c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
+
+            c1.setCreatedAt(new Date(1449020159));
+            c2.setCreatedAt(new Date(1440517159));
+            c3.setCreatedAt(new Date(1409507059));
+            c4.setCreatedAt(new Date(1440505191));
 //            } else if (type.equals("menu")){
 //
 //            } else if (type.equals("user")){
@@ -352,6 +358,7 @@ public class API {
     public static void comment(String tag, Comment comment, Response.Listener<Comment> successListener,
                                Response.ErrorListener failureListener) {
         if(isTest) {
+            comment.setCreatedAt(new Date(1449505191));
             successListener.onResponse(comment);
         } else {
             String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -415,7 +422,7 @@ public class API {
         }
     }
 
-    public static void getAverageRating (String tag, Rate rate, String type, int parentId, Response.Listener<Rate> successListener,
+    public static void getAverageRating (String tag, String type, int parentId, Response.Listener<Rate> successListener,
                                          Response.ErrorListener failureListener) {
         if(isTest){
             float min = 0.0f; float max = 5.0f;
@@ -424,10 +431,9 @@ public class API {
             Rate r1 = new Rate(type, parentId, avg);
             successListener.onResponse(r1);
         } else{
-            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
             mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                    BASE_URL + (String.format("/rate/%s/%d", type, parentId)), Rate.class, successListener, failureListener)
-                    .setPostBodyInJSONForm(postBody).setTag(tag));
+                    BASE_URL + (String.format("/rate/%s/%d", type, parentId)),
+                    Rate.class, successListener, failureListener).setTag(tag));
         }
     }
 

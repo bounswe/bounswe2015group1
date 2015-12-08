@@ -38,6 +38,16 @@ public class User implements Parcelable {
         this.dateOfBirth = dateOfBirth;
     }
 
+    //For Signup
+    public User(String email, boolean isRestaurant, String password, String fullName, String location, String dateOfBirth){
+        this.email = email;
+        this.isRestaurant = isRestaurant;
+        this.password = password;
+        this.fullName = fullName;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
+    }
+
     protected User(Parcel in) {
         id = in.readInt();
         email = in.readString();
