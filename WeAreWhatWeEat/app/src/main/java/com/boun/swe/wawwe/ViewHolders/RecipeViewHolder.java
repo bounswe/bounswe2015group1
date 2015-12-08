@@ -12,59 +12,20 @@ import com.boun.swe.wawwe.R;
  */
 public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView recipeImg;
-    private TextView itemRecipeName;
-    private TextView type;
-    private TextView calories;
-    private TextView score;
+    public ImageView recipePic;
+    public TextView recipeName;
+    public TextView type;
+    public TextView calories;
+    public TextView score;
 
-    public RecipeViewHolder(View v) {
-        super(v);
-        recipeImg = (ImageView) v.findViewById(R.id.recipePic_small);
-        itemRecipeName = (TextView) v.findViewById(R.id.itemRecipeName);
-        type = (TextView) v.findViewById(R.id.type);
-        calories = (TextView) v.findViewById(R.id.calories);
-        score = (TextView) v.findViewById(R.id.score);
+    public RecipeViewHolder(View itemView) {
+        super(itemView);
+
+        recipePic = (ImageView) itemView.findViewById(R.id.recipePic_small);
+        recipeName = (TextView) itemView.findViewById(R.id.itemRecipeName);
+
+        type = (TextView) itemView.findViewById(R.id.type);
+        calories = (TextView) itemView.findViewById(R.id.calories);
+        score = (TextView) itemView.findViewById(R.id.score);
     }
-
-    public ImageView getRecipeImg() {
-        return recipeImg;
-    }
-
-    public void setRecipeImg(ImageView recipeImg) {
-        this.recipeImg = recipeImg;
-    }
-
-    public TextView getItemRecipeName() {
-        return itemRecipeName;
-    }
-
-    public void setItemRecipeName(TextView itemRecipeName) {
-        this.itemRecipeName = itemRecipeName;
-    }
-
-    public TextView getType() {
-        return type;
-    }
-
-    public void setType(TextView type) {
-        this.type = type;
-    }
-
-    public TextView getCalories() {
-        return calories;
-    }
-
-    public void setCalories(TextView calories) {
-        this.calories = calories;
-    }
-
-    public TextView getScore() {
-        return score;
-    }
-
-    public void setScore(TextView score) {
-        this.score = score;
-    }
-
 }

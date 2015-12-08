@@ -1,7 +1,5 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.annotation.TargetApi;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,24 +12,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
-import com.boun.swe.wawwe.App;
-import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Recipe;
-import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Created by onurguler on 28/11/15.

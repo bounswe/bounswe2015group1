@@ -1,7 +1,5 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.annotation.TargetApi;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,57 +81,6 @@ public class Profile extends BaseFragment {
 
         User user = App.getUser();
         setUserInfo(user);
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View addButton = profileView.findViewById(R.id.profile_button_feed);
-            addButton.setOutlineProvider(new ViewOutlineProvider() {
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    // TODO gives IllegalStateException on fragment removal
-//                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
-                    int diameter = 144;
-                    outline.setOval(0, 0, diameter, diameter);
-                }
-            });
-            addButton.setClipToOutline(true);
-
-            addButton.findViewById(R.id.profile_button_feed)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (context instanceof MainActivity) {
-                                MainActivity main = (MainActivity) context;
-                                main.makeFragmentTransaction(RecipeCreator.getFragment(null));
-                            }
-                        }
-                    });
-
-            //Menu Add Button
-            View addMenuButton = profileView.findViewById(R.id.profile_button_newMenu);
-            addMenuButton.setOutlineProvider(new ViewOutlineProvider() {
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    // TODO gives IllegalStateException on fragment removal
-//                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
-                    int diameter = 144;
-                    outline.setOval(0, 0, diameter, diameter);
-                }
-            });
-            addMenuButton.setClipToOutline(true);
-
-            addMenuButton.findViewById(R.id.profile_button_newMenu)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (context instanceof MainActivity) {
-                                MainActivity main = (MainActivity) context;
-                                main.makeFragmentTransaction(MenuCreator.getFragment(null));
-                            }
-                        }
-                    });
-        }*/
 
         profileView.findViewById(R.id.action_recipe_create)
                 .setOnClickListener(new View.OnClickListener() {

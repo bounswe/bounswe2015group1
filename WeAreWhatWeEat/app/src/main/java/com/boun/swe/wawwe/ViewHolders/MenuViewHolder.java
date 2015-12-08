@@ -12,28 +12,12 @@ import com.boun.swe.wawwe.R;
  */
 public class MenuViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView menuName;
-    private ImageView menuImg;
+    public TextView menuName;
+    public ImageView menuImg;
 
     public MenuViewHolder(View v) {
         super(v);
         menuName = (TextView) v.findViewById(R.id.itemMenuName);
         menuImg = (ImageView) v.findViewById(R.id.menuPic_small);
-    }
-
-    public TextView getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(TextView menuName) {
-        this.menuName = menuName;
-    }
-
-    public ImageView getMenuImg() {
-        return menuImg;
-    }
-
-    public void setMenuImg(ImageView menuImg) {
-        this.menuImg = menuImg;
     }
 }

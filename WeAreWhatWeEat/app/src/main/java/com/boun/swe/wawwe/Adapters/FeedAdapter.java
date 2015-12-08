@@ -1,69 +1,135 @@
 package com.boun.swe.wawwe.Adapters;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.boun.swe.wawwe.Fragments.RecipeDetail;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
+import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
+import com.boun.swe.wawwe.ViewHolders.MenuViewHolder;
+import com.boun.swe.wawwe.ViewHolders.RecipeViewHolder;
+import com.boun.swe.wawwe.ViewHolders.UserViewHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by mert on 17/10/15.
- *
- * Classic recycler view adapter implementation
- * with generic methods are included.
+ * Created by onurguler on 08/12/15.
  */
-public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.UserViewHolder> {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    List<Object> items = new ArrayList<>();
     Context context;
-    ArrayList<Recipe> data = new ArrayList<>();
+
+    private final int RECIPE = 0, MENU = 1, USER = 2;
 
     public FeedAdapter(Context context) {
         this.context = context;
     }
 
-    public void setData(Recipe[] recipes) {
-        if (data.size() != 0) {
-            data.clear();
+    public void setData(Object[] data) {
+        if (items.size() != 0) {
+            items.clear();
             notifyDataSetChanged();
         }
-        addItems(recipes);
+        addItems(data);
     }
 
-    public void addItems(Recipe[] recipes) {
-        int start = data.size();
-        data.addAll(Arrays.asList(recipes));
-        notifyItemRangeChanged(start, recipes.length);
+    public void addItems(Object[] data) {
+        int start = items.size();
+        items.addAll(Arrays.asList(data));
+        notifyItemRangeChanged(start, data.length);
     }
 
     @Override
-    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View userItemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_recipe, parent, false);
-        return new UserViewHolder(userItemView);
+    public int getItemViewType(int position) {
+        Object data = items.get(position);
+        if (data instanceof Recipe) {
+            return RECIPE;
+        } else if (data instanceof Menu) {
+            return MENU;
+        } else if (data instanceof User) {
+            return USER;
+        }
+        return -1;
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return this.items.size();
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
-        final Recipe recipe = data.get(position);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        RecyclerView.ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+
+        switch (viewType) {
+            case RECIPE:
+                View v1 = inflater.inflate(R.layout.item_recipe, viewGroup, false);
+                viewHolder = new RecipeViewHolder(v1);
+                break;
+            case MENU:
+                View v2 = inflater.inflate(R.layout.item_menu, viewGroup, false);
+                viewHolder = new MenuViewHolder(v2) {
+                };
+                break;
+            default:
+                //These lines are probably wrong :)
+                View v = inflater.inflate(R.layout.item_user, viewGroup, false);
+                viewHolder = new UserViewHolder(v);
+                break;
+        }
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+        switch (viewHolder.getItemViewType()) {
+            case RECIPE:
+                RecipeViewHolder rvh = (RecipeViewHolder) viewHolder;
+                configureRecipeViewHolder(rvh, position);
+                rvh.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.makeFragmentTransaction(RecipeDetail.getFragment((Recipe) items.get(position)));
+                        }
+                    }
+                });
+                break;
+            case MENU:
+                MenuViewHolder mvh = (MenuViewHolder) viewHolder;
+                configureMenuViewHolder(mvh, position);
+                break;
+            case USER:
+                //Again, these lines does not make sense :)
+                UserViewHolder uvh = (UserViewHolder) viewHolder;
+                configureUserViewHolder(uvh, position);
+                break;
+        }
+    }
+
+    private void configureUserViewHolder(UserViewHolder holder, int position) {
+        final User user = (User) items.get(position);
+
+        if(user != null) {
+
+        }
+    }
+
+    private void configureRecipeViewHolder(RecipeViewHolder holder, int position) {
+        final Recipe recipe = (Recipe) items.get(position);
 
         holder.recipeName.setText(recipe.getName());
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,23 +141,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.UserViewHolder
         });
     }
 
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
+    private void configureMenuViewHolder(MenuViewHolder holder, int position) {
+        final Menu menu = (Menu) items.get(position);
 
-        public ImageView recipePic;
-        public TextView recipeName;
-        public TextView type;
-        public TextView calories;
-        public TextView score;
-
-        public UserViewHolder(View itemView) {
-            super(itemView);
-
-            recipePic = (ImageView) itemView.findViewById(R.id.recipePic_small);
-            recipeName = (TextView) itemView.findViewById(R.id.itemRecipeName);
-
-            type = (TextView) itemView.findViewById(R.id.type);
-            calories = (TextView) itemView.findViewById(R.id.calories);
-            score = (TextView) itemView.findViewById(R.id.score);
+        if(menu != null) {
+            holder.menuName.setText(menu.getName());
         }
     }
 }
