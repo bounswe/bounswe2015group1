@@ -28,10 +28,10 @@ public class AppConfig extends Configuration {
 
     private String nutritionixAppId;
     private String nutritionixAppKey;
+    
+    private String avatarFactorOne;
+    private String avatarFactorTwo;
 
-    public String getNutritionixAppKey() {
-        return nutritionixAppKey;
-    }
 
     public DataSourceFactory getDatabase() {
         return database;
@@ -48,4 +48,17 @@ public class AppConfig extends Configuration {
     public String getNutritionixAppId() {
         return nutritionixAppId;
     }
+
+    public String getNutritionixAppKey() {
+        return nutritionixAppKey;
+    }
+    
+    public String getAvatarFactorOne() {
+        return avatarFactorOne;
+    }
+
+    public String getAvatarFactorTwo() {
+        return avatarFactorTwo;
+    }
+
 }

@@ -13,6 +13,8 @@ public class Recipe {
 
     private List<Ingredient> ingredients;
     private String description;
+    
+    private List<String> tags;
 
     public Long getId() {
         return id;
@@ -46,6 +48,10 @@ public class Recipe {
         this.name = name;
     }
 
+    public void setTags(List<String> tags){
+        this.tags = tags;
+    }
+    
     public Recipe() {
     }
 
@@ -55,6 +61,7 @@ public class Recipe {
         this.name = name;
         this.description = description;
         this.ingredients = new ArrayList<Ingredient>();
+        this.tags = null;
     }
 
     public String getDescription() {
@@ -73,6 +80,12 @@ public class Recipe {
         for (Ingredient ingredient : ingredients) {
             dao.createIngredient(id, ingredient.getName(), ingredient.getIngredientId(),
                     ingredient.getAmount(), ingredient.getUnit());
+        }
+    }
+    
+    public void createTags(RecipeDAO dao){
+        if(tags != null){
+            dao.insertTagsForRecipe(id, tags);
         }
     }
 

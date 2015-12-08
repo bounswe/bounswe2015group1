@@ -2,9 +2,15 @@ package bounswegroup1.resource;
 
 import javax.ws.rs.core.MediaType;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
+import com.google.common.io.CharStreams;
 
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +21,10 @@ import bounswegroup1.model.AccessToken;
 import bounswegroup1.model.User;
 import io.dropwizard.auth.Auth;
 import bounswegroup1.db.UserDAO;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @Path("/user")
@@ -48,9 +58,24 @@ public class UserResource {
         return user;
     }
 
+    @POST
+    @Path("/avatar")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public void avatarUpload(@Auth AccessToken token, @FormDataParam("file") InputStream file, @FormDataParam("file") FormDataContentDisposition contentDispositionHeader){
+        System.out.println(contentDispositionHeader.getFileName());
+        
+        try {
+            System.out.println(CharStreams.toString(new InputStreamReader(file)));
+        } catch (IOException e) {
+            System.out.println("wat??");
+
+            e.printStackTrace();
+        }
+    }
+
     @GET
     @Path("/{id}")
-    public Optional<User> getUser(@PathParam("id") Long id) {
-        return Optional.fromNullable(dao.getUserById(id));
+    public User getUser(@PathParam("id") Long id) {
+        return dao.getUserById(id);
     }
 }

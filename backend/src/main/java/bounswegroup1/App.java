@@ -25,6 +25,7 @@ import bounswegroup1.db.UserDAO;
 import bounswegroup1.model.AccessToken;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
@@ -83,11 +84,15 @@ public class App extends Application<AppConfig> {
         final IngredientResource ingredientResource = new IngredientResource(httpClient,
                 config.getNutritionixAppId(), config.getNutritionixAppKey());
 
+        final AvatarUploader avatarUploader = new AvatarUploader(config.getAvatarFactorOne(), config.getAvatarFactorTwo());
+        
         // register resources
         env.jersey()
                 .register(AuthFactory.binder(
                         new OAuthFactory<AccessToken>(new OAuthAuthenticator(accessTokenDAO),
                                 config.getBearerRealm(), AccessToken.class)));
+        
+        env.jersey().register(MultiPartFeature.class);
 
         env.jersey().register(userResource);
         env.jersey().register(sessionResource);

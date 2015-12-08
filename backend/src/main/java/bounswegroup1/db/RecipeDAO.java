@@ -5,6 +5,7 @@ import java.util.List;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
+import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
@@ -38,11 +39,18 @@ public abstract class RecipeDAO {
     abstract public void createIngredient(@Bind("id") Long id, @Bind("name") String name,
             @Bind("ingredient_id") String ingredientId, @Bind("amount") Long amount,
             @Bind("unit") String unit);
+    
+    @SqlQuery("select tag from tags where recipe_id = :id")
+    abstract public List<String> getTagsForRecipe(@Bind("id") Long recipeId);
+    
+    @SqlBatch("insert into tags (recipe_id, tag) values (:id, :tag)")
+    abstract public void insertTagsForRecipe(@Bind("id") Long recipeId, @Bind("tag") List<String> tag);
 
     public void createRecipe(Recipe recipe) {
         Long id = _createRecipe(recipe);
         recipe.setId(id);
         recipe.createIngredients(this);
+        recipe.createTags(this);
     }
 
     public Recipe getRecipe(Long recipeId) {

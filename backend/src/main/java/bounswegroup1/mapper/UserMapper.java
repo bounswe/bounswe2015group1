@@ -17,7 +17,8 @@ public class UserMapper implements ResultSetMapper<User> {
         final String fullName = rs.getString("full_name");
         final String location = rs.getString("location");
         final Date dateOfBirth = rs.getDate("date_of_birth");
+        final Boolean isRestaurant = rs.getBoolean("is_restaurant");
 
-        return new User(id, email, passwordHash, passwordSalt, fullName, location, dateOfBirth);
+        return new User(id, email, passwordHash, passwordSalt, fullName, location, dateOfBirth, isRestaurant);
     }
 }

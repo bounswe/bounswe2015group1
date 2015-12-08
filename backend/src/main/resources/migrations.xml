@@ -96,4 +96,105 @@
 	<changeSet id="5" author="group1">
 		<addAutoIncrement tableName="recipes" columnName="id"/>
 	</changeSet>
+	
+	<changeSet id="6" author="group1">
+		<addColumn tableName="users">
+			<column name="is_restaurant" type="boolean" defaultValue="false"></column>
+		</addColumn>
+		
+		<createTable tableName="tags">
+			<column name="recipe_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_tag_recipe" references="recipes(id)" />
+			</column>
+			<column name="tag" type="text">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createTable tableName="menus">
+			<column name="id" type="integer" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="name" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_menu_user" references="users(id)" />
+			</column>
+			
+			<column name="description" type="text">
+			</column>
+			
+			<column name="created_at" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createTable tableName="menu_recipes">
+			<column name="recipe_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_recipe_menu" references="recipes(id)" />
+			</column>
+			<column name="menu_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_menu_recipe" references="menus(id)" />
+			</column>
+		</createTable>
+		
+		<createTable tableName="comments">
+			<column name="id" type="integer" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="type" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="parent_id" type="integer">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_comment_user" references="users(id)" />
+			</column>
+			
+			<column name="body" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="user_full_name" type="text">
+			</column>
+			
+			<column name="created_at" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<createTable tableName="ratings">
+			<column name="id" type="integer" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="type" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="parent_id" type="integer">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_comment_user" references="users(id)" />
+			</column>
+			
+			<column name="rating" type="float">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="created_at" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	
 </databaseChangeLog>
