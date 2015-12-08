@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group>
-        <item android:id="@+id/menu_main_subSettings"
-            android:title="@string/action_menu_settings" />
-        <item android:id="@+id/menu_main_subLogout"
-            android:title="@string/action_menu_logout" />
-    </group>
+    <item android:id="@+id/menu_main_subLogout"
+        android:icon="@mipmap/ic_power_settings_new_black_24dp"
+        android:title="@string/action_menu_logout"
+        android:orderInCategory="1"
+        app:showAsAction="always"/>
 
 </menu>

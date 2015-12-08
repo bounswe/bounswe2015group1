@@ -22,36 +22,75 @@ import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.gujun.android.taggroup.TagGroup;
+import su.levenetc.android.textsurface.Text;
+import su.levenetc.android.textsurface.TextSurface;
+import su.levenetc.android.textsurface.animations.Alpha;
+import su.levenetc.android.textsurface.animations.ChangeColor;
+import su.levenetc.android.textsurface.animations.Delay;
+import su.levenetc.android.textsurface.animations.Parallel;
+import su.levenetc.android.textsurface.animations.Sequential;
+import su.levenetc.android.textsurface.animations.Slide;
+import su.levenetc.android.textsurface.animations.TransSurface;
+import su.levenetc.android.textsurface.contants.Pivot;
+import su.levenetc.android.textsurface.contants.Side;
 
 /**
  * Created by Mert on 31/10/15.
  */
 
-public class RecipeCreator extends BaseFragment {
+public class RecipeCreator extends LeafFragment {
 
-    LinearLayout ingredientHolder;
+    private Recipe recipe;
 
-    public RecipeCreator() { }
+    public RecipeCreator() {
+        TAG = App.getInstance().getString(R.string.title_menu_recipeCreation);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate holder
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_creation,
                 container, false);
 
+        // Get views
         final EditText recipeName = (EditText) recipeCreationView.findViewById(R.id.recipeName);
-        ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
+        final LinearLayout ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
         final EditText howTo = (EditText) recipeCreationView.findViewById(R.id.description);
         final Button addIngredients = (Button) recipeCreationView.findViewById(R.id.add_new_ingredient);
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
+        final TagGroup tagGroup = (TagGroup) recipeCreationView.findViewById(R.id.tag_group);
+        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+
+        // Set headers
+        int[] headerIds = new int[] { R.id.rCreation_header_rName, R.id.rCreation_header_rIngredients,
+                R.id.rCreation_header_rHowTo, R.id.rCreation_header_rTags };
+        int[] headerTextIds = new int[] { R.string.title_recipe, R.string.title_ingredients,
+                R.string.title_directions, R.string.title_tags };
+        for (int i = 0;i < headerIds.length;i++) {
+            TextSurface header = (TextSurface) recipeCreationView.findViewById(headerIds[i]);
+            Text text = Commons.generateHeader(headerTextIds[i]);
+            header.play(new Sequential(
+                    Delay.duration(i * 100),
+                    new Parallel(
+                            Slide.showFrom(Side.LEFT, text, 500),
+                            ChangeColor.to(text, 750, context.getResources()
+                                    .getColor(R.color.colorAccent))
+                    )));
+        }
+
+        recipe = getArguments().getParcelable("recipe");
 
         addIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addIngredientRow();
+                addIngredientRow(ingredientHolder);
             }
         });
 
@@ -60,6 +99,8 @@ public class RecipeCreator extends BaseFragment {
             public void onClick(View view) {
                 String recipe_name = recipeName.getText().toString();
                 String directions = howTo.getText().toString();
+                String[] alltagsUserGenerated = tagGroup.getTags();
+                String[] alltagsStatic = tagGroupStatic.getTags();
 
                 if (recipe_name.equals("") || directions.equals("")) {
                     Toast.makeText(App.getInstance(), "Some fields are missing",
@@ -70,10 +111,8 @@ public class RecipeCreator extends BaseFragment {
                 List<Ingredient> ingredients = new ArrayList<Ingredient>();
                 for (int i = 0; i < ingredientHolder.getChildCount() - 1; i++) {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
-
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
-                    Spinner amountType = (Spinner) ingredientRow.findViewById(R.id.spinner_amountType);
 
                     String ingredient_name = ingredientName.getText().toString();
                     String ingredient_amount = ingredientAmount.getText().toString();
@@ -84,87 +123,121 @@ public class RecipeCreator extends BaseFragment {
                         return;
                     }
 
-                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount),
-                            (String) amountType.getSelectedItem()));
+                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount)));
                 }
 
-                Recipe recipe = new Recipe(recipe_name, directions, ingredients);
+                if (recipe != null) {
+                    Recipe recipe = new Recipe(recipe_name, directions, ingredients);
 
-                API.createRecipe(RecipeCreator.class.getSimpleName(), recipe,
-                        new Response.Listener<Recipe>() {
-                            @Override
-                            public void onResponse(Recipe response) {
-                                if (context instanceof MainActivity) {
-                                    MainActivity main = (MainActivity) context;
-                                    main.onBackPressed();
+                    API.editRecipe(getTag(), recipe, recipe.getId(),
+                            new Response.Listener<Recipe>() {
+                                @Override
+                                public void onResponse(Recipe response) {
+                                    if (context instanceof MainActivity) {
+                                        MainActivity main = (MainActivity) context;
+                                        main.onBackPressed();
+                                    }
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, context.getString(R.string.error_createRecipe),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, context.getString(R.string.error_editRecipe),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Recipe recipe = new Recipe(recipe_name, directions, ingredients);
+
+                    API.createRecipe(getTag(), recipe,
+                            new Response.Listener<Recipe>() {
+                                @Override
+                                public void onResponse(Recipe response) {
+                                    if (context instanceof MainActivity) {
+                                        MainActivity main = (MainActivity) context;
+                                        main.onBackPressed();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, context.getString(R.string.error_createRecipe),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             }
         });
+        recipeName.requestFocus();
 
-        addIngredientRow();
+        if (recipe != null) {
+            recipeName.setText(recipe.getName());
+            howTo.setText(recipe.getDescription());
+            submit.setText(context.getString(R.string.button_edit_recipe));
+
+            API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
+                @Override
+                public void onResponse(String[] response) {
+                    tagGroupStatic.setTags(response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            for (Ingredient ingredient: recipe.getIngredients()) {
+                View ingredientRow = addIngredientRow(ingredientHolder);
+
+                EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
+                EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+
+                ingredientName.setText(ingredient.getName());
+                ingredientAmount.setText(""+ingredient.getAmount());
+            }
+        }
+        else addIngredientRow(ingredientHolder);
 
         return recipeCreationView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-            main.getSupportActionBar()
-                    .setTitle(R.string.title_menu_recipeCreation);
-//            main.setDisplayHomeAsUp();
-        }
-    }
-
-    private void addIngredientRow() {
+    private View addIngredientRow(final LinearLayout ingredientHolder) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
 
-        final View ingredient = inflater.inflate(R.layout.item_ingredient,
+        final View ingredientRow = inflater.inflate(R.layout.item_ingredient,
                 ingredientHolder, false);
 
-        final ImageButton delete = (ImageButton) ingredient.findViewById(R.id.button_ingredient_delete);
+        final ImageButton delete = (ImageButton) ingredientRow.findViewById(R.id.button_ingredient_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(ingredientHolder.getChildCount() - 2 != 0){
-                    ingredientHolder.removeView(ingredient);
-                }
-                else {
-                    final EditText ingName = (EditText) ingredient.findViewById(R.id.ingredient_name);
+                if (ingredientHolder.getChildCount() - 2 != 0) {
+                    ingredientHolder.removeView(ingredientRow);
+                } else {
+                    final EditText ingName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     ingName.setText(null);
-                    final EditText  ingAmt = (EditText) ingredient.findViewById(R.id.ingredient_amount);
+                    final EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
                     ingAmt.setText(null);
-                    final Spinner amountType = (Spinner) ingredient.findViewById(R.id.spinner_amountType);
-                    amountType.setSelection(0);
                 }
             }
         });
 
-        Spinner amountType = (Spinner) ingredient.findViewById(R.id.spinner_amountType);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.amount_type,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        amountType.setAdapter(adapter);
-
-        ingredientHolder.addView(ingredient, ingredientHolder.getChildCount() - 1);
+        ingredientHolder.addView(ingredientRow, ingredientHolder.getChildCount() - 1);
+        return ingredientRow;
     }
 
-    public static RecipeCreator getFragment(Bundle bundle) {
+    public static RecipeCreator getFragment(Recipe recipe) {
         RecipeCreator recipeCreationFragment = new RecipeCreator();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("recipe", recipe);
+
         recipeCreationFragment.setArguments(bundle);
         return recipeCreationFragment;
     }
+
 }

@@ -64,6 +64,7 @@ public class Login extends BaseFragment {
                                                     public void onResponse(User response) {
                                                         response.setPassword(password);
                                                         App.setUser(response);
+                                                        exitLoginFragment();
                                                     }
                                                 },
                                                 new Response.ErrorListener() {
@@ -72,11 +73,9 @@ public class Login extends BaseFragment {
 
                                                     }
                                                 });
-                                        if (rememberMe.isChecked()) {
+                                        if (rememberMe.isChecked())
                                             App.setRememberMe(true);
-                                            App.setUser(user);
-                                        }
-                                        exitLoginFragment();
+                                        App.setUser(user);
                                     }
                                 },
                                 new Response.ErrorListener() {
@@ -93,7 +92,12 @@ public class Login extends BaseFragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final String email = emailEditText.getText().toString();
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.getSupportActionBar().show();
+                            main.makeFragmentTransaction(Signup.getFragment(new Bundle()));
+                        }
+                        /*final String email = emailEditText.getText().toString();
                         final String password = passwordEditText.getText().toString();
 
                         if (!isInputValid(new EditText[]{emailEditText, passwordEditText}))
@@ -113,8 +117,8 @@ public class Login extends BaseFragment {
                                                         App.setAccessValues(response);
                                                         if (rememberMe.isChecked()) {
                                                             App.setRememberMe(true);
-                                                            App.setUser(user);
                                                         }
+                                                        App.setUser(user);
                                                         exitLoginFragment();
                                                     }
                                                 },
@@ -135,11 +139,20 @@ public class Login extends BaseFragment {
                                         Toast.makeText(App.getInstance(), context.getString(R.string.error_signUpError),
                                                 Toast.LENGTH_SHORT).show();
                                     }
-                                });
+                                });*/
                     }
                 });
 
         return loginView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (context instanceof MainActivity) {
+            MainActivity main = (MainActivity) context;
+            main.getSupportActionBar().hide();
+        }
     }
 
     @Override

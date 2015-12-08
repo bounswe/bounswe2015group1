@@ -1,0 +1,42 @@
+<div ng-controller="ViewMenuCtrl">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<button type="button" ng-click="back()" class="btn btn-success">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back</button>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12">
+	<div class="col-md-3">
+		<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%;margin-top:10px;">
+		<p><label>Average Rate :</label> <uib-rating ng-model="avgRate" max="max" readonly="true" aria-labelledby="default-rating"></uib-rating></p>
+		<p><label>Add Rating : </label> <uib-rating ng-model="rate" max="max" aria-labelledby="default-rating"></uib-rating>
+		<button type="button" ng-click="addRating()" class="btn">Rate</button></p>
+	</div>
+	<div class="col-md-7">
+		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ menu.name }} </h3>
+		<br/>
+		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Included Recipes</u></h4>
+		<table class="table table-bordered">
+			<tr ng-repeat="(ind,recipeId) in menu.recipeIds">
+				<td><a href="#" ng-click="viewRecipe(recipeId)">{{ menu.recipeNames[ind] }}</td>
+			</tr>
+		</table>
+		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Description</u></h4>
+		{{ menu.description }}
+		<br/>
+		<div>
+			<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Comments</u></h4>
+			<div ng-repeat="(id,comment) in comments">
+				{{comment.body}}
+				<br />
+				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.userId)"> Delete </a>{{ comment.userFullName}} on {{comment.createdAt}}</div>
+			</div>
+		</div>
+		
+		<div>
+			<label>Add Comment</label>
+			<input type="text" class="form-control" ng-model="commentText" placeholder="Write Your Comment Here...">
+			<button type="button" ng-click="addComment()" class="btn">Send</button>
+		</div>
+
+	</div>		
+	</div>
+</div>

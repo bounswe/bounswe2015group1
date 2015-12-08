@@ -13,7 +13,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
-import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -21,25 +22,30 @@ import com.boun.swe.wawwe.Utils.API;
 /**
  * Created by Mert on 09/11/15.
  */
+
 public class Feeds extends BaseFragment {
 
     private RecyclerView feeds;
 
-    public Feeds() { }
+    public Feeds() {
+        TAG = App.getInstance().getString(R.string.title_menu_feeds);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View feedsView = inflater.inflate(R.layout.layout_fragment_feeds,
-            container, false);
+                container, false);
 
         feeds = (RecyclerView) feedsView.findViewById(R.id.feeds);
         feeds.setItemAnimator(new DefaultItemAnimator());
         feeds.setLayoutManager(new LinearLayoutManager(context));
+        //TODO You can change the adapter to old one by uncommenting this and commenting the next one.
+        //final FeedAdapter adapter = new FeedAdapter(context);
         final FeedAdapter adapter = new FeedAdapter(context);
         feeds.setAdapter(adapter);
 
-        API.getAllRecipes(Feeds.class.getSimpleName(),
+        API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
@@ -55,16 +61,24 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
+        API.getMenu(getTag(), 1,
+                new Response.Listener<Menu>(){
+                    @Override
+                    public void onResponse(Menu response){
+                        if(response != null) {
+                            Object[] o = {response};
+                            adapter.addItems(o);
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Toast.makeText(context, context.getString(R.string.error_feed),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
         return feedsView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity)
-            ((MainActivity) context).getSupportActionBar()
-                    .setTitle(R.string.title_menu_feeds);
     }
 
     public static Feeds getFragment(Bundle bundle) {

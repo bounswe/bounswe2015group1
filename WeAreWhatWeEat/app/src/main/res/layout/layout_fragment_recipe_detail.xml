@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/scrollView" >
+
         <LinearLayout
+            android:id="@+id/recipeDetail_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <ImageView
+                android:id="@+id/recipeImage"
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:background="@drawable/image_placeholder"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -38,6 +47,26 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/title_tags"
+                android:id="@+id/textView4"
+                android:layout_marginTop="20dp" />
+
+            <me.gujun.android.taggroup.TagGroup
+                android:id="@+id/tag_group_static"
+                style="@style/TagGroup.Large"
+                app:atg_borderColor="@color/colorAccent"
+                app:atg_textColor="@color/colorAccent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -51,7 +80,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearance"
                 android:text="test"
                 android:textColor="@color/black"
                 android:layout_marginTop="20dp"
@@ -61,6 +90,18 @@
                 android:minLines="3"
                 android:layout_weight="1"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/title_nutrition"
+                android:layout_marginTop="20dp" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritions"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
         </LinearLayout>
 
     </ScrollView>

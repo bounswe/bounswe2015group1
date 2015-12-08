@@ -8,19 +8,27 @@
     <string name="action_sign_up_short">Sign up</string>
     <string name="action_sign_in_short">Sign in</string>
 
+    <!-- Menu Creation -->
+    <string-array name="menu_period_array">
+        <item>daily</item>
+        <item>weekly</item>
+        <item>monthly</item>
+    </string-array>
+    <string name="label_menuName">Name</string>
+    <string name="label_menuDesc">Description</string>
+    <string name="label_menuPeriod">Period</string>
+    <string name="label_menuRecIds">Recipes</string>
+
     <!-- Recipe Creation -->
-    <string name="title_recipe">Recipe Creation</string>
+    <string name="title_recipe">Recipe Name</string>
     <string name="title_ingredients">Ingredients</string>
+    <string name="title_tags">Tags</string>
     <string name="title_directions">How To?</string>
     <string name="button_submit_recipe">Submit</string>
+    <string name="button_edit_recipe">Save Changes</string>
 
-    <string-array name="amount_type">
-        <item>gr</item>
-        <item>kg</item>
-        <item>tsp</item>
-        <item>tbsp</item>
-        <item>cups</item>
-    </string-array>
+    <!-- Recipe Detail -->
+    <string name="title_nutrition">Nutritions</string>
 
     <!-- Profile -->
     <string name="title_fullName">Name</string>
@@ -43,7 +51,16 @@
     <string name="action_menu_add">Add</string>
     <string name="title_menu_feeds">Feeds</string>
     <string name="title_menu_profile">Profile</string>
+    <string name="title_menu_search">Search</string>
+    <string name="title_menu_menu">Create Menu</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
+    <string name="title_menu_recipeDetail">Recipe Detail</string>
+    <string name="title_menu_menuDetail">Menu Detail</string>
     <string name="title_menu_myRecipe">My Recipes</string>
+    <string name="title_menu_signup">Sign up</string>
+
+    <!-- Comment Rating -->
+    <string name="prompt_makeComment">Write Comment…</string>
+
 </resources>

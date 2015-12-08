@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/row_height_bigger"
+    android:weightSum="100"
+    android:paddingTop="15dp">
+
+    <Spinner
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/menu_spinner_recipe_row"
+        android:layout_weight="100"></Spinner>
+
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/button_recipe_row_delete"
+        android:background="@mipmap/minus" />
+
+</LinearLayout>

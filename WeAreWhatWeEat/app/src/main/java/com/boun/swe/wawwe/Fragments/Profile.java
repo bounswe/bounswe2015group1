@@ -1,7 +1,5 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.annotation.TargetApi;
-import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,11 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,8 +24,6 @@ import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Created by Mert on 09/11/15.
@@ -44,7 +37,9 @@ public class Profile extends BaseFragment {
 
     RecyclerView myFeeds;
 
-    public Profile() { }
+    public Profile() {
+        TAG = App.getInstance().getString(R.string.title_menu_profile);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +64,7 @@ public class Profile extends BaseFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         myFeeds.setAdapter(adapter);
 
-        API.getAllRecipes(Profile.class.getSimpleName(),
+        API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
@@ -87,40 +82,29 @@ public class Profile extends BaseFragment {
         User user = App.getUser();
         setUserInfo(user);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View addButton = profileView.findViewById(R.id.profile_button_feed);
-            addButton.setOutlineProvider(new ViewOutlineProvider() {
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    int diameter = getResources().getDimensionPixelSize(R.dimen.diameter);
-                    outline.setOval(0, 0, diameter, diameter);
-                }
-            });
-            addButton.setClipToOutline(true);
-
-            addButton.findViewById(R.id.profile_button_feed)
-                    .setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (context instanceof MainActivity) {
-                                MainActivity main = (MainActivity) context;
-                                main.makeFragmentTransaction(RecipeCreator.getFragment(new Bundle()));
-                            }
+        profileView.findViewById(R.id.action_recipe_create)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.makeFragmentTransaction(RecipeCreator.getFragment(null));
                         }
-                    });
-        }
+                    }
+                });
+
+        profileView.findViewById(R.id.action_menu_create)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (context instanceof MainActivity) {
+                            MainActivity main = (MainActivity) context;
+                            main.makeFragmentTransaction(MenuCreator.getFragment(null));
+                        }
+                    }
+                });
 
         return profileView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity)
-            ((MainActivity) context).getSupportActionBar()
-                    .setTitle(R.string.title_menu_profile);
     }
 
     @Override
@@ -143,18 +127,13 @@ public class Profile extends BaseFragment {
             case R.id.menu_profile_add:
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
-                    main.makeFragmentTransaction(RecipeCreator.getFragment(new Bundle()));
+
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(null));
                 }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public static Profile getFragment(Bundle bundle) {
-        Profile profileFragment = new Profile();
-        profileFragment.setArguments(bundle);
-        return profileFragment;
     }
 
     private void setUserInfo(User user) {
@@ -164,7 +143,12 @@ public class Profile extends BaseFragment {
         if (user.getLocation() != null)
             location.setText(user.getLocation());
         if (user.getDateOfBirth() != null)
-            dateOfBirth.setText(new SimpleDateFormat("dd MM yyyy")
-                    .format(user.getDateOfBirth()));
+            dateOfBirth.setText(user.getDateOfBirth());
+    }
+
+    public static Profile getFragment(Bundle bundle) {
+        Profile profileFragment = new Profile();
+        profileFragment.setArguments(bundle);
+        return profileFragment;
     }
 }

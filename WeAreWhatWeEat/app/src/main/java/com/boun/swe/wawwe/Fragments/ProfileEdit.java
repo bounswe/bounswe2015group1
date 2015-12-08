@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -20,20 +22,25 @@ import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.fourmob.datetimepicker.date.DatePickerDialog;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Mert on 09/11/15.
  */
-public class ProfileEdit extends BaseFragment {
+public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDateSetListener {
+
+    private String DATEPICKER_TAG = "date_picker";
 
     EditText email;
     EditText password;
     EditText fullName;
     EditText location;
-    EditText dateOfBirth;
+    TextView dateOfBirth;
+    LinearLayout holderDateOfBirth;
 
     public ProfileEdit() { }
 
@@ -41,6 +48,7 @@ public class ProfileEdit extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        TAG = App.getInstance().getString(R.string.title_menu_profileEdit);
     }
 
     @Nullable
@@ -56,7 +64,24 @@ public class ProfileEdit extends BaseFragment {
         password = (EditText) profileView.findViewById(R.id.profileEdit_password);
         fullName = (EditText) profileView.findViewById(R.id.profileEdit_fullName);
         location = (EditText) profileView.findViewById(R.id.profileEdit_location);
-        dateOfBirth = (EditText) profileView.findViewById(R.id.profileEdit_dateOfBirth);
+        dateOfBirth = (TextView) profileView.findViewById(R.id.profileEdit_dateOfBirth);
+        holderDateOfBirth = (LinearLayout) profileView.findViewById(R.id.profileEdit_holder_dateOfBirth);
+        holderDateOfBirth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                        ProfileEdit.this,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.setVibrate(false);
+                datePickerDialog.setYearRange(1950, calendar.get(Calendar.YEAR));
+                datePickerDialog.setCloseOnSingleTapDay(false);
+                datePickerDialog.show(getActivity().getSupportFragmentManager(), DATEPICKER_TAG);
+            }
+        });
 
         setUserInfo(user);
 
@@ -64,15 +89,10 @@ public class ProfileEdit extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if (context instanceof MainActivity) {
-            MainActivity main = (MainActivity) context;
-            main.getSupportActionBar()
-                .setTitle(R.string.title_menu_profileEdit);
-//            main.setDisplayHomeAsUp();
-        }
+    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, 0, 0);
+        dateOfBirth.setText(String.format("%d-%02d-%02d", year, month, day));
     }
 
     @Override
@@ -106,7 +126,7 @@ public class ProfileEdit extends BaseFragment {
                     if (!loc.isEmpty())
                         user.setLocation(loc);
                     if (!date.isEmpty())
-                        user.setDateOfBirth(Date.valueOf(date));
+                        user.setDateOfBirth(date);
 
                     API.updateUser(getTag(), user,
                             new Response.Listener<User>() {
@@ -147,7 +167,7 @@ public class ProfileEdit extends BaseFragment {
             location.setText(user.getLocation());
         if (user.getDateOfBirth() != null)
             dateOfBirth.setText(new SimpleDateFormat("dd MM yyyy")
-                    .format(user.getDateOfBirth()));
+                    .format(Date.valueOf(user.getDateOfBirth())));
     }
 
     public static ProfileEdit getFragment(Bundle bundle) {

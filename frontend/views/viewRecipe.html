@@ -1,15 +1,56 @@
-<div ng-controller="ViewRecipeCtrl" class="col-md-offset-3">
-	<div>
-	<h3>{{ recipe.name }} </h3>
-	<br/>
-	<h4>Ingredients</h4>
-	<div ng-repeat="ingredient in recipe.ingredients">
- 		{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
+<div ng-controller="ViewRecipeCtrl">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<button type="button" ng-click="back()" class="btn btn-success">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back</button>
+		<button type="button" ui-sref="addRecipe({ editID : recipeId.toString()})" class="btn btn-warning pull-right" ng-hide="!editAllowed">
+		<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>Edit</button>
 	</div>
-	<br/>
-	<h4>Description</h4>
-	{{ recipe.description }}
-	<br/>
-	<a href="#" ng-click="back()">Back</a>
+	<div class="col-xs-12 col-sm-12 col-md-12">
+	<div class="col-md-3">
+		<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%;margin-top:10px;">
+		<p><label>Average Rate :</label> <uib-rating ng-model="avgRate" max="max" readonly="true" aria-labelledby="default-rating"></uib-rating></p>
+		<p><label>Add Rating : </label> <uib-rating ng-model="rate" max="max" aria-labelledby="default-rating"></uib-rating>
+		<button type="button" ng-click="addRating()" class="btn">Rate</button></p>
+		<label>Recommended for you:</label></br>
+		<p ng-repeat="recommended in recommendedRecipes">
+			<a href="#" ui-sref="viewRecipe({ recipeID: recommended.id.toString()})"> {{ recommended.name }}</a>
+		</p>
+	</div>
+	<div class="col-md-7">
+		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ recipe.name }} </h3>
+		<br/>
+		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Ingredients</u></h4>
+		<table class="table table-bordered">
+			<tr ng-repeat="ingredient in recipe.ingredients">
+				<td class="success">{{ ingredient.amount }}</td>
+				<td class="danger">{{ ingredient.unit }}</td>
+				<td class="info">{{ ingredient.name  }}</td>
+			</tr>
+		</table>
+		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Description</u></h4>
+		{{ recipe.description }}
+		<br/>
+		<div>
+			<h4  ng-click="nutrCollapsed = !nutrCollapsed"><a href="#" style="font-family: Montserrat;color: #F4A73B;"><u>Nutritional Values</u></a></h4>
+			<div uib-collapse="nutrCollapsed" ng-repeat="(id,nutrition) in nutritionLiterals">
+				<b>{{ nutrition.charAt(0).toUpperCase() + nutrition.slice(1) }}</b> : {{ recipe.nutritions[nutrition] }} {{ nutritionUnits[id] }}
+			</div>
+		</div>
+		<div>
+			<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Comments</u></h4>
+			<div ng-repeat="(id,comment) in comments">
+				{{comment.body}}
+				<br />
+				<div align="right"><a href="#" ng-click="deleteComment(comment.id)" ng-show="isOwner(comment.userId)">Delete</a>  {{comment.userFullName}} on {{comment.createdAt}}</div>
+			</div>
+		</div>
+		
+		<div>
+			<label>Add Comment</label>
+			<input type="text" class="form-control" ng-model="commentText" placeholder="Write Your Comment Here...">
+			<button type="button" ng-click="addComment()" class="btn">Send</button>
+		</div>
+
+	</div>		
 	</div>
 </div>

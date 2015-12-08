@@ -16,26 +16,32 @@ import java.util.Date;
  */
 public class User implements Parcelable {
 
-    // Service has saved user names with
-    // "username" string this is to meet
-    // that usage and also java conventions
-    // fullName...
-
     private int id;
     private String email;
+    private boolean isRestaurant;
     private String password;
     private String fullName;
     private String location;
-    private Date dateOfBirth;
+    private String dateOfBirth;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public User(int id, String email, String password, String fullName, String location, Date dateOfBirth) {
+    public User(int id, String email, String password, String fullName, String location, String dateOfBirth) {
         this.id = id;
         this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.location = location;
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    //For Signup
+    public User(String email, boolean isRestaurant, String password, String fullName, String location, String dateOfBirth){
+        this.email = email;
+        this.isRestaurant = isRestaurant;
         this.password = password;
         this.fullName = fullName;
         this.location = location;
@@ -66,6 +72,14 @@ public class User implements Parcelable {
         this.email = email;
     }
 
+    public boolean isRestaurant() {
+        return isRestaurant;
+    }
+
+    public void setIsRestaurant(boolean isRestaurant) {
+        this.isRestaurant = isRestaurant;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -74,11 +88,11 @@ public class User implements Parcelable {
         this.location = location;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

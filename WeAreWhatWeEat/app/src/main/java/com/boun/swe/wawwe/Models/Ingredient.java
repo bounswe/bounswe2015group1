@@ -11,19 +11,18 @@ public class Ingredient implements Parcelable {
     private String ingredientId = "PlaceHolder";
     private String name;
     private int amount;
-    private String unit;
+    private Nutrition nutritions;
 
-    public Ingredient(String name, int amount, String unit) {
+    public Ingredient(String name, int amount) {
         this.name = name;
         this.amount = amount;
-        this.unit = unit;
     }
 
     protected Ingredient(Parcel in) {
         ingredientId = in.readString();
         name = in.readString();
         amount = in.readInt();
-        unit = in.readString();
+        nutritions = in.readParcelable(Nutrition.class.getClassLoader());
     }
 
     public String getName() {
@@ -38,16 +37,10 @@ public class Ingredient implements Parcelable {
         return amount;
     }
 
+    public Nutrition getNutritions() { return nutritions; }
+
     public void setAmount(int amount) {
         this.amount = amount;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     @Override
@@ -60,7 +53,7 @@ public class Ingredient implements Parcelable {
         dest.writeString(ingredientId);
         dest.writeString(name);
         dest.writeFloat(amount);
-        dest.writeString(unit);
+        dest.writeParcelable(nutritions, flags);
     }
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
