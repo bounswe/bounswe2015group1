@@ -246,6 +246,37 @@ public class API {
 
     public static void getUserRecipes(String tag, Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
+        if(isTest){
+            String file1 = "test_recipe1.json";
+            String file2 = "test_recipe2.json";
+            String file3 = "test_recipe3.json";
+
+            String postBody1 = loadJSONFromAsset(file1);
+            String postBody2 = loadJSONFromAsset(file2);
+            String postBody3 = loadJSONFromAsset(file3);
+
+            Gson gson1 = new Gson();
+            Gson gson2 = new Gson();
+            Gson gson3 = new Gson();
+            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+            JsonReader reader2 = new JsonReader(new StringReader(postBody2));
+            JsonReader reader3 = new JsonReader(new StringReader(postBody3));
+
+            reader1.setLenient(true);
+            reader2.setLenient(true);
+            reader3.setLenient(true);
+
+            Recipe testRcp1 = gson1.fromJson(postBody1, Recipe.class);
+            Recipe testRcp2 = gson2.fromJson(postBody2, Recipe.class);
+            Recipe testRcp3 = gson3.fromJson(postBody3, Recipe.class);
+
+            testRcp1.setUserId(App.getUserId());
+            testRcp2.setUserId(App.getUserId());
+            testRcp3.setUserId(App.getUserId());
+
+            Recipe[] userRecipes = {testRcp1, testRcp2, testRcp3};
+            successListener.onResponse(userRecipes);
+        }
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/user/%s",
                 App.getUserId()), Recipe[].class, successListener, failureListener).setTag(tag));
     }
@@ -282,8 +313,27 @@ public class API {
 
     public static void getMenu(String tag, int menuID, Response.Listener<Menu> successListener,
                                       Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d",
-                menuID), Menu.class, successListener, failureListener).setTag(tag));
+        if(isTest){
+            String file1 = "test_recipe1.json";
+
+            String postBody1 = loadJSONFromAsset(file1);
+
+            Gson gson1 = new Gson();
+
+            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+
+            reader1.setLenient(true);
+
+            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
+
+            testMenu.setUserId(App.getUserId());
+            testMenu.setId(menuID);
+
+            successListener.onResponse(testMenu);
+        } else {
+            mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d",
+                    menuID), Menu.class, successListener, failureListener).setTag(tag));
+        }
     }
 
     public static void getRecipesforMenu(String tag, int menuID, Response.Listener<Recipe[]> successListener,
