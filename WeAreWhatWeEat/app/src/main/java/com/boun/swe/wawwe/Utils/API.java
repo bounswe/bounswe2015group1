@@ -314,7 +314,7 @@ public class API {
     public static void getMenu(String tag, int menuID, Response.Listener<Menu> successListener,
                                       Response.ErrorListener failureListener) {
         if(isTest){
-            String file1 = "test_recipe1.json";
+            String file1 = "test_menu1.json";
 
             String postBody1 = loadJSONFromAsset(file1);
 
