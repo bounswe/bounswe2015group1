@@ -31,13 +31,15 @@ public class User {
     private String fullName;
     private String location;
     private Date dateOfBirth;
+    
+    private Boolean isRestaurant;
 
     public User() {
         this.id = -1l;
     }
 
     public User(Long id, String email, String passwordHash, String passwordSalt, String fullName,
-            String location, Date dateOfBirth) {
+            String location, Date dateOfBirth, Boolean isRestaurant) {
         super();
         this.id = id;
         this.email = email;
@@ -46,6 +48,7 @@ public class User {
         this.fullName = fullName;
         this.location = location;
         this.dateOfBirth = dateOfBirth;
+        this.isRestaurant = isRestaurant;
     }
 
     @JsonSetter("password")
@@ -146,4 +149,10 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public Boolean isRestaurant(){
+        return isRestaurant;
+    }
+    
+    
 }
