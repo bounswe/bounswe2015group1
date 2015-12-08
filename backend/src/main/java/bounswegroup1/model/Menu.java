@@ -8,7 +8,7 @@ public class Menu {
     private Long id;
     private String name;
     private Long userId;
-    private List<Recipe> recipes;
+    private List<Long> recipes;
     private Date createdAt;
     
     public String getName() {
@@ -27,7 +27,7 @@ public class Menu {
         this.createdAt = createdAt;
     }
 
-    public Menu(Long id, String name, Long userId, List<Recipe> recipes, Date createdAt) {
+    public Menu(Long id, String name, Long userId, List<Long> recipes, Date createdAt) {
         super();
         this.id = id;
         this.name = name;
@@ -48,11 +48,11 @@ public class Menu {
         this.id = id;
     }
 
-    public List<Recipe> getRecipes() {
+    public List<Long> getRecipes() {
         return recipes;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
+    public void setRecipes(List<Long> recipes) {
         this.recipes = recipes;
     }
 
@@ -64,7 +64,7 @@ public class Menu {
         this.userId = userId;
     }
     
-    public void addRecipe(Recipe id){
+    public void addRecipe(Long id){
         recipes.add(id);
     }
 }
