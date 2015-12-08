@@ -1,4 +1,4 @@
-myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeService) {
+myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $stateParams, recipeService) {
 			$scope.ingredients=[];
 			$scope.ingredientUnits = [];
 			$scope.taglist = [];
@@ -53,6 +53,8 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 					nutrition.sugars += ing.nutritions.sugars;
 					nutrition.iron += ing.nutritions.iron;
 				}
+
+				// NAME IS NOT TAG PROBABLY
 				$scope.taglist = $scope.taglist.concat($scope.recipeName.split());
 				if($scope.userTags != "")
 					$scope.taglist = $scope.taglist.concat($scope.userTags.split());
@@ -65,13 +67,16 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 				$scope.newIngredientName = "";
 				$scope.newIngredientAmount = "";
 				$scope.newIngredientFullData = null;
+				$scope.recipeName = "";
+				$scope.recipeDesc = "";
+				$scope.userTags = "";
 			};
 			$scope.addIngredient = function() {
 				console.log("CURR INGREDIENT: " + JSON.stringify($scope.newIngredientFullData));
 				var nutrition = { "calories" : 0, "carbohydrate" : 0, "fats" : 0, "proteins" : 0, "sodium" : 0, "fiber" : 0, "cholesterol" : 0, "sugars" : 0, "iron" : 0};
 				var ing = $scope.newIngredientFullData;
 				var amount = parseInt($scope.newIngredientAmount);
-				var multiplier = amount / ing.nf_serving_size_qty;
+				var multiplier = amount ; // / ing.nf_serving_size_qty;
 
 				nutrition.calories += ing.nf_calories  * multiplier;
 				nutrition.carbohydrate = ing.nf_total_carbohydrate * multiplier;
@@ -92,6 +97,11 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
 				$scope.newIngredientName = "";
 				$scope.newIngredientAmount = "";
 				$scope.newIngredientFullData = null;
+			};
+
+			$scope.removeIngredient = function(pos) {
+				$scope.ingredients.splice(pos,1);
+				$scope.ingredientUnits.splice(pos,1);
 			};
 
 			$scope.$watch(recipeService.getAddStatus, function() {
@@ -120,4 +130,37 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, recipeServ
       			}
   			}
 
+  			var init = function() {
+  				console.log("STATE PARAMS ADD RECIPE " + $stateParams.editID)
+  				if($stateParams.editID !== null && $stateParams.editID != '' && typeof $stateParams.editID != 'undefined' ) {
+  					$scope.recipeId = parseInt($stateParams.editID);
+  					$scope.editMode = true;
+  					console.log("RECIPE EDIT MODE id: " + $scope.recipeId);
+  					recipeService.getRecipeWithID($scope.recipeId).then(function(response) {
+  						$scope.ingredients = response.data.ingredients;
+  						$scope.recipeName = response.data.name;
+  						$scope.recipeDesc = response.data.description
+  						$scope.userTags = response.data.tags.join(' ');
+  						for(var i=0; i < $scope.ingredients.length; i++) {
+  							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.ingredients[i].ingredientId).then(function(response){
+	    						if(response.data.status_code == 404) {
+	    							console.log("Ingredient not found");
+	    						}
+	    						else {
+	    							console.log("Ingredient Unit Fetched")
+	    							for(var ind=0; ind < $scope.ingredients.length; ind++) {
+	    								if($scope.ingredients[ind].ingredientId == response.data.item_id) {
+	    									$scope.ingredientUnits[ind] = response.data.nf_serving_size_unit;
+	    								}
+	    							}
+	    							console.log("Ingredient Units " + JSON.stringify($scope.ingredientUnits))
+	    						}
+    						});
+  						}
+      				});
+
+  				}
+  			}
+
+  			init();
 	});

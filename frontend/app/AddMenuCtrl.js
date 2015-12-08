@@ -13,6 +13,14 @@ myApp.controller('AddMenuCtrl', function($rootScope, $scope, $http, userService,
 				}
 				console.log("Selected recipe ids: " + JSON.stringify(recipeIds));
 				menuService.addMenu($scope.menuName, recipeIds, $scope.period, $scope.menuDesc);
+				$scope.getRecipes();
+				$scope.selectedRecipes =[];
+				$scope.taglist = [];
+				$scope.userTags = ""
+				$scope.menuDesc = ""
+				$scope.period = "";
+				$scope.recipesToBeAdded = [];
+				$scope.recipesToBeRemoved = [];
 			};
 
 

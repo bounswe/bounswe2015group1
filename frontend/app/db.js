@@ -1,4 +1,4 @@
-angular.module('FoodApp').factory('standinDB', function() { 
+angular.module('FoodApp').factory('standinDB', function($window, $rootScope) { 
 	var recipes = [{"id" : 1 , "userId" : "2" ,"name":"Tomato Soup","ingredients":
 						[{"ingredientId":"529e8039f9655f6d3500d506",
 							"name":"Tomatoes",
@@ -55,6 +55,33 @@ angular.module('FoodApp').factory('standinDB', function() {
 				 {"id": 153, "userId": 7 , "userFullName": "John Doe" , "type" : "recipe"  , "parentId" : 1, "rating" : 4, "createdAt" : "2011-10-06"}];
 
 	var users = [{"id" : 7 , "fullName" : "John Doe"}];
+
+	var init = function() {
+		if($rootScope.saveTheStorage) {
+			if($window.sessionStorage.recipes) { 
+				console.log("Browser Data available");
+				console.log("SESSION RECIPES: "  + JSON.stringify($window.sessionStorage.recipes));
+				recipes = JSON.parse($window.sessionStorage.recipes);
+			}
+			if($window.sessionStorage.menus) menus = JSON.parse($window.sessionStorage.menus);
+			if($window.sessionStorage.comments) comments = JSON.parse($window.sessionStorage.comments);
+			if($window.sessionStorage.rates) rates = JSON.parse($window.sessionStorage.rates);
+			if($window.sessionStorage.users) users = JSON.parse($window.sessionStorage.users);
+		}
+	}
+
+	init();
+
+	var saveDB = function() {
+		console.log("PRESAVE: "  + JSON.stringify($window.sessionStorage.recipes));
+		$window.sessionStorage.recipes = JSON.stringify(recipes);
+		$window.sessionStorage.menus = JSON.stringify(menus);
+		$window.sessionStorage.comments = JSON.stringify(comments);
+		$window.sessionStorage.rates = JSON.stringify(rates);
+		$window.sessionStorage.users = JSON.stringify(users);
+		console.log("AFTERSAVE: "  + JSON.stringify($window.sessionStorage.recipes));
+	}
+
 	var searchRecipes = function (query) {
 		var queryTags = query.split(" ");
 		queryTags = queryTags.filter(function(val) { return val !== null && val != "" } );
@@ -78,6 +105,16 @@ angular.module('FoodApp').factory('standinDB', function() {
 		}
 		console.log("Recipe Search results: " + JSON.stringify(resultRecipes));
 		return resultRecipes;
+	}
+
+	var getRecommendedRecipes = function(id) {
+		var recipe = getRecipeWithID(id);
+		if(recipe !== null) {
+			var result = searchRecipes(recipe.tags.join(' '));
+			console.log("RECOMMENDED RECIPES db return " + JSON.stringify(result));
+			result = result.filter((v) => {return v.id != id} );
+			return result;
+		}
 	}
 
 	var searchMenus = function (query) {
@@ -255,6 +292,7 @@ angular.module('FoodApp').factory('standinDB', function() {
 		getRecipes : function(){
 			return recipes;
 		},
+		getRecommendedRecipes : getRecommendedRecipes,
 		getComments : getComments,
 		getCommentsByUser : getCommentsByUser,
 		getAvgRate : getAvgRate,
@@ -268,7 +306,8 @@ angular.module('FoodApp').factory('standinDB', function() {
 		makeComment : makeComment,
 		deleteComment : deleteComment,
 		getUserRecipes : getUserRecipes,
-		rate : rate
+		rate : rate,
+		saveDB : saveDB
 	};
 
 });

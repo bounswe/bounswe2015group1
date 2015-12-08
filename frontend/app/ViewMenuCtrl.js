@@ -75,8 +75,10 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 		}
 
 		$scope.back = function() {
-			console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
-			$state.go($rootScope.previousState, $rootScope.previousParams);
+			//console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
+			//$state.go($rootScope.previousState, $rootScope.previousParams);
+			//$rootScope.back();
+			window.history.back();
 		};
 
 		$scope.viewRecipe = function(id) {

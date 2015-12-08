@@ -2,6 +2,8 @@
 	<div class="col-xs-12 col-sm-12 col-md-12">
 		<button type="button" ng-click="back()" class="btn btn-success">
 		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back</button>
+		<button type="button" ui-sref="addRecipe({ editID : recipeId.toString()})" class="btn btn-warning pull-right" ng-hide="!editAllowed">
+		<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>Edit</button>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-12">
 	<div class="col-md-3">
@@ -9,6 +11,10 @@
 		<p><label>Average Rate :</label> <uib-rating ng-model="avgRate" max="max" readonly="true" aria-labelledby="default-rating"></uib-rating></p>
 		<p><label>Add Rating : </label> <uib-rating ng-model="rate" max="max" aria-labelledby="default-rating"></uib-rating>
 		<button type="button" ng-click="addRating()" class="btn">Rate</button></p>
+		<label>Recommended for you:</label></br>
+		<p ng-repeat="recommended in recommendedRecipes">
+			<a href="#" ui-sref="viewRecipe({ recipeID: recommended.id.toString()})"> {{ recommended.name }}</a>
+		</p>
 	</div>
 	<div class="col-md-7">
 		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ recipe.name }} </h3>
@@ -24,6 +30,12 @@
 		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Description</u></h4>
 		{{ recipe.description }}
 		<br/>
+		<div>
+			<h4  ng-click="nutrCollapsed = !nutrCollapsed"><a href="#" style="font-family: Montserrat;color: #F4A73B;"><u>Nutritional Values</u></a></h4>
+			<div uib-collapse="nutrCollapsed" ng-repeat="(id,nutrition) in nutritionLiterals">
+				<b>{{ nutrition.charAt(0).toUpperCase() + nutrition.slice(1) }}</b> : {{ recipe.nutritions[nutrition] }} {{ nutritionUnits[id] }}
+			</div>
+		</div>
 		<div>
 			<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Comments</u></h4>
 			<div ng-repeat="(id,comment) in comments">

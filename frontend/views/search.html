@@ -7,7 +7,7 @@
 		              	<img src="img/chefhat.png" class="img-thumbnail">
 	            	</div>
 	            	<div class="col-md-9">
-	            		<h3><a href="#"  ng-click="viewRecipe(recipe.id)">{{ recipe.name }} </a></h3>
+	            		<h3><a href="#"  ui-sref="viewRecipe({recipeID : recipe.id.toString()})">{{ recipe.name }} </a></h3>
 	       				<p>{{ recipe.description}}</p>
 	            	</div>
 				</div>
@@ -29,12 +29,12 @@
 			</div>-->
     	<uib-tab heading="Menus">
     	    <uib-pagination total-items="menuResults.length" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
-				<div class="row" ng-repeat=" menu in menuResults">
+				<div class="row" ng-repeat=" menu in menuResults.slice(((menusCurrentPage-1)*maxSize),menusCurrentPage*maxSize)">
 					<div class="col-md-3">
 		              	<img src="img/chefhat.png" class="img-thumbnail">
 	            	</div>
 	            	<div class="col-md-9">
-	            		<h3><a href="#"  ng-click="viewMenu(menu.id)">{{ menu.name }} </a></h3>
+	            		<h3><a href="#"  ui-sref="viewMenu({menuID: menu.id.toString()})">{{ menu.name }} </a></h3>
 	       				<p>{{ menu.description}}</p>
 	            	</div>
 				</div>

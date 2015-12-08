@@ -18,7 +18,7 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 		controller : 'LoginCtrl',
 		templateUrl : '/views/login.html'
 	}).state('addRecipe', {
-		url : '/addRecipe',
+		url : '/addRecipe/:editID',
 		controller : 'AddRecipeCtrl',
 		templateUrl : '/views/addRecipe.html'
 	}).state('addMenu', {
@@ -41,20 +41,38 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 	$urlRouterProvider.otherwise('/');
 });
 
-angular.module('FoodApp').run(function($rootScope) {
+angular.module('FoodApp').run(function($rootScope, $state) {
 		$rootScope.saveTheDay = false;
+		$rootScope.saveTheStorage = false;
 		$rootScope.saveTheDelay = 10;
 		$rootScope.baseUrl = "http://ec2-52-89-168-70.us-west-2.compute.amazonaws.com:8080";
+		$rootScope.stateStack = [];
+		$rootScope.paramStack = [];
 		$rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
    			$rootScope.previousState = from.name;
     		$rootScope.previousParams = fromParams;
     		console.log('Previous state:'+$rootScope.previousState);
     		console.log('Previous Params state:'+ JSON.stringify($rootScope.previousParams));
+    		/*if($rootScope.stateStack.length < 10) {
+    			$rootScope.stateStack.push(from.name);
+    			$rootScope.paramStack.push(fromParams);
+    		}*/
 		});
+
+		/*$rootScope.back = function() {
+			if($rootScope.stateStack.length == 0) {
+				$state.go("main");
+			}
+			else {
+				var params = $rootScope.paramStack.pop();
+				var params = typeof params == "undefined" ? {dummy : 0} : params;
+				$state.go($rootScope.stateStack.pop(),$rootScope.paramStack.pop());
+			}
+		}*/
 });
 
-angular.module('FoodApp').factory('userService', function($http, $window, $state, $rootScope) {
-	var user = null;
+angular.module('FoodApp').factory('userService', function($http, $window, $state, $rootScope, standinDB) {
+	var user = { "id" : -1};
 	var token = null;
 	var loggedIn = false;
 	var logout = function() {
@@ -107,6 +125,9 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 			token = null;
 			delete $window.sessionStorage.token;
 			loggedIn = false;
+			if($rootScope.saveTheDay && $rootScope.saveTheStorage) {
+				standinDB.saveDB();
+			};
 			$window.location.href = "/";
 	};
 	var register = function (fullName, email, password, dateOfBirth, location, isRestaurant) {
@@ -145,6 +166,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		token = JSON.parse($window.sessionStorage.token);
 		$http.get($rootScope.baseUrl + '/api/user/'+ token.userId).then(function(response) {
 			user = response.data;
+			console.log("User exists :" + JSON.stringify(user));
 			loggedIn = true;
 		});
 	}
@@ -207,6 +229,16 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		});
 		return $http.get($rootScope.baseUrl + '/api/recipe/all');
 	};
+	var getAllRecipes = function() {
+		if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.getRecipes()});
+					},$rootScope.saveTheDelay)
+				});
+		}
+		else return $http.get($rootScope.baseUrl + '/api/recipe/all');
+	}
 	var getUserRecipes = function(id) {
 		if($rootScope.saveTheDay) {
 				return $q(function(resolve,reject) {
@@ -217,10 +249,22 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		}
 		else return $http.get($rootScope.baseUrl + '/api/recipe/user/' + id);
 	}
+	var getRecommendedRecipes = function(id) {
+		if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.getRecommendedRecipes(id)});
+					},$rootScope.saveTheDelay)
+				});
+		}
+		else return $http.get($rootScope.baseUrl + '/api/recipe/recommended/' + id);
+	}
 	return {
 		addRecipe : addRecipe,
 		fetchAllRecipes : fetchAllRecipes,
+		getAllRecipes : getAllRecipes,
 		getUserRecipes : getUserRecipes,
+		getRecommendedRecipes : getRecommendedRecipes,
 		getRecipes : function() {
 			return recipes;
 		},
