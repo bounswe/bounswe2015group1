@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
 import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -60,6 +61,23 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
+        API.getMenu(getTag(), 1,
+                new Response.Listener<Menu>(){
+                    @Override
+                    public void onResponse(Menu response){
+                        if(response != null) {
+                            Object[] o = {response};
+                            adapter.addItems(o);
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        Toast.makeText(context, context.getString(R.string.error_feed),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
         return feedsView;
     }
 
