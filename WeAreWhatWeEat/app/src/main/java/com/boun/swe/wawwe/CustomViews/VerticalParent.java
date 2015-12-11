@@ -1,4 +1,4 @@
-package com.boun.swe.wawwe.Models;
+package com.boun.swe.wawwe.CustomViews;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
 

@@ -1,4 +1,4 @@
-package com.boun.swe.wawwe.Models;
+package com.boun.swe.wawwe.CustomViews;
 
 /**
  * Created by akintoksan on 08/12/15.

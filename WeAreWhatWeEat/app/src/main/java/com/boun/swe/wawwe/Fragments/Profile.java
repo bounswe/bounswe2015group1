@@ -3,7 +3,6 @@ package com.boun.swe.wawwe.Fragments;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,26 +13,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.boun.swe.wawwe.Adapters.VerticalExpandableAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
-import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
+import com.boun.swe.wawwe.CustomViews.VerticalChild;
+import com.boun.swe.wawwe.CustomViews.VerticalParent;
 import com.boun.swe.wawwe.R;
-import com.boun.swe.wawwe.Utils.API;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mert on 09/11/15.
  */
-public class Profile extends BaseFragment {
+public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.ExpandCollapseListener {
 
     ImageView avatar;
     TextView fullName;
     TextView location;
     TextView dateOfBirth;
+    private static final int NUM_TEST_DATA_ITEMS = 20;
+
+    private VerticalExpandableAdapter mExpandableAdapter;
 
     RecyclerView myFeeds;
 
@@ -59,7 +64,19 @@ public class Profile extends BaseFragment {
         dateOfBirth = (TextView) profileView.findViewById(R.id.profile_dateOfBirth);
 
         myFeeds = (RecyclerView) profileView.findViewById(R.id.myFeed);
-        myFeeds.setItemAnimator(new DefaultItemAnimator());
+        // Create a new adapter with 20 test data items
+        mExpandableAdapter = new VerticalExpandableAdapter(context, setUpTestData(NUM_TEST_DATA_ITEMS));
+
+        // Attach this activity to the Adapter as the ExpandCollapseListener
+        mExpandableAdapter.setExpandCollapseListener(this);
+
+        // Set the RecyclerView's adapter to the ExpandableAdapter we just created
+        myFeeds.setAdapter(mExpandableAdapter);
+        // Set the layout manager to a LinearLayout manager for vertical list
+        myFeeds.setLayoutManager(new LinearLayoutManager(context));
+
+
+      /*  myFeeds.setItemAnimator(new DefaultItemAnimator());
         myFeeds.setLayoutManager(new LinearLayoutManager(context));
         final FeedAdapter adapter = new FeedAdapter(context);
         myFeeds.setAdapter(adapter);
@@ -77,7 +94,7 @@ public class Profile extends BaseFragment {
                     public void onErrorResponse(VolleyError error) {
                         // TODO could not load...
                     }
-                });
+                });*/
 
         User user = App.getUser();
         setUserInfo(user);
@@ -150,5 +167,44 @@ public class Profile extends BaseFragment {
         Profile profileFragment = new Profile();
         profileFragment.setArguments(bundle);
         return profileFragment;
+    }
+
+    @Override
+    public void onListItemExpanded(int position) {
+        Toast.makeText(context, "Expanded", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onListItemCollapsed(int position) {
+        Toast.makeText(context, "Collapsed", Toast.LENGTH_SHORT).show();
+    }
+    private List<VerticalParent> setUpTestData(int numItems) {
+        List<VerticalParent> verticalParentList = new ArrayList<>();
+
+        for (int i = 0; i < numItems; i++) {
+            List<VerticalChild> childItemList = new ArrayList<>();
+
+            VerticalChild verticalChild = new VerticalChild();
+            verticalChild.setChildText("FirstChild");
+            childItemList.add(verticalChild);
+
+            // Evens get 2 children, odds get 1
+            if (i % 2 == 0) {
+                VerticalChild verticalChild2 = new VerticalChild();
+                verticalChild2.setChildText("SecondChild");
+                childItemList.add(verticalChild2);
+            }
+
+            VerticalParent verticalParent = new VerticalParent();
+            verticalParent.setChildItemList(childItemList);
+            verticalParent.setParentNumber(i);
+            verticalParent.setParentText("Parent");
+            if (i == 0) {
+                verticalParent.setInitiallyExpanded(false);
+            }
+            verticalParentList.add(verticalParent);
+        }
+
+        return verticalParentList;
     }
 }

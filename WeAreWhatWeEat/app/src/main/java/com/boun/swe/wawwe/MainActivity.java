@@ -46,6 +46,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         prepareResideMenu();
         getSupportActionBar().hide();
 
+
         if (App.getRememberMe())
             API.login(MainActivity.class.getSimpleName(), App.getUser(),
                     new Response.Listener<AccessToken>() {
