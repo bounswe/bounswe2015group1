@@ -150,8 +150,14 @@ public class User {
         this.id = id;
     }
     
-    public Boolean isRestaurant(){
+    @JsonGetter("isRestaurant")
+    public Boolean getIsRestaurant(){
         return isRestaurant;
+    }
+
+    @JsonSetter("isRestaurant")
+    public void setIsRestaurant(Boolean isRestaurant) {
+        this.isRestaurant = isRestaurant;
     }
     
     

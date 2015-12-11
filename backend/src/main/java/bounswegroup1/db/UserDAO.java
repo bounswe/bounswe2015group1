@@ -18,9 +18,9 @@ public interface UserDAO {
 
     @GetGeneratedKeys
     @SqlUpdate("insert into users (email, password_hash, password_salt, "
-            + "full_name, location, date_of_birth) "
+            + "full_name, location, date_of_birth,is_restaurant) "
             + "values (:email, :passwordHash, :passwordSalt, "
-            + ":fullName, :location, :dateOfBirth)")
+            + ":fullName, :location, :dateOfBirth,:isRestaurant)")
     Long addUser(@BindBean User user);
 
     @SqlUpdate("update users set password_hash = :passwordHash, password_salt = :passwordSalt,"
