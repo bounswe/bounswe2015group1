@@ -16,6 +16,16 @@ public class Recipe {
     
     private List<String> tags;
 
+    private Nutrition nutritions;
+
+    public Nutrition getNutritions(){
+        return nutritions;
+    }
+
+    public void setNutritions(Nutrition nutritions){
+        this.nutritions = nutritions;
+    } 
+
     public Long getId() {
         return id;
     }
@@ -51,6 +61,10 @@ public class Recipe {
     public void setTags(List<String> tags){
         this.tags = tags;
     }
+
+    public List<String> getTags(){
+        return tags;
+    }
     
     public Recipe() {
     }
@@ -61,7 +75,7 @@ public class Recipe {
         this.name = name;
         this.description = description;
         this.ingredients = new ArrayList<Ingredient>();
-        this.tags = null;
+        this.tags = new ArrayList<String>();
     }
 
     public String getDescription() {
@@ -76,6 +90,14 @@ public class Recipe {
         ingredients.add(new Ingredient(ingredientId, name, amount, unit));
     }
 
+    public void addTags(String tag) {
+        tags.add(tag);
+    }
+
+    public void addNutritions(Nutrition nutritions) {
+        this.nutritions = nutritions;
+    }
+
     public void createIngredients(RecipeDAO dao) {
         for (Ingredient ingredient : ingredients) {
             dao.createIngredient(id, ingredient.getName(), ingredient.getIngredientId(),
@@ -87,6 +109,30 @@ public class Recipe {
         if(tags != null){
             dao.insertTagsForRecipe(id, tags);
         }
+    }
+
+    public void createNutrition(RecipeDAO dao){
+        if(nutritions != null){
+            Long id = dao._createNutrition(nutritions.getCalories(),
+                nutritions.getCarbohydrate(),nutritions.getFats(),nutritions.getProteins(),
+                nutritions.getSodium(),nutritions.getFiber(),nutritions.getCholesterol(),
+                nutritions.getSugars(),nutritions.getIron());
+            nutritions.setId(id);
+            if(nutritions.getId() != null){
+                dao.createNutritionRecipe(nutritions.getId(),this.getId());
+            }
+        }
+    }
+
+    public boolean isContainTag(String tag){
+        ArrayList<String> tags = new ArrayList<String>(this.getTags());
+
+        for(int i=0;i<tags.size(); i++){
+            if(tags.get(i).equals(tag)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

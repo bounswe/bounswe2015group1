@@ -7,9 +7,15 @@ import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import bounswegroup1.model.Recipe;
+import bounswegroup1.model.Nutrition;
 
 public class RecipeMapper implements ResultSetMapper<Recipe> {
     private Recipe recipe;
+    String lastIngredientId;
+
+    public RecipeMapper(){
+        lastIngredientId = "-1";
+    }
 
     @Override
     public Recipe map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
@@ -17,12 +23,28 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
             // first row, create the recipe object
             recipe = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
                     rs.getString("description"));
+
+            recipe.addNutritions(new Nutrition(rs.getLong("nutrition_id"),rs.getFloat("calories"),
+                rs.getFloat("carbohydrate"),rs.getFloat("fats"),rs.getFloat("proteins"),
+                rs.getFloat("sodium"),rs.getFloat("fiber"),rs.getFloat("cholesterol"),
+                rs.getFloat("sugars"),rs.getFloat("iron")));
         }
 
-        recipe.addIngredient(rs.getString("ingredient_id"), rs.getString("ingredient_name"),
+        if (!rs.getString("ingredient_id").equals(lastIngredientId)) {
+            recipe.addIngredient(rs.getString("ingredient_id"), rs.getString("ingredient_name"),
                 rs.getLong("amount"), rs.getString("unit"));
+            
+            lastIngredientId = rs.getString("ingredient_id");
+        }
+
+
+        if(!recipe.isContainTag(rs.getString("tag"))){
+            recipe.addTags(rs.getString("tag"));
+        }
+
 
         return recipe;
     }
+
 
 }

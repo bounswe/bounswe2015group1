@@ -30,6 +30,12 @@ public class RecipeResource {
         return recipeDAO.getRecipesForUser(userId);
     }
 
+    @Path("/tags/{id}")
+    @GET
+    public List<String> getTagsForUser(@PathParam("id") Long userId) {
+        return recipeDAO.getTagsForUser(userId);
+    }
+
     @Path("/all")
     @GET
     public List<Recipe> getAllRecipes() {
@@ -40,6 +46,12 @@ public class RecipeResource {
     @GET
     public Recipe getRecipeById(@PathParam("id") Long id){
         return recipeDAO.getRecipe(id);
+    }
+
+    @Path("/recommend/{id}")
+    @GET
+    public List<Recipe> getRecommendedRecipeByRecipeId(@PathParam("id") Long id){
+        return recipeDAO.getRecommendedRecipeByRecipeId(id);
     }
 
     @POST
