@@ -21,18 +21,39 @@ import bounswegroup1.model.Recipe;
     private Long id;
     private String name;
     private Long userId;
-    private List<Recipe> recipes;
+    private List<Recipe> recipeIds;
     private Date createdAt; */
 
-public interface MenuDAO {
-    @SqlUpdate("insert into menus (name, user_id, created_at) values (:name, :userId, now())")
-    public Long addMenu(@BindBean Menu menu);
+public abstract class MenuDAO {
+
+    @GetGeneratedKeys
+    @SqlUpdate("insert into menus (name, user_id, created_at, period, description) values (:name, :userId, now(), :period, :description)")
+    abstract protected Long _addMenu(@BindBean Menu menu);
     
     @SqlBatch("insert into menu_recipes (menu_id, recipe_id) values (:menuId, :recipeId)")
-    public void addRecipesForMenu(@Bind("menu_id") Long menuId, @Bind("tag") List<Long> recipeIds);
+    abstract protected void addRecipesForMenu(@Bind("menu_id") Long menuId, @Bind("tag") List<Long> recipeIds);
     
     @Mapper(MenuMapper.class)
     @SqlQuery("select * from menus, menu_recipes where menus.id = :id and menu_recipes.menu_id = :id")
-    public List<Menu> getMenuById(@Bind("id") Long id);
-    
-}
+    abstract protected List<Menu> getMenuById(@Bind("id") Long id);
+
+    @SqlUpdate("insert into menu_recipes (recipe_id, menu_id) "
+            + "values (:recipe_id, :menu_id)")
+    abstract public void createRecipe( @Bind("recipe_id") Long recipeId,
+        @Bind("menu_id") Long menuId);
+
+    public Menu getMenu(Long menuId){
+        List<Menu> res = getMenuById(menuId);
+
+            if (res == null || res.isEmpty()) {
+                return null;
+            }
+
+            return res.get(0);
+    }
+
+    public void addMenu(Menu menu) {
+        Long id = _addMenu(menu);
+        menu.setId(id);
+        menu.createRecipes(this);
+    }}

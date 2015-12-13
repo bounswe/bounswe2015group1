@@ -11,11 +11,31 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import bounswegroup1.db.RecipeDAO;
+import bounswegroup1.db.MenuDAO;
 import bounswegroup1.model.AccessToken;
 import bounswegroup1.model.Recipe;
+import bounswegroup1.model.Menu;
 import io.dropwizard.auth.Auth;
 
 
+@Path("/menu")
+@Produces(MediaType.APPLICATION_JSON)
 public class MenuResource {
+    private final MenuDAO menuDAO;
 
+    public MenuResource(MenuDAO menuDAO) {
+        super();
+        this.menuDAO = menuDAO;
+    }
+
+    @POST
+    public Menu addMenu(@Auth AccessToken accessToken, Menu menu) {
+        // if id is present, edit, otherwise add.
+        
+        
+        menu.setUserId(accessToken.getUserId());
+        menuDAO.addMenu(menu);
+
+        return menu;
+    }
 }

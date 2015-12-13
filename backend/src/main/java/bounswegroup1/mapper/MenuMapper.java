@@ -17,11 +17,16 @@ public class MenuMapper implements ResultSetMapper<Menu> {
     @Override
     public Menu map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
         if(result == null){
-            List<Long> recipes = new ArrayList<Long>();
-            result = new Menu(rs.getLong("id"), rs.getString("name"), rs.getLong("user_id"), recipes, rs.getDate("created_at"));
+            List<Long> recipeIds = new ArrayList<Long>();
+            List<String> recipeNames = new ArrayList<String>();
+            result = new Menu(rs.getLong("id"), rs.getString("name"), rs.getLong("user_id"), recipeIds, rs.getDate("created_at"));
+            result.setDescription(rs.getString("description"));
+            result.setPeriod(rs.getString("period"));
+            result.setRecipeNames(recipeNames);
         }
         
         result.addRecipe(rs.getLong("recipe_id"));
+        result.addRecipeName(rs.getString("recipe_name"));
         return result;
     }
     
