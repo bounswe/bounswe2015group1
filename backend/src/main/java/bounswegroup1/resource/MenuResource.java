@@ -38,4 +38,21 @@ public class MenuResource {
 
         return menu;
     }
+
+    @GET
+    public List<Menu> getAllMenus() {
+        return menuDAO.getMenus();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Menu getMenuById(@PathParam("id") Long id){
+        return menuDAO.getMenu(id);
+    }
+
+    @GET
+    @Path("/{id}/recipes")
+    public List<Recipe> getRecipesForMenu(@PathParam("id") Long id){
+    	return menuDAO.getRecipesForMenu(id);
+    }
 }
