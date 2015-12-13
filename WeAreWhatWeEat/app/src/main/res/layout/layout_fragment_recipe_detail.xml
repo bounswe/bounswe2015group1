@@ -22,39 +22,46 @@
                 android:layout_height="175dp"
                 android:background="@drawable/image_placeholder"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/recipeName"
-                android:layout_marginTop="20dp" />
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rDetail_title_recipeName"
+                style="@style/CustomTitle" />
 
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rDetail_title_ingredients"
+                style="@style/CustomTitle" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_ingredients"
-                android:layout_marginTop="20dp" />
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rDetail_ingredientHolder"
+                android:layout_height="0dp"
+                android:layout_width="match_parent" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/ingredient_item_holder" >
+                android:id="@+id/ingredient_item_holder"
+                android:visibility="gone">
 
             </LinearLayout>
 
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rDetail_title_directions"
+                style="@style/CustomTitle" />
+
             <TextView
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_tags"
-                android:id="@+id/textView4"
-                android:layout_marginTop="20dp" />
+                android:textAppearance="?android:attr/textAppearance"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:minLines="1"
+                android:lines="3"/>
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/rDetail_title_tags"
+                style="@style/CustomTitle" />
 
             <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group_static"
@@ -68,40 +75,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_directions"
-                android:layout_marginTop="20dp" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:textAppearance="?android:attr/textAppearance"
-                android:text="test"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:minLines="3"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/title_nutrition"
-                android:layout_marginTop="20dp" />
-
             <su.levenetc.android.textsurface.TextSurface
-                android:id="@+id/nutritions"
+                android:id="@+id/rDetail_title_nutritions"
+                style="@style/CustomTitle" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3" >
+
+                <su.levenetc.android.textsurface.TextSurface
+                    android:id="@+id/nutritionsLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <su.levenetc.android.textsurface.TextSurface
+                    android:id="@+id/nutritionsMiddle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <su.levenetc.android.textsurface.TextSurface
+                    android:id="@+id/nutritionsRight"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

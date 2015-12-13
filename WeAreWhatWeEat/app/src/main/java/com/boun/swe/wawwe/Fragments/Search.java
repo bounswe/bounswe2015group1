@@ -53,30 +53,22 @@ public class Search extends BaseFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         searchResults.setAdapter(adapter);
 
+        String query = getArguments().getString("query", null);
+        if (query != null) {
+            searchBox.setText(query);
+            makeSearch(query, adapter);
+        }
+
         searchView.findViewById(R.id.search_searchButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String searchText = searchBox.getText().toString();
-
-                API.searchRecipe(getTag(), searchText,
-                        new Response.Listener<Recipe[]>() {
-                            @Override
-                            public void onResponse(Recipe[] response) {
-                                if (response != null)
-                                    adapter.setData(response);
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, context.getString(R.string.error_feed),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
+                if (!searchText.isEmpty()) {
+                    makeSearch(searchText, adapter);
+                    getArguments().putString("query", searchText);
+                }
             }
         });
-
 
         return searchView;
     }
@@ -94,9 +86,31 @@ public class Search extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public static Search getFragment(Bundle bundle) {
+    private void makeSearch(String query, final FeedAdapter adapter) {
+        API.searchRecipe(getTag(), query,
+                new Response.Listener<Recipe[]>() {
+                    @Override
+                    public void onResponse(Recipe[] response) {
+                        if (response != null)
+                            adapter.setData(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, context.getString(R.string.error_feed),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static Search getFragment(String query) {
         Search searchFragment = new Search();
-        searchFragment.setArguments(bundle);
+
+        Bundle searchBundle = new Bundle();
+        searchBundle.putString("query", query);
+        searchFragment.setArguments(searchBundle);
+
         return searchFragment;
     }
 

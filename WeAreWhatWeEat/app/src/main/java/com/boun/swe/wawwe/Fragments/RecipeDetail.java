@@ -61,75 +61,117 @@ public class RecipeDetail extends LeafFragment {
     }
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View recipeDetailView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
         recipe = getArguments().getParcelable("recipe");
 
         ImageView recipeImage = (ImageView) recipeDetailView.findViewById(R.id.recipeImage);
-        TextView recipeName = (TextView) recipeDetailView.findViewById(R.id.recipeName);
         TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
-        LinearLayout ingredientHolder = (LinearLayout) recipeDetailView
-                .findViewById(R.id.ingredient_item_holder);
 
         final TagGroup tagGroupStatic = (TagGroup) recipeDetailView.findViewById(R.id.tag_group_static);
-        API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
-            @Override
-            public void onResponse(String[] response) {
-                tagGroupStatic.setTags(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        API.getRecipeTags(getTag(), recipe.getId(),
+                new Response.Listener<String[]>() {
+                    @Override
+                    public void onResponse(String[] response) {
+                        tagGroupStatic.setTags(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
+                    }
+                });
+        tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+            @Override
+            public void onTagClick(String tag) {
+                if (context instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.makeFragmentTransaction(Search.getFragment(tag));
+                }
             }
         });
 
-        TextView deneme = (TextView) recipeDetailView.findViewById(R.id.calories);
-        recipeName.setText(recipe.getName());
-        directions.setText(recipe.getDescription());
-        for (Ingredient ingredient: recipe.getIngredients()) {
-            addIngredientRow(ingredientHolder, ingredient);
-            //deneme.setText(String.format(" %d", ingredient.getNutritions().getId()));
-        }
-
-        TextSurface nutritionHolder = (TextSurface) recipeDetailView.findViewById(R.id.nutritions);
-        String[] names = new String[] {
-                "Calories : %.2f",
-                "Carbonhydrate : %.2f",
-                "Fats : %.2f",
-                "Proteins : %.2f",
-                "Sodium : %.2f",
-                "Fiber : %.2f",
-                "Cholesterol : %.2f",
-                "Sugar : %.2f",
-                "Iron : %.2f"
-        };
-
-        int c = 0;
-        float nutritionHeight = 0;
-        Text previous = null;
-        for (float value: new Float[] { 1f,1f,1f,1f,1f,1f,1f,1f,1f }) {//recipe.getNutritions().getNutritionsAsArray()) {
-            Text text = Commons.generateText(String.format(names[c], value));
-            if (previous != null)
-                text.setPosition(new Position(Align.BOTTOM_OF, previous));
-            nutritionHeight = text.getHeight() * 9;
-            nutritionHolder.play(new Sequential(
-                    Delay.duration(c * 100),
+        // Set headers
+        int[] headerIds = new int[] { R.id.rDetail_title_recipeName, R.id.rDetail_title_ingredients,
+                R.id.rDetail_title_directions, R.id.rDetail_title_tags, R.id.rDetail_title_nutritions };
+        int[] headerTextIds = new int[] { R.string.title_recipe, R.string.title_ingredients,
+                R.string.title_directions, R.string.title_tags, R.string.title_nutrition };
+        for (int i = 0;i < headerIds.length;i++) {
+            TextSurface header = (TextSurface) recipeDetailView.findViewById(headerIds[i]);
+            Text text = i == 0 ? Commons.generateHeader(recipe.getName()) :
+                    Commons.generateHeader(headerTextIds[i]);
+            header.play(new Sequential(
+                    Delay.duration(i * 100),
                     new Parallel(
                             Slide.showFrom(Side.LEFT, text, 500),
                             ChangeColor.to(text, 750, context.getResources()
                                     .getColor(R.color.colorAccent))
                     )));
+        }
+
+        // Show ingredients
+        directions.setText(recipe.getDescription());
+        TextSurface ingredientHolder = (TextSurface) recipeDetailView.findViewById(R.id.rDetail_ingredientHolder);
+        Text previous = null;
+        for (int i = 0;i < recipe.getIngredients().size();i++) {
+            Ingredient ingredient = recipe.getIngredients().get(i);
+
+            Text text = Commons.generateText(String.format("%d x %s",
+                    ingredient.getAmount(), ingredient.getName()));
+            if (previous != null)
+                text.setPosition(new Position(Align.CENTER_OF | Align.BOTTOM_OF, previous));
+
+            ingredientHolder.play(new Sequential(
+                    Delay.duration((i + 1) * 100),
+                    Slide.showFrom(Side.LEFT, text, 500)));
 
             previous = text;
-            c++;
         }
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) nutritionHolder.getLayoutParams();
-        params.height = (int) (nutritionHeight + nutritionHeight / 4.5f);
-        nutritionHolder.getCamera().setTransY(-nutritionHeight / 2);
-        nutritionHolder.setLayoutParams(params);
+        if (previous != null) {
+            int ingredientCount = recipe.getIngredients().size();
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ingredientHolder.getLayoutParams();
+            params.height = (int) (previous.getHeight() * ingredientCount);
+            ingredientHolder.setLayoutParams(params);
+
+            if (ingredientCount > 1)
+                ingredientHolder.getCamera()
+                        .setTransY(-(params.height - previous.getHeight()) / 2);
+        }
+
+        TextSurface nutritionHolderLeft = (TextSurface) recipeDetailView.findViewById(R.id.nutritionsLeft);
+        TextSurface nutritionHolderMiddle = (TextSurface) recipeDetailView.findViewById(R.id.nutritionsMiddle);
+        TextSurface nutritionHolderRight = (TextSurface) recipeDetailView.findViewById(R.id.nutritionsRight);
+
+        String[] names = context.getResources().getStringArray(R.array.prompt_nutritions);
+        Float[] values = new Float[] { 1f,1f,1f,1f,1f,1f,1f,1f,1f };//recipe.getNutritions().getNutritionsAsArray());
+        Text[] texts = new Text[9];
+        for (int i = 0;i < values.length;i++)
+            texts[i] = Commons.generateText(String.format(names[i], values[i]));
+
+        for (int col = 0;col < 3;col++) {
+            TextSurface nutritionHolder = col == 0 ? nutritionHolderLeft :
+                    col == 1 ? nutritionHolderMiddle : nutritionHolderRight;
+
+            for (int row = 0;row < 3;row++) {
+                Text text = texts[row * 3 + col];
+                if (row != 1)
+                    text.setPosition(new Position(Align.CENTER_OF | (row == 0 ?
+                            Align.TOP_OF : Align.BOTTOM_OF), texts[col + 3]));
+
+                nutritionHolder.play(new Parallel(
+                        Slide.showFrom(Side.LEFT, text, 500),
+                        ChangeColor.to(text, 750, context.getResources()
+                                .getColor(R.color.colorAccent))
+                ));
+            }
+        }
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) nutritionHolderLeft.getLayoutParams();
+        params.height = (int) (texts[0].getHeight() * 4);
+        nutritionHolderLeft.setLayoutParams(params);
+        nutritionHolderMiddle.setLayoutParams(params);
+        nutritionHolderRight.setLayoutParams(params);
 
         LinearLayout holder = (LinearLayout) recipeDetailView.findViewById(R.id.recipeDetail_holder);
         View commentView = new CommentRatingView.Builder(context, this)

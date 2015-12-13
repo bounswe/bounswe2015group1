@@ -1,15 +1,12 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,33 +14,21 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
-import com.boun.swe.wawwe.CustomViews.CommentRatingView;
 import com.boun.swe.wawwe.MainActivity;
-import com.boun.swe.wawwe.Models.Ingredient;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
-import com.boun.swe.wawwe.Utils.Commons;
-
-import me.gujun.android.taggroup.TagGroup;
-import su.levenetc.android.textsurface.Text;
-import su.levenetc.android.textsurface.TextSurface;
-import su.levenetc.android.textsurface.animations.ChangeColor;
-import su.levenetc.android.textsurface.animations.Delay;
-import su.levenetc.android.textsurface.animations.Parallel;
-import su.levenetc.android.textsurface.animations.Sequential;
-import su.levenetc.android.textsurface.animations.Slide;
-import su.levenetc.android.textsurface.common.Position;
-import su.levenetc.android.textsurface.contants.Align;
-import su.levenetc.android.textsurface.contants.Side;
 
 /**
  * Created by onurguler on 08/12/15.
+ *
+ * TODO prettify this fragment as well...
  */
 public class MenuDetail extends LeafFragment {
 
-    com.boun.swe.wawwe.Models.Menu menu;
+    Menu menu;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +70,7 @@ public class MenuDetail extends LeafFragment {
                     }
                 });
 
+        // TODO use correct call, if not set up by backend; write a test...
         API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
@@ -105,6 +91,7 @@ public class MenuDetail extends LeafFragment {
         return menuDetailView;
     }
 
+    // TODO show with a recycler view, with on click functionality to recipe detail fragment
     private void addRecipeRow(LinearLayout recipeHolder, Recipe recipe) {
         TextView text = new TextView(context);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -120,7 +107,28 @@ public class MenuDetail extends LeafFragment {
         recipeHolder.addView(text, recipeHolder.getChildCount() - 1);
     }
 
-    public static MenuDetail getFragment(com.boun.swe.wawwe.Models.Menu menu) {
+    @Override
+    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        menu.findItem(R.id.menu_profile_add).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_profile_editDone:
+                if (context instanceof MainActivity) {
+                    MainActivity main = (MainActivity) context;
+                    main.makeFragmentTransaction(ProfileEdit.getFragment(new Bundle()));
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static MenuDetail getFragment(Menu menu) {
         MenuDetail menuDetailFragment = new MenuDetail();
 
         Bundle bundle = new Bundle();
@@ -128,18 +136,5 @@ public class MenuDetail extends LeafFragment {
 
         menuDetailFragment.setArguments(bundle);
         return menuDetailFragment;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }

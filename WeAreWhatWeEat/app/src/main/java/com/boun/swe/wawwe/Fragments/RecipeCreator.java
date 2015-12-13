@@ -6,12 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -30,14 +28,11 @@ import java.util.List;
 import me.gujun.android.taggroup.TagGroup;
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextSurface;
-import su.levenetc.android.textsurface.animations.Alpha;
 import su.levenetc.android.textsurface.animations.ChangeColor;
 import su.levenetc.android.textsurface.animations.Delay;
 import su.levenetc.android.textsurface.animations.Parallel;
 import su.levenetc.android.textsurface.animations.Sequential;
 import su.levenetc.android.textsurface.animations.Slide;
-import su.levenetc.android.textsurface.animations.TransSurface;
-import su.levenetc.android.textsurface.contants.Pivot;
 import su.levenetc.android.textsurface.contants.Side;
 
 /**
@@ -47,6 +42,8 @@ import su.levenetc.android.textsurface.contants.Side;
 public class RecipeCreator extends LeafFragment {
 
     private Recipe recipe;
+
+    TagGroup tagGroupStatic;
 
     public RecipeCreator() {
         TAG = App.getInstance().getString(R.string.title_menu_recipeCreation);
@@ -59,6 +56,8 @@ public class RecipeCreator extends LeafFragment {
         View recipeCreationView = inflater.inflate(R.layout.layout_fragment_recipe_creation,
                 container, false);
 
+        recipe = getArguments().getParcelable("recipe");
+
         // Get views
         final EditText recipeName = (EditText) recipeCreationView.findViewById(R.id.recipeName);
         final LinearLayout ingredientHolder = (LinearLayout) recipeCreationView.findViewById(R.id.ingredient_item_holder);
@@ -66,7 +65,17 @@ public class RecipeCreator extends LeafFragment {
         final Button addIngredients = (Button) recipeCreationView.findViewById(R.id.add_new_ingredient);
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
         final TagGroup tagGroup = (TagGroup) recipeCreationView.findViewById(R.id.tag_group);
-        final TagGroup tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+        tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
+
+        tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+            @Override
+            public void onTagClick(String tag) {
+                if (context instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.makeFragmentTransaction(Search.getFragment(tag));
+                }
+            }
+        });
 
         // Set headers
         int[] headerIds = new int[] { R.id.rCreation_header_rName, R.id.rCreation_header_rIngredients,
@@ -84,8 +93,6 @@ public class RecipeCreator extends LeafFragment {
                                     .getColor(R.color.colorAccent))
                     )));
         }
-
-        recipe = getArguments().getParcelable("recipe");
 
         addIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +115,7 @@ public class RecipeCreator extends LeafFragment {
                     return;
                 }
 
-                List<Ingredient> ingredients = new ArrayList<Ingredient>();
+                List<Ingredient> ingredients = new ArrayList<>();
                 for (int i = 0; i < ingredientHolder.getChildCount() - 1; i++) {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
@@ -195,7 +202,7 @@ public class RecipeCreator extends LeafFragment {
                 EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
 
                 ingredientName.setText(ingredient.getName());
-                ingredientAmount.setText(""+ingredient.getAmount());
+                ingredientAmount.setText(String.format("%d", ingredient.getAmount()));
             }
         }
         else addIngredientRow(ingredientHolder);
@@ -218,9 +225,10 @@ public class RecipeCreator extends LeafFragment {
                 if (ingredientHolder.getChildCount() - 2 != 0) {
                     ingredientHolder.removeView(ingredientRow);
                 } else {
-                    final EditText ingName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
+                    // TODO implement autocomplete and filling of tags...
+                    EditText ingName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     ingName.setText(null);
-                    final EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                    EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
                     ingAmt.setText(null);
                 }
             }

@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -40,8 +42,6 @@ public class Feeds extends BaseFragment {
         feeds = (RecyclerView) feedsView.findViewById(R.id.feeds);
         feeds.setItemAnimator(new DefaultItemAnimator());
         feeds.setLayoutManager(new LinearLayoutManager(context));
-        //TODO You can change the adapter to old one by uncommenting this and commenting the next one.
-        //final FeedAdapter adapter = new FeedAdapter(context);
         final FeedAdapter adapter = new FeedAdapter(context);
         feeds.setAdapter(adapter);
 
@@ -50,7 +50,7 @@ public class Feeds extends BaseFragment {
                     @Override
                     public void onResponse(Recipe[] response) {
                         if (response != null)
-                            adapter.setData(response);
+                            adapter.addItems(response);
                     }
                 },
                 new Response.ErrorListener() {

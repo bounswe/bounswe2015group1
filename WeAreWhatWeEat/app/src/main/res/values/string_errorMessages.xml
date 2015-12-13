@@ -8,6 +8,7 @@
     <string name="error_feed">Could not get feeds.</string>
 
     <string name="error_myRecipes">Could not find my recipes.</string>
+    <string name="error_requestRecipe">Could not find this recipe.</string>
 
     <string name="error_updateUser">User values could not be updated!</string>
 

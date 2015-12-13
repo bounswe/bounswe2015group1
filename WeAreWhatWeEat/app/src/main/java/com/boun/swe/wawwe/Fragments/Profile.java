@@ -3,6 +3,7 @@ package com.boun.swe.wawwe.Fragments;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,32 +16,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
-import com.boun.swe.wawwe.Adapters.VerticalExpandableAdapter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.Adapters.FeedAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
-import com.boun.swe.wawwe.CustomViews.VerticalChild;
-import com.boun.swe.wawwe.CustomViews.VerticalParent;
 import com.boun.swe.wawwe.R;
+import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
-import java.util.ArrayList;
-import java.util.List;
+import su.levenetc.android.textsurface.Text;
+import su.levenetc.android.textsurface.TextSurface;
+import su.levenetc.android.textsurface.animations.ChangeColor;
+import su.levenetc.android.textsurface.animations.Circle;
+import su.levenetc.android.textsurface.animations.Delay;
+import su.levenetc.android.textsurface.animations.Parallel;
+import su.levenetc.android.textsurface.animations.Rotate3D;
+import su.levenetc.android.textsurface.animations.Sequential;
+import su.levenetc.android.textsurface.animations.ShapeReveal;
+import su.levenetc.android.textsurface.animations.Slide;
+import su.levenetc.android.textsurface.common.Position;
+import su.levenetc.android.textsurface.contants.Align;
+import su.levenetc.android.textsurface.contants.Direction;
+import su.levenetc.android.textsurface.contants.Pivot;
+import su.levenetc.android.textsurface.contants.Side;
 
 /**
  * Created by Mert on 09/11/15.
  */
-public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.ExpandCollapseListener {
-
-    ImageView avatar;
-    TextView fullName;
-    TextView location;
-    TextView dateOfBirth;
-    private static final int NUM_TEST_DATA_ITEMS = 20;
-
-    private VerticalExpandableAdapter mExpandableAdapter;
+public class Profile extends BaseFragment {
 
     RecyclerView myFeeds;
+    FloatingActionsMenu multipleActions;
 
     public Profile() {
         TAG = App.getInstance().getString(R.string.title_menu_profile);
@@ -58,35 +69,37 @@ public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.E
         View profileView = inflater.inflate(R.layout.layout_fragment_profile,
                 container, false);
 
-        avatar = (ImageView) profileView.findViewById(R.id.profile_image);
-        fullName = (TextView) profileView.findViewById(R.id.profile_fullName);
-        location = (TextView) profileView.findViewById(R.id.profile_location);
-        dateOfBirth = (TextView) profileView.findViewById(R.id.profile_dateOfBirth);
+        ImageView avatar = (ImageView) profileView.findViewById(R.id.profile_image);
 
         myFeeds = (RecyclerView) profileView.findViewById(R.id.myFeed);
-        // Create a new adapter with 20 test data items
-        mExpandableAdapter = new VerticalExpandableAdapter(context, setUpTestData(NUM_TEST_DATA_ITEMS));
-
-        // Attach this activity to the Adapter as the ExpandCollapseListener
-        mExpandableAdapter.setExpandCollapseListener(this);
-
-        // Set the RecyclerView's adapter to the ExpandableAdapter we just created
-        myFeeds.setAdapter(mExpandableAdapter);
-        // Set the layout manager to a LinearLayout manager for vertical list
-        myFeeds.setLayoutManager(new LinearLayoutManager(context));
-
-
-      /*  myFeeds.setItemAnimator(new DefaultItemAnimator());
+        myFeeds.setItemAnimator(new DefaultItemAnimator());
         myFeeds.setLayoutManager(new LinearLayoutManager(context));
         final FeedAdapter adapter = new FeedAdapter(context);
         myFeeds.setAdapter(adapter);
+
+        multipleActions = (FloatingActionsMenu) profileView.findViewById(R.id.multiple_actions);
+
+        API.getAllMenusforUser(getTag(),
+                new Response.Listener<com.boun.swe.wawwe.Models.Menu[]>() {
+                    @Override
+                    public void onResponse(com.boun.swe.wawwe.Models.Menu[] response) {
+                        if (response != null)
+                            adapter.addItems(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
 
         API.getAllRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
                         if (response != null)
-                            adapter.setData(response);
+                            adapter.addItems(response);
                     }
                 },
                 new Response.ErrorListener() {
@@ -94,10 +107,11 @@ public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.E
                     public void onErrorResponse(VolleyError error) {
                         // TODO could not load...
                     }
-                });*/
+                });
 
+        TextSurface userTag = (TextSurface) profileView.findViewById(R.id.userTag);
         User user = App.getUser();
-        setUserInfo(user);
+        setUserInfo(user, userTag);
 
         profileView.findViewById(R.id.action_recipe_create)
                 .setOnClickListener(new View.OnClickListener() {
@@ -110,18 +124,30 @@ public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.E
                     }
                 });
 
-        profileView.findViewById(R.id.action_menu_create)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (context instanceof MainActivity) {
-                            MainActivity main = (MainActivity) context;
-                            main.makeFragmentTransaction(MenuCreator.getFragment(null));
+        // TODO open this when isRestaurant is added...
+//        if (user.isRestaurant())
+            profileView.findViewById(R.id.action_menu_create)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (context instanceof MainActivity) {
+                                MainActivity main = (MainActivity) context;
+                                main.makeFragmentTransaction(MenuCreator.getFragment(null));
+                            }
                         }
-                    }
-                });
+                    });
+//        else
+//            multipleActions.removeButton((FloatingActionButton)
+//                    profileView.findViewById(R.id.action_menu_create));
 
         return profileView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        multipleActions.collapse();
     }
 
     @Override
@@ -153,58 +179,55 @@ public class Profile extends BaseFragment implements ExpandableRecyclerAdapter.E
         }
     }
 
-    private void setUserInfo(User user) {
+    private void setUserInfo(User user, TextSurface userTag) {
+        int textSize = 25;
+
+        Text PHFullName = Commons.generateText(R.string.title_fullName, textSize, R.color.colorAccent);
+        Text PHLocation = Commons.generateText(R.string.title_location, textSize, R.color.colorAccent);
+        Text PHDateOfBirth = Commons.generateText(R.string.title_dateOfBirth, textSize, R.color.colorAccent);
+        PHFullName.setPosition(new Position(Align.TOP_OF | Align.CENTER_OF, PHLocation));
+        PHDateOfBirth.setPosition(new Position(Align.BOTTOM_OF | Align.CENTER_OF, PHLocation));
+
+        userTag.play(new Parallel(
+                Delay.duration(1000),
+                ShapeReveal.create(PHLocation, 1000, Circle.show(Side.CENTER, Direction.OUT), false),
+                ShapeReveal.create(PHFullName, 1000, Circle.show(Side.CENTER, Direction.OUT), false),
+                ShapeReveal.create(PHDateOfBirth, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+            ));
+
         if (user == null) return;
-        if (user.getFullName() != null)
-            fullName.setText(user.getFullName());
-        if (user.getLocation() != null)
-            location.setText(user.getLocation());
-        if (user.getDateOfBirth() != null)
-            dateOfBirth.setText(user.getDateOfBirth());
+        if (user.getFullName() != null) {
+            Text fullName = Commons.generateText(user.getFullName(), textSize, R.color.colorAccent);
+            fullName.setPosition(new Position(Align.CENTER_OF, PHFullName));
+            userTag.play(new Sequential(
+                    Delay.duration(1000),
+                    Rotate3D.hideFromSide(PHFullName, 750, Pivot.TOP),
+                    ShapeReveal.create(fullName, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+            ));
+        }
+        if (user.getLocation() != null) {
+            Text location = Commons.generateText(user.getLocation(), textSize, R.color.colorAccent);
+            location.setPosition(new Position(Align.CENTER_OF, PHLocation));
+            userTag.play(new Sequential(
+                    Delay.duration(1000),
+                    Rotate3D.hideFromSide(PHLocation, 750, Pivot.TOP),
+                    ShapeReveal.create(location, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+            ));
+        }
+        if (user.getDateOfBirth() != null) {
+            Text dateOfBirth = Commons.generateText(user.getDateOfBirth(), textSize, R.color.colorAccent);
+            dateOfBirth.setPosition(new Position(Align.CENTER_OF, PHDateOfBirth));
+            userTag.play(new Sequential(
+                    Delay.duration(1000),
+                    Rotate3D.hideFromSide(PHDateOfBirth, 750, Pivot.TOP),
+                    ShapeReveal.create(dateOfBirth, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+            ));
+        }
     }
 
     public static Profile getFragment(Bundle bundle) {
         Profile profileFragment = new Profile();
         profileFragment.setArguments(bundle);
         return profileFragment;
-    }
-
-    @Override
-    public void onListItemExpanded(int position) {
-        Toast.makeText(context, "Expanded", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onListItemCollapsed(int position) {
-        Toast.makeText(context, "Collapsed", Toast.LENGTH_SHORT).show();
-    }
-    private List<VerticalParent> setUpTestData(int numItems) {
-        List<VerticalParent> verticalParentList = new ArrayList<>();
-
-        for (int i = 0; i < numItems; i++) {
-            List<VerticalChild> childItemList = new ArrayList<>();
-
-            VerticalChild verticalChild = new VerticalChild();
-            verticalChild.setChildText("FirstChild");
-            childItemList.add(verticalChild);
-
-            // Evens get 2 children, odds get 1
-            if (i % 2 == 0) {
-                VerticalChild verticalChild2 = new VerticalChild();
-                verticalChild2.setChildText("SecondChild");
-                childItemList.add(verticalChild2);
-            }
-
-            VerticalParent verticalParent = new VerticalParent();
-            verticalParent.setChildItemList(childItemList);
-            verticalParent.setParentNumber(i);
-            verticalParent.setParentText("Parent");
-            if (i == 0) {
-                verticalParent.setInitiallyExpanded(false);
-            }
-            verticalParentList.add(verticalParent);
-        }
-
-        return verticalParentList;
     }
 }

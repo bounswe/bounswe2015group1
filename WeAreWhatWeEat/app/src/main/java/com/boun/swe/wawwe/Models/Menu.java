@@ -19,6 +19,8 @@ public class Menu implements Parcelable {
     private String description;
     private int createdAt;
 
+    transient private boolean isExpanded = false;
+
     public Menu(String name, String period, List<Integer> recipeIds, String description){
         this.name = name;
         this.period = period;
@@ -91,6 +93,22 @@ public class Menu implements Parcelable {
 
     public void setCreatedAt(int createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<String> getRecipeNames() {
+        return recipeNames;
+    }
+
+    public void setRecipeNames(List<String> recipeNames) {
+        this.recipeNames = recipeNames;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setIsExpanded(boolean isExpanded) {
+        this.isExpanded = isExpanded;
     }
 
     @Override

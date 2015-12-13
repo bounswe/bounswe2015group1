@@ -29,6 +29,17 @@
 
     <!-- Recipe Detail -->
     <string name="title_nutrition">Nutritions</string>
+    <string-array name="prompt_nutritions">
+        <item>Calories : %.2f</item>
+        <item>Carbohydrate : %.2f</item>
+        <item>Fats : %.2f</item>
+        <item>Proteins : %.2f</item>
+        <item>Sodium : %.2f</item>
+        <item>Fiber : %.2f</item>
+        <item>Cholesterol : %.2f</item>
+        <item>Sugar : %.2f</item>
+        <item>Iron : %.2f</item>
+    </string-array>
 
     <!-- Profile -->
     <string name="title_fullName">Name</string>

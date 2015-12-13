@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -193,7 +193,7 @@ public class MenuCreator extends LeafFragment{
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             menu.findItem(R.id.menu_profile_add).setVisible(false);
@@ -205,9 +205,13 @@ public class MenuCreator extends LeafFragment{
         return super.onOptionsItemSelected(item);
     }
 
-    public static MenuCreator getFragment(Bundle bundle) {
+    public static MenuCreator getFragment(Menu menu) {
         MenuCreator menuFragment = new MenuCreator();
-        menuFragment.setArguments(bundle);
+
+        Bundle menuCreatorBundle = new Bundle();
+        menuCreatorBundle.putParcelable("menu", menu);
+        menuFragment.setArguments(menuCreatorBundle);
+
         return menuFragment;
     }
 

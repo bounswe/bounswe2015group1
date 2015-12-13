@@ -18,6 +18,7 @@
 
     <dimen name="item_margin">5dp</dimen>
     <dimen name="item_padding">5dp</dimen>
+    <dimen name="item_paddingLow">2dp</dimen>
 
     <dimen name="navigationBar_height">48dp</dimen>
 

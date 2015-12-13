@@ -15,7 +15,7 @@
             android:layout_width="@dimen/image_width_bigger"
             android:layout_height="@dimen/image_height_bigger"
             android:layout_margin="@dimen/item_margin"
-            android:src="@mipmap/ic_recipe" />
+            android:src="@drawable/menuicon" />
 
         <TextView
             android:id="@+id/itemMenuName"

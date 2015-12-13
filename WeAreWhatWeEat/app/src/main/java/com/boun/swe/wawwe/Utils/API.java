@@ -305,9 +305,25 @@ public class API {
                 itemId), Ingredient[].class, successListener, failureListener).setTag(tag));
     }
 
-    public static void getAllMenusforUser(String tag, Response.Listener<Menu> successListener,
+    public static void getAllMenusforUser(String tag, Response.Listener<Menu[]> successListener,
                                       Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +"/menu", Menu.class,
+        if(isTest){
+            String file1 = "test_menu1.json";
+
+            String postBody1 = loadJSONFromAsset(file1);
+
+            Gson gson1 = new Gson();
+
+            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+
+            reader1.setLenient(true);
+
+            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
+            Menu testMenu1 = gson1.fromJson(postBody1, Menu.class);
+            Menu testMenu2 = gson1.fromJson(postBody1, Menu.class);
+
+            successListener.onResponse(new Menu[] {testMenu, testMenu1, testMenu2});
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +"/menu", Menu[].class,
                 successListener, failureListener).setTag(tag));
     }
 

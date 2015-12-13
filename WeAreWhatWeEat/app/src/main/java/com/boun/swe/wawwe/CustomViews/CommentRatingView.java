@@ -66,10 +66,10 @@ public class CommentRatingView {
         public View create() {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
-            View commentRatingView = inflater.inflate(R.layout.layout_view_comment_rating, null, false);
+            final View commentRatingView = inflater.inflate(R.layout.layout_view_comment_rating, null, false);
 
             // Prepare RecyclerView
-            RecyclerView comments = (RecyclerView) commentRatingView.findViewById(R.id.comments);
+            final RecyclerView comments = (RecyclerView) commentRatingView.findViewById(R.id.comments);
             comments.setLayoutManager(new LinearLayoutManager(context));
             comments.setItemAnimator(new DefaultItemAnimator());
             final CommentAdapter adapter = new CommentAdapter(context);
@@ -96,8 +96,10 @@ public class CommentRatingView {
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            String userComment = commentText.getText().toString();
+                            if (userComment.isEmpty()) return;
                             Comment comment = new Comment(App.getUser().getFullName(),
-                                    type, parentId, commentText.getText().toString());
+                                    type, parentId, userComment);
                             API.comment(fragment.getTag(), comment,
                                     new Response.Listener<Comment>() {
                                         @Override

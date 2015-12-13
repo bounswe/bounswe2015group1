@@ -20,6 +20,13 @@ public class Recipe implements Parcelable {
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
 
+    transient private boolean isSubItem = false;
+
+    public Recipe(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Recipe(String name, String description, List<Ingredient> ingredients) {
         this.name = name;
         this.description = description;
@@ -96,6 +103,14 @@ public class Recipe implements Parcelable {
 
     public void setNutritions(Nutrition nutritions) {
         this.nutritions = nutritions;
+    }
+
+    public boolean isSubItem() {
+        return isSubItem;
+    }
+
+    public void setIsSubItem(boolean isSubItem) {
+        this.isSubItem = isSubItem;
     }
 
     @Override

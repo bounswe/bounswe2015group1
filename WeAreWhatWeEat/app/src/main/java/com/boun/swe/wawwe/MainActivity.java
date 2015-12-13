@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                 resideMenu.closeMenu();
                 break;
             case R.id.menu_search:
-                makeFragmentTransaction(Search.getFragment(new Bundle()));
+                makeFragmentTransaction(Search.getFragment(null));
                 resideMenu.closeMenu();
                 break;
         }

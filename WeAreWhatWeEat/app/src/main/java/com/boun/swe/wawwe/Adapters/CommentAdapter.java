@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
+import com.boun.swe.wawwe.Utils.Commons;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.Date;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentHolder> {
 
     Context context;
+    RecyclerView recyclerView;
     ArrayList<Comment> data = new ArrayList<Comment>();
 
     public CommentAdapter(Context context) {
@@ -41,6 +43,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         int start = data.size();
         data.addAll(Arrays.asList(comments));
         notifyItemRangeChanged(start, comments.length);
+        recyclerView.smoothScrollToPosition(getItemCount());
+
+        if(comments.length > 0) {
+            ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+            params.height = (int) Commons.dpToPx(200);
+            recyclerView.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     public void clear() {
