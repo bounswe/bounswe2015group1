@@ -19,11 +19,14 @@ import bounswegroup1.resource.RecipeResource;
 import bounswegroup1.resource.SessionResource;
 import bounswegroup1.resource.UserResource;
 import bounswegroup1.resource.MenuResource;
+import bounswegroup1.resource.CommentResource;
 import bounswegroup1.auth.OAuthAuthenticator;
 import bounswegroup1.db.AccessTokenDAO;
 import bounswegroup1.db.RecipeDAO;
 import bounswegroup1.db.UserDAO;
 import bounswegroup1.db.MenuDAO;
+import bounswegroup1.db.CommentDAO;
+
 import bounswegroup1.model.AccessToken;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -75,6 +78,7 @@ public class App extends Application<AppConfig> {
         final AccessTokenDAO accessTokenDAO = jdbi.onDemand(AccessTokenDAO.class);
         final RecipeDAO recipeDAO = jdbi.onDemand(RecipeDAO.class);
         final MenuDAO menuDAO = jdbi.onDemand(MenuDAO.class);
+        final CommentDAO commentDAO = jdbi.onDemand(CommentDAO.class);
 
         final Client httpClient = new JerseyClientBuilder(env).using(config.getHttpClient())
                 .build("httpClient");
@@ -86,6 +90,7 @@ public class App extends Application<AppConfig> {
         final MenuResource menuResource = new MenuResource(menuDAO);
         final IngredientResource ingredientResource = new IngredientResource(httpClient,
                 config.getNutritionixAppId(), config.getNutritionixAppKey());
+        final CommentResource commentResource = new CommentResource(commentDAO, userDAO);
 
         final AvatarUploader avatarUploader = new AvatarUploader(config.getAvatarFactorOne(), config.getAvatarFactorTwo());
         
@@ -102,6 +107,8 @@ public class App extends Application<AppConfig> {
         env.jersey().register(recipeResource);
         env.jersey().register(ingredientResource);
         env.jersey().register(menuResource);
+        env.jersey().register(commentResource);
+
     }
 
     private void configureCors(Environment environment) {
