@@ -196,5 +196,95 @@
 			</column>
 		</createTable>
 	</changeSet>
+
+	<changeSet id="7" author="group1">
+		<addColumn tableName="menus">
+			<column name="period" type="text"></column>	
+		</addColumn>
+	</changeSet>
+
+	<changeSet id="8" author="group1">
+		<createTable tableName="nutritions">
+			<column name="id" type="integer">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="calories" type="float">
+			</column>
+
+			<column name="carbohydrate" type="float">
+			</column>
+
+			<column name="fats" type="float">
+			</column>
+
+			<column name="proteins" type="float">
+			</column>
+
+			<column name="sodium" type="float">
+			</column>
+
+			<column name="fiber" type="float">
+			</column>
+
+			<column name="cholesterol" type="float">
+			</column>
+
+			<column name="sugars" type="float">
+			</column>
+
+			<column name="iron" type="float">
+			</column>
+			
+		</createTable>
+
+		<createTable tableName="nutrition_ingredient">
+
+			<column name="nutrition_id" type="integer">
+				<constraints nullable="false" />
+			</column>
+			<column name="ingredient_id" type="text">
+				<constraints nullable="false" />
+			</column>
+			
+		</createTable>
+
+	</changeSet>
+
+	<changeSet id="9" author="group1">
+		<addPrimaryKey columnNames="id"
+            constraintName="pk_nutritions"
+            tableName="nutritions" />
+        <addAutoIncrement 
+            columnDataType="integer"
+            columnName="id"
+            incrementBy="1"
+            startWith="1"
+            tableName="nutritions"/>
+
+        <dropColumn 
+            columnName="ingredient_id"
+            tableName="nutrition_ingredient"/>
+
+        <addColumn tableName="nutrition_ingredient">
+			<column name="recipe_id" type="text"></column>	
+		</addColumn>        
+	
+		<renameTable
+            newTableName="nutrition_recipe"
+            oldTableName="nutrition_ingredient"/>
+	</changeSet>
+
+	<changeSet id="10" author="group1">
+
+        <dropColumn 
+            columnName="recipe_id"
+            tableName="nutrition_recipe"/>
+
+        <addColumn tableName="nutrition_recipe">
+			<column name="recipe_id" type="integer"></column>	
+		</addColumn>        
+	
+	</changeSet>
 	
 </databaseChangeLog>
