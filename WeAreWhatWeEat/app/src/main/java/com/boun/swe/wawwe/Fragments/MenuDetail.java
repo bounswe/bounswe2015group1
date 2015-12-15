@@ -2,6 +2,9 @@ package com.boun.swe.wawwe.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.Adapters.FeedAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Menu;
@@ -29,6 +33,8 @@ import com.boun.swe.wawwe.Utils.API;
 public class MenuDetail extends LeafFragment {
 
     Menu menu;
+
+    private RecyclerView recView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +54,14 @@ public class MenuDetail extends LeafFragment {
         TextView menuNameTextView = (TextView) menuDetailView.findViewById(R.id.menuNameText);
         TextView descriptionTextView = (TextView) menuDetailView.findViewById(R.id.menuDescText);
         TextView periodTextView = (TextView) menuDetailView.findViewById(R.id.periodText);
-        final LinearLayout recipeHolder = (LinearLayout) menuDetailView.findViewById(R.id.recipe_item_holder);
         final TextView createdbyTextView = (TextView) menuDetailView.findViewById(R.id.createdByText);
+
+        recView = (RecyclerView) menuDetailView.findViewById(R.id.recipe_item_holder);
+        recView.setItemAnimator(new DefaultItemAnimator());
+        recView.setLayoutManager(new LinearLayoutManager(context));
+        final FeedAdapter adapter = new FeedAdapter(context);
+        recView.setAdapter(adapter);
+
 
         menuNameTextView.setText(menu.getName());
         descriptionTextView.setText(menu.getDescription());
@@ -70,20 +82,18 @@ public class MenuDetail extends LeafFragment {
                     }
                 });
 
-        // TODO use correct call, if not set up by backend; write a test...
-        API.getAllRecipes(getTag(),
+        // TODO write a test...
+        API.getRecipesforMenu(getTag(), menu.getId(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
-                        for(Recipe recipe : response){
-                            addRecipeRow(recipeHolder, recipe);
-                        }
+                        adapter.addItems(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(App.getInstance(), "Could not get recipes",
+                        Toast.makeText(App.getInstance(), "Could not get recipes of menu",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -91,7 +101,7 @@ public class MenuDetail extends LeafFragment {
         return menuDetailView;
     }
 
-    // TODO show with a recycler view, with on click functionality to recipe detail fragment
+    // TODO it is unused, delete it
     private void addRecipeRow(LinearLayout recipeHolder, Recipe recipe) {
         TextView text = new TextView(context);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
