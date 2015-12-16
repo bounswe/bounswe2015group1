@@ -23,6 +23,11 @@ public abstract class RatingDAO {
 	@SqlUpdate("insert into ratings (type, parent_id, user_id, rating, created_at) values (:type, :parentId, :userId, :rating, now())")
 	abstract protected Long _addRating(@BindBean Rating rating);
 
+	@SqlUpdate("delete from ratings"+
+		" where ratings.user_id = :userId"+
+		" and ratings.parent_id = :parentId")
+	abstract protected void _deleteRating(@BindBean Rating rating);
+
 	@SqlQuery("select * from ratings,menus"+
 	" where ratings.parent_id = :id"+
 	" and menus.id = :id")
@@ -62,6 +67,18 @@ public abstract class RatingDAO {
 	@Mapper(RatingMapper.class)
 	abstract protected List<Rating> _getRatingByUserForUser(@Bind("userId") Long menuId, @Bind("raterId") Long userId);
 
+	public void addRating(Rating rating){
+		Float fRating = rating.getRating();
+		String.format("%.1f", fRating);
+		rating.setRating(fRating);
+		Long id = _addRating(rating);
+		rating.setId(id);
+	}
+
+	public void deleteRating(Rating rating){
+		_deleteRating(rating);
+	}
+
 	public Float getAverageRatingForParent(Long parentId, String type) {
 		
 		List<List<Rating>> res;
@@ -85,15 +102,6 @@ public abstract class RatingDAO {
         String.format("%.1f", avgRating);
         return avgRating;
     }
-
-
-	public void addRating(Rating rating){
-		Float fRating = rating.getRating();
-		String.format("%.1f", fRating);
-		rating.setRating(fRating);
-		Long id = _addRating(rating);
-		rating.setId(id);
-	}
 
 	public Rating getRatingByUserForMenu(Long menuId, Long commenterId) {
         List<Rating> res = _getRatingByUserForMenu(menuId, commenterId);

@@ -44,6 +44,7 @@ public class RatingResource {
         
         
         rating.setUserId(accessToken.getUserId());
+        ratingDAO.deleteRating(rating);
         ratingDAO.addRating(rating);
 
         return rating;
