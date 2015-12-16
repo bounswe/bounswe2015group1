@@ -83,9 +83,9 @@ public abstract class RatingDAO {
 		
 		List<List<Rating>> res;
 
-		if(type.equals("Menu")) res = _getRatingsForMenu(parentId);
-		else if(type.equals("Recipe")) res = _getRatingsForRecipe(parentId);
-		else if(type.equals("User")) res = _getRatingsForUser(parentId);
+		if(type.toLowerCase().equals("menu")) res = _getRatingsForMenu(parentId);
+		else if(type.toLowerCase().equals("recipe")) res = _getRatingsForRecipe(parentId);
+		else if(type.toLowerCase().equals("user")) res = _getRatingsForUser(parentId);
 		else return 0.0f;
 
         Float totalRating = 0.0f;
