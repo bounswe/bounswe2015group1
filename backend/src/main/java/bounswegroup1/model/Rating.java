@@ -10,6 +10,10 @@ public class Rating {
     private Float rating;
     private Date createdAt;
     
+    public Rating () {
+
+    }
+
     public Rating(Long id, Long userId, String type, Long parentId, Float rating, Date createdAt) {
         super();
         this.id = id;
