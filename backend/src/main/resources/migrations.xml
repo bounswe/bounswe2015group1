@@ -286,5 +286,13 @@
 		</addColumn>        
 	
 	</changeSet>
+
+	<changeSet id="11" author="group1">
+
+        <addColumn tableName="recipes">
+			<column name="created_at" type="datetime"></column>	
+		</addColumn>        
+	
+	</changeSet>
 	
 </databaseChangeLog>

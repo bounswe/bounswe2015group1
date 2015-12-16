@@ -2,6 +2,7 @@ package bounswegroup1.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import bounswegroup1.db.RecipeDAO;
 
@@ -16,6 +17,8 @@ public class Recipe {
     
     private List<String> tags;
 
+    private Date createdAt;
+
     private Nutrition nutritions;
 
     public Nutrition getNutritions(){
@@ -24,6 +27,14 @@ public class Recipe {
 
     public void setNutritions(Nutrition nutritions){
         this.nutritions = nutritions;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     } 
 
     public Long getId() {
@@ -69,11 +80,12 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(Long id, Long userId, String name, String description) {
+    public Recipe(Long id, Long userId, String name, String description,Date createdAt) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.description = description;
+        this.createdAt = createdAt;
         this.ingredients = new ArrayList<Ingredient>();
         this.tags = new ArrayList<String>();
     }

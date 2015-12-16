@@ -22,7 +22,7 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
         if (idx == 0) {
             // first row, create the recipe object
             recipe = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
-                    rs.getString("description"));
+                    rs.getString("description"),rs.getDate("created_at"));
 
             recipe.addNutritions(new Nutrition(rs.getLong("nutrition_id"),rs.getFloat("calories"),
                 rs.getFloat("carbohydrate"),rs.getFloat("fats"),rs.getFloat("proteins"),
