@@ -145,7 +145,7 @@ public class RecipeDetail extends LeafFragment {
         TextSurface nutritionHolderRight = (TextSurface) recipeDetailView.findViewById(R.id.nutritionsRight);
 
         String[] names = context.getResources().getStringArray(R.array.prompt_nutritions);
-        Float[] values = new Float[] { 1f,1f,1f,1f,1f,1f,1f,1f,1f };//recipe.getNutritions().getNutritionsAsArray());
+        float[] values = recipe.getNutritions().getNutritionsAsArray();
         Text[] texts = new Text[9];
         for (int i = 0;i < values.length;i++)
             texts[i] = Commons.generateText(String.format(names[i], values[i]));
@@ -174,10 +174,10 @@ public class RecipeDetail extends LeafFragment {
         nutritionHolderRight.setLayoutParams(params);
 
         LinearLayout holder = (LinearLayout) recipeDetailView.findViewById(R.id.recipeDetail_holder);
-        View commentView = new CommentRatingView.Builder(context, this)
-                .setParent(recipe)
-                .create();
-        holder.addView(commentView);
+//        View commentView = new CommentRatingView.Builder(context, this)
+//                .setParent(recipe)
+//                .create();
+//        holder.addView(commentView);
 
         return recipeDetailView;
     }

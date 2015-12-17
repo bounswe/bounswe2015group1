@@ -94,20 +94,20 @@ public class Profile extends BaseFragment {
                     }
                 });
 
-        API.getAllRecipes(getTag(),
-                new Response.Listener<Recipe[]>() {
-                    @Override
-                    public void onResponse(Recipe[] response) {
-                        if (response != null)
-                            adapter.addItems(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO could not load...
-                    }
-                });
+//        API.getAllRecipes(getTag(),
+//                new Response.Listener<Recipe[]>() {
+//                    @Override
+//                    public void onResponse(Recipe[] response) {
+//                        if (response != null)
+//                            adapter.addItems(response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        // TODO could not load...
+//                    }
+//                });
 
         TextSurface userTag = (TextSurface) profileView.findViewById(R.id.userTag);
         User user = App.getUser();

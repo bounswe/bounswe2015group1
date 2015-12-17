@@ -17,7 +17,7 @@ public class Menu implements Parcelable {
     private List<Integer> recipeIds;
     private List<String> recipeNames;
     private String description;
-    private int createdAt;
+    private String createdAt;
 
     transient private boolean isExpanded = false;
 
@@ -35,7 +35,7 @@ public class Menu implements Parcelable {
         period = in.readString();
         recipeNames = in.createStringArrayList();
         description = in.readString();
-        createdAt = in.readInt();
+        createdAt = in.readString();
     }
 
 
@@ -87,11 +87,11 @@ public class Menu implements Parcelable {
         this.description = description;
     }
 
-    public int getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(int createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -123,7 +123,7 @@ public class Menu implements Parcelable {
         dest.writeString(period);
         dest.writeStringList(recipeNames);
         dest.writeString(description);
-        dest.writeInt(createdAt);
+        dest.writeString(createdAt);
     }
 
     public static final Creator<Menu> CREATOR = new Creator<Menu>() {

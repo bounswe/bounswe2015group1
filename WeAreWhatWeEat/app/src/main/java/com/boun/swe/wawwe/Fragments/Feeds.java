@@ -61,19 +61,37 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
-        API.getMenu(getTag(), 1,
-                new Response.Listener<Menu>(){
+//        API.getMenu(getTag(), 1,
+//                new Response.Listener<Menu>() {
+//                    @Override
+//                    public void onResponse(Menu response) {
+//                        if (response != null) {
+//                            Object[] o = {response};
+//                            adapter.addItems(o);
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(context, context.getString(R.string.error_feed),
+//                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
+        API.getAllMenusforUser(getTag(),
+                new Response.Listener<Menu[]>() {
                     @Override
-                    public void onResponse(Menu response){
-                        if(response != null) {
-                            Object[] o = {response};
-                            adapter.addItems(o);
+                    public void onResponse(Menu[] response) {
+                        if (response != null) {
+                            //Object[] o = {response};
+                            adapter.addItems(response);
                         }
                     }
                 },
-                new Response.ErrorListener(){
+                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error){
+                    public void onErrorResponse(VolleyError error) {
                         Toast.makeText(context, context.getString(R.string.error_feed),
                                 Toast.LENGTH_SHORT).show();
                     }

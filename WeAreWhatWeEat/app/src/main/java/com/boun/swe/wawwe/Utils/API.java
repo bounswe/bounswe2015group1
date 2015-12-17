@@ -55,7 +55,7 @@ public class API {
     private static String UUID;
 
     private static boolean underDev = true;
-    private static boolean isTest = true;
+    private static boolean isTest = false;
 
     public static void init() {
         if (instance == null) {
