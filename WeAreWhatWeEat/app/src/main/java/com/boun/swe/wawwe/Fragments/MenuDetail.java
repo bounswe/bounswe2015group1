@@ -1,5 +1,6 @@
 package com.boun.swe.wawwe.Fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -82,12 +83,13 @@ public class MenuDetail extends LeafFragment {
                     }
                 });
 
-        // TODO write a test...
         API.getRecipesforMenu(getTag(), menu.getId(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
-                        adapter.addItems(response);
+                        if (response != null) {
+                            adapter.addItems(response);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -101,26 +103,11 @@ public class MenuDetail extends LeafFragment {
         return menuDetailView;
     }
 
-    // TODO it is unused, delete it
-    private void addRecipeRow(LinearLayout recipeHolder, Recipe recipe) {
-        TextView text = new TextView(context);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        int margin = (int) context.getResources().
-                getDimension(R.dimen.activity_horizontal_margin);
-        params.setMargins(margin, margin, margin, margin);
-        text.setTextColor(context.getResources().getColor(R.color.black));
-        text.setTextAppearance(context, android.R.style.TextAppearance);
-        text.setLayoutParams(params);
-        text.setText(String.format(" - %s", recipe.getName()));
-        recipeHolder.addView(text, recipeHolder.getChildCount() - 1);
-    }
-
     @Override
     public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
-        menu.findItem(R.id.menu_profile_add).setVisible(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            menu.findItem(R.id.menu_profile_add).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -128,10 +115,10 @@ public class MenuDetail extends LeafFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_profile_editDone:
-                if (context instanceof MainActivity) {
-                    MainActivity main = (MainActivity) context;
-                    main.makeFragmentTransaction(ProfileEdit.getFragment(new Bundle()));
-                }
+//                if (context instanceof MainActivity) {
+//                    MainActivity main = (MainActivity) context;
+//                    main.makeFragmentTransaction(MenuEdit.getFragment(new Bundle()));
+//                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

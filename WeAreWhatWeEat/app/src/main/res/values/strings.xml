@@ -26,6 +26,11 @@
     <string name="title_directions">How To?</string>
     <string name="button_submit_recipe">Submit</string>
     <string name="button_edit_recipe">Save Changes</string>
+    <string-array name="ingredient_units">
+        <item>--</item>
+        <item>kg</item>
+        <item>lt</item>
+    </string-array>
 
     <!-- Recipe Detail -->
     <string name="title_nutrition">Nutritions</string>

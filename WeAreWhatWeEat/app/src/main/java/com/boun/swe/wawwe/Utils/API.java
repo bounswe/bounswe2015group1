@@ -211,7 +211,7 @@ public class API {
     public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
                                   Response.ErrorListener failureListener) {
         if (isTest) successListener.onResponse(new String[] { "Egg", "Salty", "Breakfast" });
-        else mQueue.add(new GeneralRequest<>(Request.Method.POST,
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/recipe/tags/%d", recipeId),
                 String[].class, successListener, failureListener).setTag(tag));
     }

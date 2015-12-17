@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -74,13 +75,20 @@ public class RecipeDetail extends LeafFragment {
                 new Response.Listener<String[]>() {
                     @Override
                     public void onResponse(String[] response) {
-                        tagGroupStatic.setTags(response);
+                        if(response == null){
+                            //TODO tag api returns null
+                            Toast.makeText(context, "Tag api returns null",
+                                    Toast.LENGTH_SHORT).show();
+                        }else{
+                            tagGroupStatic.setTags(response);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toast.makeText(context, "Error getting tags",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
         tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {

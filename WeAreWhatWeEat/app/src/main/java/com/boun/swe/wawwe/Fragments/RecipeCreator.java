@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -120,9 +121,11 @@ public class RecipeCreator extends LeafFragment {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                    Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
 
                     String ingredient_name = ingredientName.getText().toString();
                     String ingredient_amount = ingredientAmount.getText().toString();
+                    String ingredient_unit = ingrUnitSpinner.getSelectedItem().toString();
 
                     if (ingredient_name.equals("") || ingredient_amount.equals("")) {
                         Toast.makeText(App.getInstance(), "Some fields are missing",
@@ -130,7 +133,7 @@ public class RecipeCreator extends LeafFragment {
                         return;
                     }
 
-                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount)));
+                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount), ingredient_unit));
                 }
 
                 if (recipe != null) {
@@ -200,9 +203,11 @@ public class RecipeCreator extends LeafFragment {
 
                 EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                 EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
 
                 ingredientName.setText(ingredient.getName());
                 ingredientAmount.setText(String.format("%d", ingredient.getAmount()));
+
             }
         }
         else addIngredientRow(ingredientHolder);
@@ -228,6 +233,8 @@ public class RecipeCreator extends LeafFragment {
                     // TODO implement autocomplete and filling of tags...
                     EditText ingName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     ingName.setText(null);
+                    Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
+                    ingrUnitSpinner.setSelection(0);
                     EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
                     ingAmt.setText(null);
                 }

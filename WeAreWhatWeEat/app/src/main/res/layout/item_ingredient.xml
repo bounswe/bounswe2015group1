@@ -17,10 +17,18 @@
         android:hint="Amt."
         android:background="@drawable/border_style" />
 
+    <Spinner
+        android:id="@+id/ingredientUnitSpinner"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="20"
+        android:entries="@array/ingredient_units"
+        ></Spinner>
+
     <EditText
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="80"
+        android:layout_weight="60"
         android:layout_marginLeft="5dp"
         android:id="@+id/ingredient_name"
         android:hint="Enter ingredient"

@@ -124,8 +124,8 @@ public class Profile extends BaseFragment {
                     }
                 });
 
-        // TODO open this when isRestaurant is added...
-//        if (user.isRestaurant())
+        // TODO test this!!!
+        if (user.isRestaurant())
             profileView.findViewById(R.id.action_menu_create)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -136,9 +136,9 @@ public class Profile extends BaseFragment {
                             }
                         }
                     });
-//        else
-//            multipleActions.removeButton((FloatingActionButton)
-//                    profileView.findViewById(R.id.action_menu_create));
+        else
+            multipleActions.removeButton((FloatingActionButton)
+                    profileView.findViewById(R.id.action_menu_create));
 
         return profileView;
     }
