@@ -257,7 +257,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 					},$rootScope.saveTheDelay)
 				});
 		}
-		else return $http.get($rootScope.baseUrl + '/api/recipe/recommended/' + id);
+		else return $http.get($rootScope.baseUrl + '/api/recipe/recommend/' + id);
 	}
 	return {
 		addRecipe : addRecipe,

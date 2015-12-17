@@ -26,7 +26,7 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 
 		$scope.getAvgRating = function() {
 			communityService.getAvgRating("menu", $scope.menuId).then(function(response) {
-				$scope.avgRate = response.data.rating;
+				$scope.avgRate = response.data;
 			});
 		};
 
