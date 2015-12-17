@@ -1,0 +1,59 @@
+<div ng-controller="AddMenuCtrl" class="row">
+	<div class="col-md-3">
+			<img src="img/chefhat.png" class="img-thumbnail" >
+			<input type="file">
+	</div>
+	<div class="col-md-9">
+	<form name="AddRecipe" role="form">
+		<h3>Create a menu</h3>
+		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9" >
+			<label>Menu Name</label>
+			<input type="text" class="form-control" placeholder="Menu name" ng-model="menuName">
+		</div>
+		<div class="col-md-9">
+			<label>Add Recipes</label>
+		</div>
+		<div class="form-group form-inline col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<div class="row">
+				<div class="col-md-4">
+				  	<select class="form-control" ng-options="recipe.name for recipe in recipes" ng-model="recipesToBeAdded" multiple>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-click="addRecipes()" aria-label="Add Recipe">
+	  				<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>
+	  				<button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-click="removeRecipes()" aria-label="Add Recipe">
+	  				<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button>
+	  			</div>
+	  			<div class="col-md-4">
+				  	<select class="form-control" ng-options="recipe.name for recipe in selectedRecipes" ng-model="recipesToBeRemoved" multiple>
+					</select>
+				</div>
+			</div>
+			<!--
+			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12"  ng-model="newRecipeName" placeholder="Name" uib-typeahead="name.text for name in getRecipes($viewValue)" required>
+			<button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-click="addRecipe()" aria-label="Add Recipe">
+  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>-->
+		</div>
+		<div class="col-md-9">
+			<div class="form-group">
+			<label>Period</label>
+			  <select class="form-control" ng-model="period">
+			    <option value="daily" selected>Daily</option>
+			    <option value="weekly">Weekly</option>
+			    <option value="monthly">Monthly</option>
+			  </select>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<label>Description</label>
+			<textarea rows="10" class="form-control" style="resize:none" ng-model="menuDesc"></textarea>
+		</div>
+
+		<div class="col-md-9">
+			<button type="submit" class="btn btn-default" ng-click="addMenu()">Create Menu</button>
+		</div>
+
+	</form>
+	</div>
+</div>

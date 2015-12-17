@@ -1,0 +1,47 @@
+<style type="text/css">
+	.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: #5bc0de;
+	}
+</style>
+<div ng-controller='MainCtrl' >
+	<div class="row" style="text-align: center">
+		<h3 style="font-size: 250%;font-family: Montserrat;color: #F4A73B;">Welcome to Mama</h3>
+	</div>
+	<div class="row"  style="text-align: center">
+		<h4 style="font-size: 150%;font-family: Montserrat;color: #F4A73B;">All Recipes</h4>
+	</div>
+	<!-- style="margin-left : 25%; centered" <div class="row" ng-repeat="recipe in recipes"> 
+		<a href="#" ng-click="viewRecipe(recipe.id)"> {{ recipe.name }} </a>
+	</div>-->
+
+	<div class="table-responsive">
+
+		<table class="table table-striped table-bordered">
+			<tr class="info" ng-repeat="_ in recipes | orderBy:'name'">
+				<td ng-show="($parent.$index % 3 == 0) && ($parent.$index + 3 > $index) && ($parent.$index <= $index)" ng-repeat="recipe in recipes | orderBy:'name'">
+	              	<a href="#" ui-sref="viewRecipe({ recipeID : '' + recipe.id})"> {{recipe.name}} </a>
+	            </td>
+			<tr>
+		</table>
+		
+	</div>
+
+	<div class="row"  style="text-align: center">
+		<h4 style="font-size: 150%;font-family: Montserrat;color: #F4A73B;">All Menus</h4>
+	</div>
+	<!-- style="margin-left : 25%; centered" <div class="row" ng-repeat="recipe in recipes"> 
+		<a href="#" ng-click="viewRecipe(recipe.id)"> {{ recipe.name }} </a>
+	</div>-->
+
+	<div class="table-responsive">
+
+		<table class="table table-striped table-bordered">
+			<tr class="info" ng-repeat="_ in menus | orderBy:'name'">
+				<td ng-show="($parent.$index % 3 == 0) && ($parent.$index + 3 > $index) && ($parent.$index <= $index)" ng-repeat="menu in menus | orderBy:'name'">
+	              	<a href="#" ui-sref="viewMenu({ menuID : '' + menu.id})"> {{menu.name}} </a>
+	            </td>
+			<tr>
+		</table>
+		
+	</div>
+</div>

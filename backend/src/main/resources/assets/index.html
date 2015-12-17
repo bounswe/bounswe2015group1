@@ -1,19 +1,148 @@
-<!doctype html>
-<html>
-<head>
-    <title>We are what we eat</title>
-    <script src="/jquery-2.1.4.min.js"> </script>
-    <script src="/app.js"> </script>
-</head>
-<body>
-    <p>
-        <input type="text" id="username" />
-        <input type="text" id="password" />
-        <input type="button" id="save" value="Add" />
-    </p>
-    <table>
-        <thead><tr><th>Username</th><th>Password</th></tr></thead>
-        <tbody id="users"></tbody>
-    </table>
-</body>
+<html ng-app="FoodApp">
+  <head>
+    <title>MAMA</title>
+    <script src="lib/angular.js"> </script>
+    <script src="lib/angular-ui-router.js"> </script>
+    <script src="lib/ui-layout.js"> </script>
+    <script src="lib/ui-bootstrap-tpls-0.14.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap.css">
+    <link rel="stylesheet" href="lib/ui-layout.css">
+    <link rel="stylesheet" href="lib/indexPage.css">
+    <script src="app/app.js"> </script>
+    <script src="app/controllers.js"> </script>
+    <script src="app/AddRecipeCtrl.js"> </script>
+    <script src="app/AddMenuCtrl.js"> </script>
+    <script src="app/LoginCtrl.js"> </script>
+    <script src="app/NavBarCtrl.js"> </script>
+    <script src="app/ProfileCtrl.js"> </script>
+    <script src="app/RegisterCtrl.js"> </script>
+    <script src="app/SearchCtrl.js"> </script>
+    <script src="app/ViewRecipeCtrl.js"> </script>
+    <script src="app/ViewMenuCtrl.js"> </script>
+    <script src="app/db.js"> </script>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+      <div class="navbar-default row" style="background-color:#f2f2f2;" ng-controller="NavBarCtrl">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                  <a class="navbar-brand" style="font-size: 250%;font-family: Montserrat;color: #F4A73B;" ui-sref="main">MAMA</a>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                  <div ng-hide="loggedIn" style="float: right;margin-right: 20px;">
+                        <ul class="nav navbar-nav navbar-right">
+                              <li>
+                                <div class="btn-group" role="group" style="margin-top:8px;" aria-label="...">
+                                    <button type="button" class="btn btn-info" style="background-color: #E85180;
+                          color: #690707;" data-toggle="modal" data-target="#loginModal">Login</button>
+                                    <button ui-sref="register" type="button" onclick="showRegister()" style="background-color: #f8c54d;
+                          color: #ab8426;" class="btn btn-success">Register</button>
+                                </div>
+                              </li>
+                        <script type="text/javascript">
+                                function showRegister(){
+                                    $("#registerModal").modal("show");
+                                }
+                        </script>
+                      </ul>
+                          
+                  </div>
+                  <div ng-show="loggedIn" style="float: right;margin-right: 20px;">
+                        <div style="margin-top:8px;">
+                              <button type="button" class="btn btn-info" style="background-color: #E85180;
+                                color: #690707;" ui-sref="addMenu">Create A Menu</button>
+                              <button type="button" class="btn btn-info" style="background-color: #E85180;
+                                color: #690707;" ui-sref="addRecipe">Create A Recipe</button>
+                              <div class="dropdown" style="float:right;">
+                                    <button class="btn btn-default dropdown-toggle" style="background-color: #4EABD9;" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        {{user.fullName}}
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                          <li><a ui-sref="profile" > {{user.fullName}} </a></li>
+                                          <li role="separator" class="divider"></li>
+                                          <li><a href="#" ng-click="logout()">Logout</a></li>
+                                    </ul>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+
+            <div id="loginModal" class="modal fade loginModal" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content login-block">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h1>Login</h1>
+                        </div>
+                        <div class="modal-body">
+                        <p>
+                          <form class="contact" role="search">
+                                <div class="form-group">
+                                  <input type="text" class="form-control input-xlarge" placeholder="Username" id="username" ng-model="emailLogin"><br>
+                                  <input type="password" class="form-control input-xlarge" placeholder="Password" id="password" ng-model="passLogin">
+                                </div>
+                           <button type="submit" class="btn btn-default" id="buttonSubmit" data-dismiss="modal" ng-click="login()">Login</button>
+                          </form>     
+                        </p>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+      </div>
+
+    <div class="row" ng-controller="NavBarCtrl">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            <div>
+                 <form id="searchForm" method="post">
+
+                  <div class="input-group">
+                          <input type="text" ng-model="searchText" class="form-control" placeholder="Search recipe, ingredient.." aria-describedby="basic-addon2">
+                          <span class="input-group-addon"  ng-click="search()" href="#" id="basic-addon2"><a ng-click="search()" href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></span>
+                  </div>
+                  <div class="btn-group input-group" data-toggle="buttons" style="margin-top: 10px;">
+                        <div>
+                            <label class="active" style="color:#DDDDDD;" ng-click="isCollapsed = !isCollapsed">Advanced Options</label>
+                                  <div uib-collapse="isCollapsed">
+                                    <div class="well well-lg">
+                                      <div>
+                                        <label>Excludes</label>
+                                        <input type="text" ng-model="excludesText" placeholder="Excluding Ingredients">
+                                      </div>
+                                      <div>
+                                        <label>Provider</label>
+                                        <input type="text" ng-model="providerName" placeholder="Provider Name">
+                                      </div>
+                                      <div>
+                                        <label>Location</label>
+                                        <input type="text" ng-model="location" placeholder="Location">
+                                      </div>
+                                    </div>
+                                  </div>
+                        </div>
+                  </div>
+                        
+                </form>
+            </div>    
+          </div>
+    </div>
+
+
+    <div class="row">
+    <div class="col-xs-1 col-sm-2 col-md-2 col-lg-2"></div>
+    <div class="col-xs-10 col-sm-8 col-md-8 col-lg-8"> <div ui-view></div></div>
+    <div class="col-xs-1 col-sm-2 col-md-2 col-lg-2"></div>
+    </div>
+
+
+
+  </body>
 </html>
