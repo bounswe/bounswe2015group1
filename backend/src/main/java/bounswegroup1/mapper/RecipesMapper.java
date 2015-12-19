@@ -11,6 +11,8 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Nutrition;
 
+import org.joda.time.DateTime;
+
 public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
 
     List<Recipe> res;
@@ -30,7 +32,7 @@ public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
     public List<Recipe> map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
         if (rs.getLong("id") != lastId) {
             curr = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
-                    rs.getString("description"),rs.getDate("created_at"));
+                    rs.getString("description"),new DateTime(rs.getDate("created_at")));
             lastId = rs.getLong("id");
 
             curr.addNutritions(new Nutrition(rs.getLong("nutrition_id"),rs.getFloat("calories"),
@@ -44,7 +46,7 @@ public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
 
         if (!rs.getString("ingredient_id").equals(lastIngredientId)) {
             curr.addIngredient(rs.getString("ingredient_id"), rs.getString("ingredient_name"),
-                rs.getLong("amount"), rs.getString("unit"));
+                rs.getLong("amount"));
 
             lastIngredientId = rs.getString("ingredient_id");
         }

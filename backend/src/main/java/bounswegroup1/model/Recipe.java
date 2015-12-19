@@ -2,7 +2,7 @@ package bounswegroup1.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
+import org.joda.time.DateTime;
 
 import bounswegroup1.db.RecipeDAO;
 
@@ -17,7 +17,7 @@ public class Recipe {
     
     private List<String> tags;
 
-    private Date createdAt;
+    private DateTime createdAt;
 
     private Nutrition nutritions;
 
@@ -29,11 +29,11 @@ public class Recipe {
         this.nutritions = nutritions;
     }
 
-    public Date getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     } 
 
@@ -80,7 +80,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(Long id, Long userId, String name, String description,Date createdAt) {
+    public Recipe(Long id, Long userId, String name, String description,DateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -98,8 +98,8 @@ public class Recipe {
         this.description = description;
     }
 
-    public void addIngredient(String ingredientId, String name, Long amount, String unit) {
-        ingredients.add(new Ingredient(ingredientId, name, amount, unit));
+    public void addIngredient(String ingredientId, String name, Long amount) {
+        ingredients.add(new Ingredient(ingredientId, name, amount));
     }
 
     public void addTags(String tag) {
@@ -113,7 +113,7 @@ public class Recipe {
     public void createIngredients(RecipeDAO dao) {
         for (Ingredient ingredient : ingredients) {
             dao.createIngredient(id, ingredient.getName(), ingredient.getIngredientId(),
-                    ingredient.getAmount(), ingredient.getUnit());
+                    ingredient.getAmount());
         }
     }
     

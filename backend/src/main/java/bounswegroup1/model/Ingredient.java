@@ -4,7 +4,6 @@ public class Ingredient {
     private String ingredientId;
     private String name;
     private Long amount;
-    private String unit;
 
     public String getName() {
         return name;
@@ -14,9 +13,6 @@ public class Ingredient {
         return amount;
     }
 
-    public String getUnit() {
-        return unit;
-    }
 
     public String getIngredientId() {
         return ingredientId;
@@ -34,17 +30,13 @@ public class Ingredient {
         this.amount = amount;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
 
     public Ingredient() {
     }
 
-    public Ingredient(String ingredientId, String name, Long amount, String unit) {
+    public Ingredient(String ingredientId, String name, Long amount) {
         this.ingredientId = ingredientId;
         this.name = name;
         this.amount = amount;
-        this.unit = unit;
     }
 }

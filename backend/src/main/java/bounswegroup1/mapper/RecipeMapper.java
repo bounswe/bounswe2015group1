@@ -9,6 +9,8 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Nutrition;
 
+import org.joda.time.DateTime;
+
 public class RecipeMapper implements ResultSetMapper<Recipe> {
     private Recipe recipe;
     String lastIngredientId;
@@ -22,7 +24,8 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
         if (idx == 0) {
             // first row, create the recipe object
             recipe = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
-                    rs.getString("description"),rs.getDate("created_at"));
+                    rs.getString("description"),new DateTime(rs.getDate("created_at")));
+
 
             recipe.addNutritions(new Nutrition(rs.getLong("nutrition_id"),rs.getFloat("calories"),
                 rs.getFloat("carbohydrate"),rs.getFloat("fats"),rs.getFloat("proteins"),
@@ -32,7 +35,7 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
 
         if (!rs.getString("ingredient_id").equals(lastIngredientId)) {
             recipe.addIngredient(rs.getString("ingredient_id"), rs.getString("ingredient_name"),
-                rs.getLong("amount"), rs.getString("unit"));
+                rs.getLong("amount"));
             
             lastIngredientId = rs.getString("ingredient_id");
         }

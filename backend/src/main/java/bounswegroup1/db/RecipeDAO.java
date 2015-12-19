@@ -54,10 +54,9 @@ public abstract class RecipeDAO {
     abstract protected Long _createRecipe(@BindBean Recipe recipe);
 
     @SqlUpdate("insert into recipe_ingredients (recipe_id, ingredient_name, ingredient_id, amount, unit) "
-            + "values (:id, :name, :ingredient_id, :amount, :unit)")
+            + "values (:id, :name, :ingredient_id, :amount, '')")
     abstract public void createIngredient(@Bind("id") Long id, @Bind("name") String name,
-            @Bind("ingredient_id") String ingredientId, @Bind("amount") Long amount,
-            @Bind("unit") String unit);
+            @Bind("ingredient_id") String ingredientId, @Bind("amount") Long amount);
     
     @SqlQuery("select tag from tags where recipe_id = :id")
     abstract public List<String> getTagsForRecipe(@Bind("id") Long recipeId);
