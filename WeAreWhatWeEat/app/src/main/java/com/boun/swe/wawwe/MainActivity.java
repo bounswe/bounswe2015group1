@@ -21,6 +21,7 @@ import com.boun.swe.wawwe.Fragments.LeafFragment;
 import com.boun.swe.wawwe.Fragments.Login;
 import com.boun.swe.wawwe.Fragments.Profile;
 import com.boun.swe.wawwe.Fragments.Search;
+import com.boun.swe.wawwe.Fragments.Signup;
 import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
@@ -32,6 +33,7 @@ import com.special.ResideMenu.ResideMenu;
 public class MainActivity extends BaseActivity implements OnClickListener {
 
     private Toolbar toolbar;
+    private Menu menu;
     // This is the menu component for application
     private ResideMenu resideMenu;
     private Handler handler;
@@ -45,7 +47,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         prepareToolbar();
         prepareResideMenu();
         getSupportActionBar().hide();
-
 
         if (App.getRememberMe())
             API.login(MainActivity.class.getSimpleName(), App.getUser(),
@@ -71,24 +72,27 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                Fragment fr = getSupportFragmentManager().findFragmentById(R.id.container);
-                if (fr != null) {
-                    if (fr instanceof LeafFragment)
-                        setDisplayHomeAsUp();
-                    else
-                        setDisplayHomeAsNavigator();
-                    toolbar.setTitle(((BaseFragment) fr).TAG);
-                }
-            }
-        });
+                    @Override
+                    public void onBackStackChanged() {
+                        Fragment fr = getSupportFragmentManager().findFragmentById(R.id.container);
+                        if (fr != null) {
+                            if (fr instanceof LeafFragment) {
+                                setDisplayHomeAsUp();
+                                if (fr instanceof Signup)
+                                    setMenuButtonVisibility(R.id.menu_main_subLogout, true);
+                            } else
+                                setDisplayHomeAsNavigator();
+                            toolbar.setTitle(((BaseFragment) fr).TAG);
+                        }
+                    }
+                });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -140,12 +144,24 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         });
     }
 
+    private boolean setMenuButtonVisibility(int resId, boolean visibility) {
+        android.view.MenuItem menuItem = menu.findItem(resId);
+        if (menuItem != null) {
+            menuItem.setVisible(false);
+            return true;
+        }
+        return false;
+    }
+
     public void makeFragmentTransaction(final BaseFragment fragment) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                if (fragment instanceof Signup)
+                    setMenuButtonVisibility(R.id.menu_main_subLogout, false);
 
                 transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right,
                         android.R.anim.slide_in_left,  android.R.anim.slide_out_right);

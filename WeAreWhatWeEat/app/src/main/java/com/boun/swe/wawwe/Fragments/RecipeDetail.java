@@ -60,6 +60,7 @@ public class RecipeDetail extends LeafFragment {
         setHasOptionsMenu(true);
         TAG = context.getString(R.string.title_menu_recipeDetail);
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -75,11 +76,11 @@ public class RecipeDetail extends LeafFragment {
                 new Response.Listener<String[]>() {
                     @Override
                     public void onResponse(String[] response) {
-                        if(response == null){
+                        if (response == null) {
                             //TODO tag api returns null
                             Toast.makeText(context, "Tag api returns null",
                                     Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             tagGroupStatic.setTags(response);
                         }
                     }
@@ -102,11 +103,11 @@ public class RecipeDetail extends LeafFragment {
         });
 
         // Set headers
-        int[] headerIds = new int[] { R.id.rDetail_title_recipeName, R.id.rDetail_title_ingredients,
-                R.id.rDetail_title_directions, R.id.rDetail_title_tags, R.id.rDetail_title_nutritions };
-        int[] headerTextIds = new int[] { R.string.title_recipe, R.string.title_ingredients,
-                R.string.title_directions, R.string.title_tags, R.string.title_nutrition };
-        for (int i = 0;i < headerIds.length;i++) {
+        int[] headerIds = new int[]{R.id.rDetail_title_recipeName, R.id.rDetail_title_ingredients,
+                R.id.rDetail_title_directions, R.id.rDetail_title_tags, R.id.rDetail_title_nutritions};
+        int[] headerTextIds = new int[]{R.string.title_recipe, R.string.title_ingredients,
+                R.string.title_directions, R.string.title_tags, R.string.title_nutrition};
+        for (int i = 0; i < headerIds.length; i++) {
             TextSurface header = (TextSurface) recipeDetailView.findViewById(headerIds[i]);
             Text text = i == 0 ? Commons.generateHeader(recipe.getName()) :
                     Commons.generateHeader(headerTextIds[i]);
@@ -123,7 +124,7 @@ public class RecipeDetail extends LeafFragment {
         directions.setText(recipe.getDescription());
         TextSurface ingredientHolder = (TextSurface) recipeDetailView.findViewById(R.id.rDetail_ingredientHolder);
         Text previous = null;
-        for (int i = 0;i < recipe.getIngredients().size();i++) {
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
             Ingredient ingredient = recipe.getIngredients().get(i);
 
             Text text = Commons.generateText(String.format("%d x %s",
@@ -155,14 +156,14 @@ public class RecipeDetail extends LeafFragment {
         String[] names = context.getResources().getStringArray(R.array.prompt_nutritions);
         float[] values = recipe.getNutritions().getNutritionsAsArray();
         Text[] texts = new Text[9];
-        for (int i = 0;i < values.length;i++)
+        for (int i = 0; i < values.length; i++)
             texts[i] = Commons.generateText(String.format(names[i], values[i]));
 
-        for (int col = 0;col < 3;col++) {
+        for (int col = 0; col < 3; col++) {
             TextSurface nutritionHolder = col == 0 ? nutritionHolderLeft :
                     col == 1 ? nutritionHolderMiddle : nutritionHolderRight;
 
-            for (int row = 0;row < 3;row++) {
+            for (int row = 0; row < 3; row++) {
                 Text text = texts[row * 3 + col];
                 if (row != 1)
                     text.setPosition(new Position(Align.CENTER_OF | (row == 0 ?
@@ -182,10 +183,10 @@ public class RecipeDetail extends LeafFragment {
         nutritionHolderRight.setLayoutParams(params);
 
         LinearLayout holder = (LinearLayout) recipeDetailView.findViewById(R.id.recipeDetail_holder);
-//        View commentView = new CommentRatingView.Builder(context, this)
-//                .setParent(recipe)
-//                .create();
-//        holder.addView(commentView);
+        View commentView = new CommentRatingView.Builder(context, this)
+                .setParent(recipe)
+                .create();
+        holder.addView(commentView);
 
         return recipeDetailView;
     }

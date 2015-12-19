@@ -15,7 +15,7 @@ public class Recipe implements Parcelable {
     private int userId;
     private String name;
     private String description;
-    private Date createdAt;
+    private String createdAt;
     private List<String> tags;
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
@@ -81,11 +81,11 @@ public class Recipe implements Parcelable {
         this.id = id;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 

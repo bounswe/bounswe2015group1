@@ -75,7 +75,7 @@ public class MenuCreator extends LeafFragment{
         });
 
         //Get Recipes of the user from server for showing them on spinner
-        API.getAllRecipes(getTag(),    //TODO Change the api call to getUserRecipes after api is ready
+        API.getUserRecipes(getTag(),
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {

@@ -80,7 +80,8 @@ public class CommentRatingView {
                     new Response.Listener<Comment[]>() {
                         @Override
                         public void onResponse(Comment[] response) {
-                            adapter.setData(response);
+                            if (response != null)
+                                adapter.setData(response);
                         }
                     },
                     new Response.ErrorListener() {
@@ -123,7 +124,8 @@ public class CommentRatingView {
                     new Response.Listener<Rate>() {
                         @Override
                         public void onResponse(Rate response) {
-                            ratingBarAverage.setRating(response.getRating());
+                            if (ratingBarAverage != null)
+                                ratingBarAverage.setRating(response.getRating());
                         }
                     },
                     new Response.ErrorListener() {
@@ -134,6 +136,20 @@ public class CommentRatingView {
                     });
 
             final RatingBar ratingBar = (RatingBar) commentRatingView.findViewById(R.id.ratingBar);
+            API.getRatingByUser(fragment.getTag(), type, parentId, App.getUserId(),
+                    new Response.Listener<Rate>() {
+                        @Override
+                        public void onResponse(Rate response) {
+                            if (response != null)
+                                ratingBar.setRating(response.getRating());
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {

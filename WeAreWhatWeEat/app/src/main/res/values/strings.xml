@@ -17,6 +17,7 @@
     <string name="label_menuName">Name</string>
     <string name="label_menuDesc">Description</string>
     <string name="label_menuPeriod">Period</string>
+    <string name="label_menuPeriodF" formatted="false">Period: %s</string>
     <string name="label_menuRecIds">Recipes</string>
 
     <!-- Recipe Creation -->

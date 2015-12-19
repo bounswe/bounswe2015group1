@@ -11,21 +11,32 @@ public class Ingredient implements Parcelable {
     private String ingredientId = "PlaceHolder";
     private String name;
     private int amount;
-    private String unit;
-//    private Nutrition nutritions;
+    transient private Nutrition nutritions;
 
-    public Ingredient(String name, int amount, String unit) {
+    public Ingredient() { }
+
+    public Ingredient(String name, int amount) {
         this.name = name;
         this.amount = amount;
-        this.unit = unit;
     }
 
     protected Ingredient(Parcel in) {
         ingredientId = in.readString();
         name = in.readString();
         amount = in.readInt();
-        unit = in.readString();
-//        nutritions = in.readParcelable(Nutrition.class.getClassLoader());
+        nutritions = in.readParcelable(Nutrition.class.getClassLoader());
+    }
+
+    public String getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(String ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public void setNutritions(Nutrition nutritions) {
+        this.nutritions = nutritions;
     }
 
     public String getName() {
@@ -36,19 +47,11 @@ public class Ingredient implements Parcelable {
         this.name = name;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String name) {
-        this.unit = unit;
-    }
-
     public int getAmount() {
         return amount;
     }
 
-//    public Nutrition getNutritions() { return nutritions; }
+    public Nutrition getNutritions() { return nutritions; }
 
     public void setAmount(int amount) {
         this.amount = amount;
@@ -64,7 +67,7 @@ public class Ingredient implements Parcelable {
         dest.writeString(ingredientId);
         dest.writeString(name);
         dest.writeFloat(amount);
-//        dest.writeParcelable(nutritions, flags);
+        dest.writeParcelable(nutritions, flags);
     }
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {

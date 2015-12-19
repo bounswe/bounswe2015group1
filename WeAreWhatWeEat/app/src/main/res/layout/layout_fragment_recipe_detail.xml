@@ -35,15 +35,6 @@
                 android:layout_height="0dp"
                 android:layout_width="match_parent" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/ingredient_item_holder"
-                android:visibility="gone">
-
-            </LinearLayout>
-
             <su.levenetc.android.textsurface.TextSurface
                 android:id="@+id/rDetail_title_directions"
                 style="@style/CustomTitle" />

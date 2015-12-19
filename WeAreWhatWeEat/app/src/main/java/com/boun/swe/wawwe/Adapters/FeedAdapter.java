@@ -159,7 +159,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     new Response.Listener<Recipe>() {
                         @Override
                         public void onResponse(Recipe response) {
-                            makeFragmentTransaction(RecipeDetail.getFragment(response));
+                            if (response != null)
+                                makeFragmentTransaction(RecipeDetail.getFragment(response));
+                            else
+                                Toast.makeText(context, context.getString(R.string.error_requestRecipe),
+                                        Toast.LENGTH_SHORT).show();
                         }
                     },
                     new Response.ErrorListener() {
@@ -173,7 +177,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
     }
 
-    private void configureMenuViewHolder(MenuViewHolder holder, final int position) {
+    private void configureMenuViewHolder(final MenuViewHolder holder, int position) {
         final Menu menu = (Menu) items.get(position);
 
         if (menu != null) {
@@ -181,9 +185,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (menu.isExpanded()) {
+                    if (menu.isExpanded())
                         makeFragmentTransaction(MenuDetail.getFragment(menu));
-                    } else {
+                    else {
                         menu.setIsExpanded(true);
 
                         List<Recipe> recipes = new ArrayList<Recipe>();
@@ -196,8 +200,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             recipes.add(recipe);
                         }
 
-                        items.addAll(position + 1, recipes);
-                        notifyItemRangeInserted(position + 1, recipes.size());
+                        items.addAll(holder.getAdapterPosition() + 1, recipes);
+                        notifyItemRangeInserted(holder.getAdapterPosition() + 1, recipes.size());
                     }
                 }
             });

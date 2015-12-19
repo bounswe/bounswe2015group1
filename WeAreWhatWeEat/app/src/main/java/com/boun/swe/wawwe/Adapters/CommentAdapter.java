@@ -79,12 +79,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             holder.userName.setText(comment.getUserFullName());
             holder.body.setText(comment.getBody());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(comment.getCreatedAt());
-            int hours = calendar.get(Calendar.HOUR_OF_DAY);
-            int minutes = calendar.get(Calendar.MINUTE);
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(comment.getCreatedAt());
+//            int hours = calendar.get(Calendar.HOUR_OF_DAY);
+//            int minutes = calendar.get(Calendar.MINUTE);
 
-            holder.createdAt.setText(String.format("%02d.%02d", hours, minutes));
+//            holder.createdAt.setText(String.format("%02d.%02d", hours, minutes));
+            holder.createdAt.setText(comment.getCreatedAt());
         }
     }
 

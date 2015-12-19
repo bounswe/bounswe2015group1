@@ -3,20 +3,25 @@ package com.boun.swe.wawwe.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.CustomViews.CustomAutoCompleteTextView;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.AutoComplete;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
@@ -121,19 +126,15 @@ public class RecipeCreator extends LeafFragment {
                     ViewGroup ingredientRow = (ViewGroup) ingredientHolder.getChildAt(i);
                     EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                     EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
-                    Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
 
                     String ingredient_name = ingredientName.getText().toString();
                     String ingredient_amount = ingredientAmount.getText().toString();
-                    String ingredient_unit = ingrUnitSpinner.getSelectedItem().toString();
 
                     if (ingredient_name.equals("") || ingredient_amount.equals("")) {
                         Toast.makeText(App.getInstance(), "Some fields are missing",
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-                    ingredients.add(new Ingredient(ingredient_name, Integer.parseInt(ingredient_amount), ingredient_unit));
                 }
 
                 if (recipe != null) {
@@ -203,7 +204,6 @@ public class RecipeCreator extends LeafFragment {
 
                 EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
                 EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
-                Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
 
                 ingredientName.setText(ingredient.getName());
                 ingredientAmount.setText(String.format("%d", ingredient.getAmount()));
@@ -216,11 +216,112 @@ public class RecipeCreator extends LeafFragment {
     }
 
     private View addIngredientRow(final LinearLayout ingredientHolder) {
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService
+        final LayoutInflater inflater = (LayoutInflater)context.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
 
         final View ingredientRow = inflater.inflate(R.layout.item_ingredient,
                 ingredientHolder, false);
+
+        final CustomAutoCompleteTextView ingName = (CustomAutoCompleteTextView)
+                ingredientRow.findViewById(R.id.ingredient_name);
+        ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(context,
+                android.R.layout.simple_dropdown_item_1line);
+        ingName.setAdapter(adapter);
+
+        ingName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    ingName.showDropDown();
+            }
+        });
+        ingName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ingName.itemReceived) {
+                    API.getIngredientItem(RecipeCreator.class.getSimpleName(),
+                            ((AutoComplete) ingName.getAdapter().getItem(position)).getId(),
+                            new Response.Listener<Ingredient>() {
+                                @Override
+                                public void onResponse(Ingredient response) {
+                                    // TODO ingredient selected...
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                }
+                else {
+                    ingName.itemReceived = true;
+                    API.searchIngredients(RecipeCreator.class.getSimpleName(),
+                            ((AutoComplete) ingName.getAdapter().getItem(position)).getText(),
+                            new Response.Listener<AutoComplete[]>() {
+                                @Override
+                                public void onResponse(AutoComplete[] response) {
+                                    ingName.dismissDropDown();
+                                    final ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(
+                                            context, android.R.layout.simple_list_item_1);
+                                    adapter.addAll(response);
+                                    ingName.setAdapter(adapter);
+                                    ingName.showDropDown();
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                }
+            }
+        });
+        ingName.addTextChangedListener(new TextWatcher() {
+            long lastPress = 0l;
+
+            @Override
+            public void beforeTextChanged(CharSequence s,
+                                          int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s,
+                                      int start, int before, int count) {
+                if (lastPress == 0) lastPress = System.currentTimeMillis();
+
+                if(System.currentTimeMillis() - lastPress > 500
+                        && !ingName.itemReceived) {
+                    lastPress = System.currentTimeMillis();
+                    if (s.toString().isEmpty()) return;
+
+                    API.autocompleteIngredients(RecipeCreator.class.getSimpleName(),
+                            s.toString(),
+                            new Response.Listener<AutoComplete[]>() {
+                                @Override
+                                public void onResponse(AutoComplete[] response) {
+                                    if (!ingName.itemReceived) return;
+
+                                    ingName.dismissDropDown();
+                                    final ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(
+                                            context, android.R.layout.simple_list_item_1);
+                                    adapter.addAll(response);
+                                    ingName.setAdapter(adapter);
+                                    ingName.showDropDown();
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
 
         final ImageButton delete = (ImageButton) ingredientRow.findViewById(R.id.button_ingredient_delete);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -230,11 +331,10 @@ public class RecipeCreator extends LeafFragment {
                 if (ingredientHolder.getChildCount() - 2 != 0) {
                     ingredientHolder.removeView(ingredientRow);
                 } else {
-                    // TODO implement autocomplete and filling of tags...
-                    EditText ingName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
+                    ingName.adapter.clear();
+                    ingName.adapter.notifyDataSetChanged();
+                    ingName.itemReceived = false;
                     ingName.setText(null);
-                    Spinner ingrUnitSpinner = (Spinner) ingredientRow.findViewById(R.id.ingredientUnitSpinner);
-                    ingrUnitSpinner.setSelection(0);
                     EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
                     ingAmt.setText(null);
                 }

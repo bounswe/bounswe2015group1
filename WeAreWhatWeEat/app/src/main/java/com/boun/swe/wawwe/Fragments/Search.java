@@ -25,9 +25,9 @@ import com.boun.swe.wawwe.Utils.API;
 /**
  * Created by onurguler on 28/11/15.
  */
-public class Search extends BaseFragment {
+public class Search extends LeafFragment {
 
-    EditText searchBox;
+    private EditText searchBox;
     private RecyclerView searchResults;
 
     public Search() { }
@@ -73,19 +73,6 @@ public class Search extends BaseFragment {
         return searchView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
     private void makeSearch(String query, final FeedAdapter adapter) {
         API.searchRecipe(getTag(), query,
                 new Response.Listener<Recipe[]>() {
@@ -98,8 +85,7 @@ public class Search extends BaseFragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, context.getString(R.string.error_feed),
-                                Toast.LENGTH_SHORT).show();
+                        // No response...
                     }
                 });
     }

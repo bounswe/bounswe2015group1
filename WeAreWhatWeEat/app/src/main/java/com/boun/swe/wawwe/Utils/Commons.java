@@ -57,7 +57,9 @@ public class Commons {
         return App.getInstance().getString(resourceId);
     }
 
-
+    public static String getString(int resourceId, String... args){
+        return App.getInstance().getString(resourceId, args);
+    }
 
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.

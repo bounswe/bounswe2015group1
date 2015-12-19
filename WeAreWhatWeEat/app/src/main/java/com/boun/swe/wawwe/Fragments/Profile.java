@@ -94,20 +94,20 @@ public class Profile extends BaseFragment {
                     }
                 });
 
-//        API.getAllRecipes(getTag(),
-//                new Response.Listener<Recipe[]>() {
-//                    @Override
-//                    public void onResponse(Recipe[] response) {
-//                        if (response != null)
-//                            adapter.addItems(response);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // TODO could not load...
-//                    }
-//                });
+        API.getUserRecipes(getTag(),
+                new Response.Listener<Recipe[]>() {
+                    @Override
+                    public void onResponse(Recipe[] response) {
+                        if (response != null)
+                            adapter.addItems(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
 
         TextSurface userTag = (TextSurface) profileView.findViewById(R.id.userTag);
         User user = App.getUser();
@@ -124,7 +124,6 @@ public class Profile extends BaseFragment {
                     }
                 });
 
-        // TODO test this!!!
         if (user.isRestaurant())
             profileView.findViewById(R.id.action_menu_create)
                     .setOnClickListener(new View.OnClickListener() {
@@ -188,39 +187,44 @@ public class Profile extends BaseFragment {
         PHFullName.setPosition(new Position(Align.TOP_OF | Align.CENTER_OF, PHLocation));
         PHDateOfBirth.setPosition(new Position(Align.BOTTOM_OF | Align.CENTER_OF, PHLocation));
 
-        userTag.play(new Parallel(
-                Delay.duration(1000),
-                ShapeReveal.create(PHLocation, 1000, Circle.show(Side.CENTER, Direction.OUT), false),
-                ShapeReveal.create(PHFullName, 1000, Circle.show(Side.CENTER, Direction.OUT), false),
-                ShapeReveal.create(PHDateOfBirth, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
-            ));
+        int promptTime = 500;
+        userTag.play(new Sequential(
+                Delay.duration(promptTime),
+                new Parallel(
+                        ShapeReveal.create(PHLocation, promptTime,
+                                Circle.show(Side.CENTER, Direction.OUT), false),
+                        ShapeReveal.create(PHFullName, promptTime,
+                                Circle.show(Side.CENTER, Direction.OUT), false),
+                        ShapeReveal.create(PHDateOfBirth, promptTime,
+                                Circle.show(Side.CENTER, Direction.OUT), false)
+                )));
 
         if (user == null) return;
         if (user.getFullName() != null) {
             Text fullName = Commons.generateText(user.getFullName(), textSize, R.color.colorAccent);
             fullName.setPosition(new Position(Align.CENTER_OF, PHFullName));
             userTag.play(new Sequential(
-                    Delay.duration(1000),
-                    Rotate3D.hideFromSide(PHFullName, 750, Pivot.TOP),
-                    ShapeReveal.create(fullName, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+                    Delay.duration(promptTime * 2),
+                    Rotate3D.hideFromSide(PHFullName, 500, Pivot.TOP),
+                    ShapeReveal.create(fullName, 500, Circle.show(Side.CENTER, Direction.OUT), false)
             ));
         }
         if (user.getLocation() != null) {
             Text location = Commons.generateText(user.getLocation(), textSize, R.color.colorAccent);
             location.setPosition(new Position(Align.CENTER_OF, PHLocation));
             userTag.play(new Sequential(
-                    Delay.duration(1000),
-                    Rotate3D.hideFromSide(PHLocation, 750, Pivot.TOP),
-                    ShapeReveal.create(location, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+                    Delay.duration(promptTime * 2),
+                    Rotate3D.hideFromSide(PHLocation, 500, Pivot.TOP),
+                    ShapeReveal.create(location, 500, Circle.show(Side.CENTER, Direction.OUT), false)
             ));
         }
         if (user.getDateOfBirth() != null) {
             Text dateOfBirth = Commons.generateText(user.getDateOfBirth(), textSize, R.color.colorAccent);
             dateOfBirth.setPosition(new Position(Align.CENTER_OF, PHDateOfBirth));
             userTag.play(new Sequential(
-                    Delay.duration(1000),
+                    Delay.duration(promptTime * 2),
                     Rotate3D.hideFromSide(PHDateOfBirth, 750, Pivot.TOP),
-                    ShapeReveal.create(dateOfBirth, 1000, Circle.show(Side.CENTER, Direction.OUT), false)
+                    ShapeReveal.create(dateOfBirth, 500, Circle.show(Side.CENTER, Direction.OUT), false)
             ));
         }
     }

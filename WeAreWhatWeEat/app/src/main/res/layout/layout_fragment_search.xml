@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,15 +11,20 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginTop="10dp">
+
         <EditText
             android:id="@+id/search_searchBox"
             android:layout_width="250dp"
+            android:singleLine="true"
+            android:ellipsize="start"
+            android:imeActionLabel="Search"
+            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/search_searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Search"/>
+            style="@style/CustomButton"
+            android:text="Search" />
 
     </LinearLayout>
 

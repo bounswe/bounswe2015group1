@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -17,94 +16,64 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/menuImage"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:background="@drawable/image_placeholder"/>
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/menuNameText"
-                android:layout_marginTop="30dp" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Description"
-                android:layout_marginTop="20dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/menuDescText"
-                android:layout_marginTop="20dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Period: "
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/periodText"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recipe_item_holder"
+                <ImageView
+                    android:id="@+id/menuImage"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    tools:listitem="@layout/item_recipe" />
+                    android:layout_height="175dp"
+                    android:background="@drawable/image_placeholder"/>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-            <LinearLayout
+                    <su.levenetc.android.textsurface.TextSurface
+                        android:id="@+id/mDetail_createdBy"
+                        android:layout_weight="1"
+                        android:layout_margin="0dp"
+                        style="@style/CustomTitle" />
+
+                    <su.levenetc.android.textsurface.TextSurface
+                        android:id="@+id/mDetail_period"
+                        android:layout_weight="1"
+                        android:layout_margin="0dp"
+                        style="@style/CustomTitle" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/mDetail_title_menuName"
+                style="@style/CustomTitle" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/mDetail_title_description"
+                style="@style/CustomTitle" />
+
+            <TextView
+                android:id="@+id/mDetail_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal">
+                android:textAppearance="?android:attr/textAppearance"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:minLines="1"
+                android:lines="3" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Created By: "
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/createdByText"
-                    android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recipe_item_holder"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_recipe" />
 
         </LinearLayout>
 

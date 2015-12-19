@@ -3,13 +3,16 @@ package com.boun.swe.wawwe.Fragments;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -32,7 +35,8 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
 
     EditText dateOfBirthEditText;
 
-    public Signup() { }
+    public Signup() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +50,6 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View signupView = inflater.inflate(R.layout.layout_fragment_signup,
                 container, false);
-
-
 
         final EditText emailEditText = (EditText) signupView.findViewById(R.id.userEmail);
         final EditText passwordEditText = (EditText) signupView.findViewById(R.id.password);
@@ -81,7 +83,7 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
             @Override
             public void onClick(View v) {
                 String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                final String password = passwordEditText.getText().toString();
                 String fullname = fullNameEditText.getText().toString();
                 String location = locationEditText.getText().toString();
                 String dateOfBirth = dateOfBirthEditText.getText().toString();
@@ -99,16 +101,15 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                         new Response.Listener<User>() {
                             @Override
                             public void onResponse(User response) {
-                                if (context instanceof MainActivity) {
-                                    MainActivity main = (MainActivity) context;
-                                    main.makeFragmentTransaction(Login.getFragment(new Bundle()));
-                                }
+                                response.setPassword(password);
+                                App.setUser(response);
+                                exitSignupFragment();
                             }
                         },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(App.getInstance(),"Error Signing Up",
+                                Toast.makeText(App.getInstance(), "Error Signing Up",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -121,7 +122,7 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
     private boolean isInputValid(EditText[] textFields) {
         boolean isValid = true;
         LevelListDrawable drawable;
-        for (EditText textField: textFields) {
+        for (EditText textField : textFields) {
             String text = textField.getText().toString();
 
             drawable = (LevelListDrawable)
@@ -130,15 +131,9 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                 drawable.setLevel(2);
                 if (isValid)
                     isValid = false;
-            }
-            else drawable.setLevel(1);
+            } else drawable.setLevel(1);
         }
         return isValid;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     public static Signup getFragment(Bundle bundle) {
@@ -152,5 +147,14 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day, 0, 0);
         dateOfBirthEditText.setText(String.format("%d-%02d-%02d", year, month, day));
+    }
+
+    private void exitSignupFragment() {
+        if (context instanceof MainActivity) {
+            MainActivity main = (MainActivity) context;
+            main.getSupportFragmentManager().popBackStack(null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            main.makeFragmentTransaction(Feeds.getFragment(new Bundle()));
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/row_height_bigger"
     android:weightSum="100"
     android:layout_marginLeft="10dp"
@@ -17,28 +18,20 @@
         android:hint="Amt."
         android:background="@drawable/border_style" />
 
-    <Spinner
-        android:id="@+id/ingredientUnitSpinner"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="20"
-        android:entries="@array/ingredient_units"
-        ></Spinner>
 
-    <EditText
+    <com.boun.swe.wawwe.CustomViews.CustomAutoCompleteTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="60"
-        android:layout_marginLeft="5dp"
+        android:layout_weight="80"
+        android:layout_marginLeft="@dimen/item_margin"
+        android:layout_marginRight="@dimen/item_margin"
         android:id="@+id/ingredient_name"
         android:hint="Enter ingredient"
         android:background="@drawable/border_style" />
 
     <ImageButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:id="@+id/button_ingredient_delete"
         android:background="@mipmap/minus" />

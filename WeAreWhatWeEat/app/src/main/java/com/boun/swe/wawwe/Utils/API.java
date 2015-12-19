@@ -1,13 +1,14 @@
 package com.boun.swe.wawwe.Utils;
 
-import android.content.res.Resources;
 import android.util.Log;
+
+import com.boun.swe.wawwe.Models.AutoComplete;
+import com.boun.swe.wawwe.Models.Nutrition;
 import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import android.content.Context;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -33,8 +34,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -72,7 +76,8 @@ public class API {
         mQueue.cancelAll(new RequestQueue.RequestFilter() {
             @Override
             public boolean apply(Request<?> request) {
-                return request.getTag().equals(tag);
+                Object requestTag = request.getTag();
+                return requestTag != null && requestTag.equals(tag);
             }
         });
     }
@@ -94,6 +99,13 @@ public class API {
                                 Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/user/%s",
                 App.getUserId()), User.class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getUserInfo(String tag, int userId,
+                                   Response.Listener<User> successListener,
+                                   Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/user/%s",
+                userId), User.class, successListener, failureListener).setTag(tag));
     }
 
     /**
@@ -287,22 +299,86 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
-    public static void searchIngredients(String tag, String query, Response.Listener<Ingredient[]> successListener,
+    public static void searchIngredients(String tag, String query, Response.Listener<AutoComplete[]> successListener,
                                          Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/search/%s",
-                query), Ingredient[].class, successListener, failureListener).setTag(tag));
+        GeneralRequest<AutoComplete[]> request = new GeneralRequest<AutoComplete[]>(
+                Request.Method.GET,
+                BASE_URL + String.format("/ingredient/search/%s", query),
+                AutoComplete[].class, successListener, failureListener) {
+            @Override
+            protected Response<AutoComplete[]> parseNetworkResponse(NetworkResponse response) {
+                String json = new String(response.data);
+                Log.v("Response", json);
+                AutoComplete[] responseModels = null;
+                try {
+                    JSONObject responseObject = new JSONObject(json);
+                    JSONArray hits = responseObject.getJSONArray("hits");
+                    responseModels = new AutoComplete[hits.length()];
+                    for (int i = 0;i < hits.length();i++) {
+                        JSONObject hit = hits.getJSONObject(i);
+                        JSONObject fields = hit.getJSONObject("fields");
+
+                        AutoComplete responseModel = new AutoComplete();
+                        responseModel.setId(fields.optString("item_id", ""));
+                        responseModel.setText(fields.optString("item_name", ""));
+
+                        responseModels[i] = responseModel;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return Response.success(responseModels,
+                        HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+        mQueue.add(request.setTag(tag));
     }
 
-    public static void autocompleteIngredients(String tag, String query, Response.Listener<Ingredient[]> successListener,
-                                                Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/autocomplete/%s",
-                query), Ingredient[].class, successListener, failureListener).setTag(tag));
-    }
-
-    public static void getIngredientItems(String tag, int itemId, Response.Listener<Ingredient[]> successListener,
+    public static void autocompleteIngredients(String tag, String query,
+                                               Response.Listener<AutoComplete[]> successListener,
                                                Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/ingredient/item/%d",
-                itemId), Ingredient[].class, successListener, failureListener).setTag(tag));
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/ingredient/autocomplete/%s", query),
+                AutoComplete[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getIngredientItem(String tag, String itemId,
+                                         Response.Listener<Ingredient> successListener,
+                                         Response.ErrorListener failureListener) {
+        GeneralRequest<Ingredient> request = new GeneralRequest<Ingredient>(Request.Method.GET,
+                BASE_URL + String.format("/ingredient/item/%s", itemId),
+                Ingredient.class, successListener, failureListener) {
+            @Override
+            protected Response<Ingredient> parseNetworkResponse(NetworkResponse response) {
+                String json = new String(response.data);
+                Log.v("Response", json);
+                Ingredient responseModel = new Ingredient();
+                try {
+                    Nutrition nutrition = new Nutrition();
+                    JSONObject responseObject = new JSONObject(json);
+
+                    responseModel.setIngredientId(responseObject.optString("item_id", ""));
+                    responseModel.setName(responseObject.optString("item_name", ""));
+
+                    nutrition.setCalories((float) responseObject.getDouble("nf_calories"));
+                    nutrition.setCarbohydrate((float) responseObject.getDouble("nf_total_carbohydrate"));
+                    nutrition.setFats((float) responseObject.getDouble("nf_total_fat"));
+                    nutrition.setProteins((float) responseObject.getDouble("nf_protein"));
+                    nutrition.setSodium((float) responseObject.getDouble("nf_sodium"));
+                    nutrition.setFiber((float) responseObject.getDouble("nf_dietary_fiber"));
+                    nutrition.setCholesterol((float) responseObject.getDouble("nf_cholesterol"));
+                    nutrition.setSugars((float) responseObject.getDouble("nf_sugars"));
+                    nutrition.setIron((float) responseObject.getDouble("nf_iron_dv"));
+
+                    responseModel.setNutritions(nutrition);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return Response.success(responseModel,
+                        HttpHeaderParser.parseCacheHeaders(response));
+            }
+        };
+        mQueue.add(request.setTag(tag));
     }
 
     public static void getAllMenusforUser(String tag, Response.Listener<Menu[]> successListener,
@@ -393,10 +469,10 @@ public class API {
                 c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
                 c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
 
-            c1.setCreatedAt(new Date(1449020159));
-            c2.setCreatedAt(new Date(1440517159));
-            c3.setCreatedAt(new Date(1409507059));
-            c4.setCreatedAt(new Date(1440505191));
+//            c1.setCreatedAt(new Date(1449020159));
+//            c2.setCreatedAt(new Date(1440517159));
+//            c3.setCreatedAt(new Date(1409507059));
+//            c4.setCreatedAt(new Date(1440505191));
 //            } else if (type.equals("menu")){
 //
 //            } else if (type.equals("user")){
@@ -424,7 +500,7 @@ public class API {
     public static void comment(String tag, Comment comment, Response.Listener<Comment> successListener,
                                Response.ErrorListener failureListener) {
         if(isTest) {
-            comment.setCreatedAt(new Date(1449505191));
+//            comment.setCreatedAt(new Date(1449505191));
             successListener.onResponse(comment);
         } else {
             String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -503,20 +579,19 @@ public class API {
         }
     }
 
-    public static void getRatingByUser (String tag, Rate rate, String type, int parentId, int userId, Response.Listener<Rate> successListener,
-                                       Response.ErrorListener failureListener) {
+    public static void getRatingByUser (String tag, String type, int parentId, int userId,
+                                        Response.Listener<Rate> successListener,
+                                        Response.ErrorListener failureListener) {
         if(isTest){
             float min = 0.0f; float max = 5.0f;
             Random rand = new Random();
             float avg = rand.nextFloat()*(max-min);
             Rate r1 = new Rate(type, parentId, avg);
             successListener.onResponse(r1);
-        } else{
-            String postBody = new GsonBuilder().create().toJson(rate, Rate.class);
-            mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                    BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)), Rate.class, successListener, failureListener)
-                    .setPostBodyInJSONForm(postBody).setTag(tag));
         }
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)),
+                Rate.class, successListener, failureListener).setTag(tag));
     }
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {

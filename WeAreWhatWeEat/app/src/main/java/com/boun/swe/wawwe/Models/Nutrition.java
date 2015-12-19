@@ -19,6 +19,8 @@ public class Nutrition implements Parcelable {
     private float sugars;
     private float iron;
 
+    public Nutrition() { }
+
     public Nutrition(Parcel in) {
         id = in.readInt();
         calories = in.readFloat();
