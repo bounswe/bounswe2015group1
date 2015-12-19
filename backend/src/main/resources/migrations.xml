@@ -295,4 +295,41 @@
 	
 	</changeSet>
 	
+	<changeSet id="12" author="group1">
+		<createTable tableName="user_consumption">
+			<column name="id" type="integer" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_user_consumption_user" references="users(id)" />
+			</column>
+			
+			<column name="recipe_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_user_consumption_recipe" references="recipes(id)" />
+			</column>
+			
+			<column name="created_at" type="datetime">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>	
+
+	<changeSet id="13" author="group1">
+        <addColumn tableName="recipes">
+			<column name="rating" type="float">
+			</column>	
+		</addColumn>
+
+        <addColumn tableName="users">
+			<column name="rating" type="float">
+			</column>	
+		</addColumn> 
+
+        <addColumn tableName="menus">
+			<column name="rating" type="float">
+			</column>	
+		</addColumn> 
+	</changeSet>
+
 </databaseChangeLog>
