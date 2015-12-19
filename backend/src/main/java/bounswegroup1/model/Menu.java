@@ -15,6 +15,7 @@ public class Menu {
     private String period;
     private List<String> recipeNames;
     private String description;
+    private Float rating;
     
     public String getName() {
         return name;
@@ -91,6 +92,14 @@ public class Menu {
 
     public void setRecipeNames(List<String> recipeNames){
         this.recipeNames = recipeNames;
+    }
+
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
     }
 
     public void addRecipe(Long id){

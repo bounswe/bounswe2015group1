@@ -11,6 +11,9 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import bounswegroup1.model.Menu;
 
+import org.joda.time.DateTime;
+
+
 public class MenuMapper implements ResultSetMapper<Menu> {
     private Menu result;
     long lastRecipeId;
@@ -24,7 +27,7 @@ public class MenuMapper implements ResultSetMapper<Menu> {
         if(result == null){
             List<Long> recipeIds = new ArrayList<Long>();
             List<String> recipeNames = new ArrayList<String>();
-            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, rs.getDate("created_at"));
+            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getDate("created_at"));
             result.setDescription(rs.getString("description"));
             result.setPeriod(rs.getString("period"));
             result.setRecipeNames(recipeNames);

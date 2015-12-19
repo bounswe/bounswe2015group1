@@ -25,7 +25,7 @@ import bounswegroup1.model.Rating;
 import io.dropwizard.auth.Auth;
 
 
-@Path("/rating")
+@Path("/rate")
 @Produces(MediaType.APPLICATION_JSON)
 public class RatingResource {
     private final RatingDAO ratingDAO;
@@ -52,19 +52,19 @@ public class RatingResource {
 
     @GET
     @Path("/menu/{id}")
-    public Float getAvgRatingForMenu(@PathParam("id") Long id){
+    public Rating getAvgRatingForMenu(@PathParam("id") Long id){
         return ratingDAO.getAverageRatingForParent(id, "menu");
     }
 
     @GET
     @Path("/recipe/{id}")
-    public Float getAvgRatingForRecipe(@PathParam("id") Long id){
+    public Rating getAvgRatingForRecipe(@PathParam("id") Long id){
         return ratingDAO.getAverageRatingForParent(id, "recipe");
     }
 
     @GET
     @Path("/user/{id}")
-    public Float getAvgRatingForUser(@PathParam("id") Long id){
+    public Rating getAvgRatingForUser(@PathParam("id") Long id){
         return ratingDAO.getAverageRatingForParent(id, "user");
     }
 

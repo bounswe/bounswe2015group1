@@ -34,6 +34,8 @@ public class User {
     
     private Boolean isRestaurant;
 
+    private Float rating;
+
     public User() {
         this.id = -1l;
     }
@@ -160,5 +162,13 @@ public class User {
         this.isRestaurant = isRestaurant;
     }
     
+    @JsonGetter("rating")
+    public Float getRating() {
+        return rating;
+    }
+
+    public void setRating(Float rating) {
+        this.rating = rating;
+    }
     
 }

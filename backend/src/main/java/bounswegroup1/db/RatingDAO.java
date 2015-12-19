@@ -23,6 +23,21 @@ public abstract class RatingDAO {
 	@SqlUpdate("insert into ratings (type, parent_id, user_id, rating, created_at) values (:type, :parentId, :userId, :rating, now())")
 	abstract protected Long _addRating(@BindBean Rating rating);
 
+	@SqlUpdate("update recipes"+
+		" set rating = :rating"+
+		" where id = :id")
+	abstract protected void _updateRatingForRecipe(@Bind("id") Long id, @Bind("rating") Float rating);
+
+	@SqlUpdate("update menus"+
+		" set rating = :rating"+
+		" where id = :id")
+	abstract protected void  _updateRatingForMenu(@Bind("id") Long id, @Bind("rating") Float rating);
+
+	@SqlUpdate("update users"+
+		" set rating = :rating"+
+		" where id = :id")
+	abstract protected void _updateRatingForUser(@Bind("id") Long id, @Bind("rating") Float rating);
+
 	@SqlUpdate("delete from ratings"+
 		" where ratings.user_id = :userId"+
 		" and ratings.parent_id = :parentId")
@@ -51,47 +66,59 @@ public abstract class RatingDAO {
 	" and menus.id = :menuId"+
 	" and ratings.user_id = :raterId")
 	@Mapper(RatingMapper.class)
-	abstract protected List<Rating> _getRatingByUserForMenu(@Bind("menuId") Long menuId, @Bind("raterId") Long userId);
+	abstract protected List<Rating> _getRatingByUserForMenu(@Bind("menuId") Long menuId, @Bind("raterId") Long raterId);
 
     @SqlQuery("select * from ratings,recipes,users"+
 	" where ratings.parent_id = :recipeId"+
 	" and recipes.id = :recipeId"+
 	" and ratings.user_id = :raterId")
 	@Mapper(RatingMapper.class)
-	abstract protected List<Rating> _getRatingByUserForRecipe(@Bind("recipeId") Long menuId, @Bind("raterId") Long userId);
+	abstract protected List<Rating> _getRatingByUserForRecipe(@Bind("recipeId") Long recipeId, @Bind("raterId") Long raterId);
 
     @SqlQuery("select * from ratings,users"+
 	" where ratings.parent_id = :userId"+
 	" and users.id = :userId"+
 	" and ratings.user_id = :raterId")
 	@Mapper(RatingMapper.class)
-	abstract protected List<Rating> _getRatingByUserForUser(@Bind("userId") Long menuId, @Bind("raterId") Long userId);
+	abstract protected List<Rating> _getRatingByUserForUser(@Bind("userId") Long userId, @Bind("raterId") Long raterId);
 
 	public void addRating(Rating rating){
 		Float fRating = rating.getRating();
-		String.format("%.1f", fRating);
-		rating.setRating(fRating);
+		String type = rating.getType();
+		Long parentId = rating.getParentId();
+
 		Long id = _addRating(rating);
 		rating.setId(id);
+
+		Rating avg = getAverageRatingForParent(parentId, type);
+
+		if(type.equals("recipe")) _updateRatingForRecipe(parentId, fRating);
+		else if(type.equals("menu")) _updateRatingForMenu(parentId, fRating);
+		else if(type.equals("user")) _updateRatingForUser(parentId, fRating);
+
 	}
 
 	public void deleteRating(Rating rating){
 		_deleteRating(rating);
 	}
 
-	public Float getAverageRatingForParent(Long parentId, String type) {
+	public Rating getAverageRatingForParent(Long parentId, String type) {
 		
 		List<List<Rating>> res;
 
 		if(type.toLowerCase().equals("menu")) res = _getRatingsForMenu(parentId);
 		else if(type.toLowerCase().equals("recipe")) res = _getRatingsForRecipe(parentId);
 		else if(type.toLowerCase().equals("user")) res = _getRatingsForUser(parentId);
-		else return 0.0f;
+		else return null;
 
         Float totalRating = 0.0f;
         Float avgRating;
         if (res == null || res.isEmpty()) {
-            return null;
+        	Rating rating = new Rating();
+        	rating.setRating(0.0f);
+        	rating.setParentId(parentId);
+        	rating.setType(type);
+            return rating;
         }
 
         for (Rating rating : res.get(0) ) {
@@ -99,8 +126,9 @@ public abstract class RatingDAO {
         }
 
         avgRating = totalRating/res.size();
-        String.format("%.1f", avgRating);
-        return avgRating;
+        Rating rating = new Rating(new Long(-1), new Long(-1), type, parentId, avgRating, new Date());
+
+        return rating;
     }
 
 	public Rating getRatingByUserForMenu(Long menuId, Long commenterId) {

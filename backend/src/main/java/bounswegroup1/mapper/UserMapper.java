@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import org.skife.jdbi.v2.StatementContext;
 
 public class UserMapper implements ResultSetMapper<User> {
@@ -16,7 +18,7 @@ public class UserMapper implements ResultSetMapper<User> {
         final String passwordSalt = rs.getString("password_salt");
         final String fullName = rs.getString("full_name");
         final String location = rs.getString("location");
-        final Date dateOfBirth = rs.getDate("date_of_birth");
+        final Date dateOfBirth = new DateTime(rs.getDate("date_of_birth"));
         final Boolean isRestaurant = rs.getBoolean("is_restaurant");
 
         return new User(id, email, passwordHash, passwordSalt, fullName, location, dateOfBirth, isRestaurant);
