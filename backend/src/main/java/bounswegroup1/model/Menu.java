@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import bounswegroup1.db.MenuDAO;
+import org.joda.time.DateTime;
 
 
 public class Menu {
@@ -11,7 +12,7 @@ public class Menu {
     private String name;
     private Long userId;
     private List<Long> recipeIds;
-    private Date createdAt;
+    private DateTime createdAt;
     private String period;
     private List<String> recipeNames;
     private String description;
@@ -25,15 +26,15 @@ public class Menu {
         this.name = name;
     }
 
-    public Date getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Menu(Long id, String name, Long userId, List<Long> recipeIds, Date createdAt) {
+    public Menu(Long id, String name, Long userId, List<Long> recipeIds, DateTime createdAt) {
         super();
         this.id = id;
         this.name = name;

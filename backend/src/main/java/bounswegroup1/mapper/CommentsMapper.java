@@ -11,6 +11,9 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import bounswegroup1.model.Comment;
 
+import org.joda.time.DateTime;
+
+
 public class CommentsMapper implements ResultSetMapper<List<Comment>> {
     List<Comment> res;
     Comment curr;
@@ -25,7 +28,7 @@ public class CommentsMapper implements ResultSetMapper<List<Comment>> {
     public List<Comment> map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
         if (rs.getLong("id") != lastId) {
             curr = new Comment(rs.getLong("id"), rs.getLong("user_id"), rs.getString("type"), 
-                rs.getLong("parent_id"), rs.getString("body"), rs.getString("user_full_name"), new DateTime(rs.getDate("created_at"));
+                rs.getLong("parent_id"), rs.getString("body"), rs.getString("user_full_name"), new DateTime(rs.getDate("created_at")));
             lastId = rs.getLong("id");
             res.add(curr);
         }

@@ -2,6 +2,9 @@ package bounswegroup1.model;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
+
 public class Comment {
     private Long id;
     private Long userId;
@@ -9,14 +12,14 @@ public class Comment {
     private Long parentId;
     private String body;
     private String userFullName;
-    private Date createdAt;
+    private DateTime createdAt;
     
     private Comment(){
         
     }
 
     public Comment(Long id, Long userId, String type, Long parentId, String body,
-            String userFullName, Date createdAt) {
+            String userFullName, DateTime createdAt) {
         super();
         this.id = id;
         this.userId = userId;
@@ -75,11 +78,11 @@ public class Comment {
         this.userFullName = userFullName;
     }
 
-    public Date getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

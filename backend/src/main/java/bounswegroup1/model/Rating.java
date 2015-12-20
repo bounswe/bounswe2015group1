@@ -2,19 +2,22 @@ package bounswegroup1.model;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
+
 public class Rating {
     private Long id;
     private Long userId;
     private String type;
     private Long parentId;
     private Float rating;
-    private Date createdAt;
+    private DateTime createdAt;
     
     public Rating () {
 
     }
 
-    public Rating(Long id, Long userId, String type, Long parentId, Float rating, Date createdAt) {
+    public Rating(Long id, Long userId, String type, Long parentId, Float rating, DateTime createdAt) {
         super();
         this.id = id;
         this.userId = userId;
@@ -64,11 +67,11 @@ public class Rating {
         this.rating = rating;
     }
 
-    public Date getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }
     

@@ -16,6 +16,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import org.joda.time.DateTime;
+
+
 public class User {
     private Long id;
 
@@ -30,7 +33,7 @@ public class User {
 
     private String fullName;
     private String location;
-    private Date dateOfBirth;
+    private DateTime dateOfBirth;
     
     private Boolean isRestaurant;
 
@@ -41,7 +44,7 @@ public class User {
     }
 
     public User(Long id, String email, String passwordHash, String passwordSalt, String fullName,
-            String location, Date dateOfBirth, Boolean isRestaurant) {
+            String location, DateTime dateOfBirth, Boolean isRestaurant) {
         super();
         this.id = id;
         this.email = email;
@@ -107,7 +110,7 @@ public class User {
     }
 
     @JsonGetter("dateOfBirth")
-    public Date getDateOfBirth() {
+    public DateTime getDateOfBirth() {
         return dateOfBirth;
     }
 
@@ -128,7 +131,7 @@ public class User {
     }
 
     @JsonSetter("dateOfBirth")
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(DateTime dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

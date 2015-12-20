@@ -14,6 +14,8 @@ import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import bounswegroup1.mapper.RatingsMapper;
 import bounswegroup1.mapper.RatingMapper;
 
+import org.joda.time.DateTime;
+
 
 import bounswegroup1.model.Rating;
 
@@ -91,6 +93,7 @@ public abstract class RatingDAO {
 		rating.setId(id);
 
 		Rating avg = getAverageRatingForParent(parentId, type);
+		fRating = avg.getRating();
 
 		if(type.equals("recipe")) _updateRatingForRecipe(parentId, fRating);
 		else if(type.equals("menu")) _updateRatingForMenu(parentId, fRating);
@@ -126,7 +129,7 @@ public abstract class RatingDAO {
         }
 
         avgRating = totalRating/res.size();
-        Rating rating = new Rating(new Long(-1), new Long(-1), type, parentId, avgRating, new Date());
+        Rating rating = new Rating(new Long(-1), new Long(-1), type, parentId, avgRating, new DateTime());
 
         return rating;
     }

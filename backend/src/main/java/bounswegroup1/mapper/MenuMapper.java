@@ -27,7 +27,7 @@ public class MenuMapper implements ResultSetMapper<Menu> {
         if(result == null){
             List<Long> recipeIds = new ArrayList<Long>();
             List<String> recipeNames = new ArrayList<String>();
-            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getDate("created_at"));
+            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getDate("created_at")));
             result.setDescription(rs.getString("description"));
             result.setPeriod(rs.getString("period"));
             result.setRecipeNames(recipeNames);
