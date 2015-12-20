@@ -4,11 +4,12 @@
 			<input type="file">
 	</div>
 	<div class="col-md-9">
-	<form name="AddRecipe" role="form">
+	<form name="AddMenu" role="form" novalidate>
 		<h3>Create a menu</h3>
-		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9" >
+		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9" ng-class="{ 'has-error' : AddMenu.menuName.$invalid && !AddMenu.menuName.$pristine }" >
 			<label>Menu Name</label>
-			<input type="text" class="form-control" placeholder="Menu name" ng-model="menuName">
+			<input type="text" name="menuName" class="form-control" placeholder="Menu name" ng-model="menuName" required>
+			<p ng-show="AddMenu.menuName.$invalid && !AddMenu.menuName.$pristine" class="help-block">Menu name is required.</p>
 		</div>
 		<div class="col-md-9">
 			<label>Add Recipes</label>
@@ -51,7 +52,7 @@
 		</div>
 
 		<div class="col-md-9">
-			<button type="submit" class="btn btn-default" ng-click="addMenu()">Create Menu</button>
+			<button type="submit" class="btn btn-default" ng-disabled="AddMenu.$invalid" ng-click="addMenu()">Create Menu</button>
 		</div>
 
 	</form>
