@@ -22,7 +22,7 @@ import bounswegroup1.model.Rating;
 public abstract class RatingDAO {
 
 	@GetGeneratedKeys
-	@SqlUpdate("insert into ratings (type, parent_id, user_id, rating, created_at) values (:type, :parentId, :userId, :rating, now())")
+	@SqlUpdate("insert into ratings (type, parent_id, user_id, rating, created_at) values (:type, :parentId, :userId, :rating, :createdAt)")
 	abstract protected Long _addRating(@BindBean Rating rating);
 
 	@SqlUpdate("update recipes"+
@@ -42,45 +42,53 @@ public abstract class RatingDAO {
 
 	@SqlUpdate("delete from ratings"+
 		" where ratings.user_id = :userId"+
-		" and ratings.parent_id = :parentId")
+		" and ratings.parent_id = :parentId"+
+		" and ratings.type = :type")
 	abstract protected void _deleteRating(@BindBean Rating rating);
 
 	@SqlQuery("select * from ratings,menus"+
 	" where ratings.parent_id = :id"+
-	" and menus.id = :id")
+	" and menus.id = :id"+
+	" and ratings.type = 'menu'")
 	@Mapper(RatingsMapper.class)
 	abstract protected List<List<Rating>> _getRatingsForMenu(@Bind("id") Long id);
 
 	@SqlQuery("select * from ratings,recipes"+
 	" where ratings.parent_id = :id"+
-	" and recipes.id = :id")
+	" and recipes.id = :id"+
+	" and ratings.type = 'recipe'")
+
 	@Mapper(RatingsMapper.class)
 	abstract protected List<List<Rating>> _getRatingsForRecipe(@Bind("id") Long id);
 
 	@SqlQuery("select * from ratings,users"+
 	" where ratings.parent_id = :id"+
-	" and users.id = :id")
+	" and users.id = :id"+
+	" and ratings.type = 'user'")
 	@Mapper(RatingsMapper.class)
 	abstract protected List<List<Rating>> _getRatingsForUser(@Bind("id") Long id);
 
     @SqlQuery("select * from ratings,menus,users"+
 	" where ratings.parent_id = :menuId"+
 	" and menus.id = :menuId"+
-	" and ratings.user_id = :raterId")
+	" and ratings.user_id = :raterId"+
+	" and ratings.type = 'menu'")
 	@Mapper(RatingMapper.class)
 	abstract protected List<Rating> _getRatingByUserForMenu(@Bind("menuId") Long menuId, @Bind("raterId") Long raterId);
 
     @SqlQuery("select * from ratings,recipes,users"+
 	" where ratings.parent_id = :recipeId"+
 	" and recipes.id = :recipeId"+
-	" and ratings.user_id = :raterId")
+	" and ratings.user_id = :raterId"+
+	" and ratings.type = 'recipe'")
 	@Mapper(RatingMapper.class)
 	abstract protected List<Rating> _getRatingByUserForRecipe(@Bind("recipeId") Long recipeId, @Bind("raterId") Long raterId);
 
     @SqlQuery("select * from ratings,users"+
 	" where ratings.parent_id = :userId"+
 	" and users.id = :userId"+
-	" and ratings.user_id = :raterId")
+	" and ratings.user_id = :raterId"+	
+	" and ratings.type = 'user'")
 	@Mapper(RatingMapper.class)
 	abstract protected List<Rating> _getRatingByUserForUser(@Bind("userId") Long userId, @Bind("raterId") Long raterId);
 
@@ -134,8 +142,8 @@ public abstract class RatingDAO {
         return rating;
     }
 
-	public Rating getRatingByUserForMenu(Long menuId, Long commenterId) {
-        List<Rating> res = _getRatingByUserForMenu(menuId, commenterId);
+	public Rating getRatingByUserForMenu(Long menuId, Long raterId) {
+        List<Rating> res = _getRatingByUserForMenu(menuId, raterId);
 
         if (res == null || res.isEmpty()) {
             return null;
@@ -144,8 +152,8 @@ public abstract class RatingDAO {
         return res.get(0);
     }
 
-	public Rating getRatingByUserForRecipe(Long recipeId, Long commenterId) {
-        List<Rating> res = _getRatingByUserForRecipe(recipeId, commenterId);
+	public Rating getRatingByUserForRecipe(Long recipeId, Long raterId) {
+        List<Rating> res = _getRatingByUserForRecipe(recipeId, raterId);
 
         if (res == null || res.isEmpty()) {
             return null;
@@ -154,8 +162,8 @@ public abstract class RatingDAO {
         return res.get(0);
     }
 
-	public Rating getRatingByUserForUser(Long userId, Long commenterId) {
-        List<Rating> res = _getRatingByUserForUser(userId, commenterId);
+	public Rating getRatingByUserForUser(Long userId, Long raterId) {
+        List<Rating> res = _getRatingByUserForUser(userId, raterId);
 
         if (res == null || res.isEmpty()) {
             return null;

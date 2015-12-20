@@ -22,6 +22,8 @@ import bounswegroup1.model.Menu;
 import bounswegroup1.model.User;
 import bounswegroup1.model.Rating;
 
+import org.joda.time.DateTime;
+
 import io.dropwizard.auth.Auth;
 
 
@@ -41,12 +43,13 @@ public class RatingResource {
     @POST
     public Rating addRating(@Auth AccessToken accessToken, Rating rating) {
         // if id is present, edit, otherwise add.
-        
+        if(rating.getRating() > 5) rating.setRating(5.0f);
+        else if(rating.getRating() < 0) rating.setRating(0.0f);
         
         rating.setUserId(accessToken.getUserId());
         ratingDAO.deleteRating(rating);
+        rating.setCreatedAt(new DateTime());
         ratingDAO.addRating(rating);
-
         return rating;
     }
 

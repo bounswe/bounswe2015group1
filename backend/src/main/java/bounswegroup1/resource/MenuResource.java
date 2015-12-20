@@ -15,6 +15,9 @@ import bounswegroup1.db.MenuDAO;
 import bounswegroup1.model.AccessToken;
 import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Menu;
+
+import org.joda.time.DateTime;
+
 import io.dropwizard.auth.Auth;
 
 
@@ -34,6 +37,7 @@ public class MenuResource {
         
         
         menu.setUserId(accessToken.getUserId());
+        menu.setCreatedAt(new DateTime());
         menuDAO.addMenu(menu);
 
         return menu;

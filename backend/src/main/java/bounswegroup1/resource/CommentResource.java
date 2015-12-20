@@ -19,6 +19,9 @@ import bounswegroup1.model.Comment;
 import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Menu;
 import bounswegroup1.model.User;
+
+import org.joda.time.DateTime;
+
 import io.dropwizard.auth.Auth;
 
 
@@ -43,8 +46,8 @@ public class CommentResource {
         
         comment.setUserId(accessToken.getUserId());
         comment.setUserFullName(userDAO.getUserById(accessToken.getUserId()).getFullName());
+        comment.setCreatedAt(new DateTime());
         commentDAO.addComment(comment);
-
         return comment;
     }
 

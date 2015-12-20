@@ -27,10 +27,11 @@ public class MenuMapper implements ResultSetMapper<Menu> {
         if(result == null){
             List<Long> recipeIds = new ArrayList<Long>();
             List<String> recipeNames = new ArrayList<String>();
-            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getDate("created_at")));
+            result = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getTimestamp("created_at").getTime()));
             result.setDescription(rs.getString("description"));
             result.setPeriod(rs.getString("period"));
             result.setRecipeNames(recipeNames);
+            result.setRating(rs.getFloat("rating"));
         }
 
         if (rs.getLong("recipe_id") != lastRecipeId) {

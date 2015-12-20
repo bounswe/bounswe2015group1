@@ -33,12 +33,13 @@ public class MenusMapper implements ResultSetMapper<List<Menu>> {
             List<Long> recipeIds = new ArrayList<Long>();
             List<String> recipeNames = new ArrayList<String>();
 
-            curr = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getDate("created_at")));
+            curr = new Menu(rs.getLong("id"), rs.getString("menu_name"), rs.getLong("user_id"), recipeIds, new DateTime(rs.getTimestamp("created_at").getTime()));
             lastId = rs.getLong("id");
 
             curr.setPeriod(rs.getString("period"));
             curr.setDescription(rs.getString("description"));
             curr.setRecipeNames(recipeNames);
+            curr.setRating(rs.getFloat("rating"));
             lastRecipeId = -1;
             res.add(curr);
         }

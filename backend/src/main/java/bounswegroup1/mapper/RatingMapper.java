@@ -22,7 +22,7 @@ public class RatingMapper implements ResultSetMapper<Rating> {
     public Rating map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
         if(result == null){
             result = new Rating(rs.getLong("id"), rs.getLong("user_id"), rs.getString("type"), 
-                rs.getLong("parent_id"), rs.getFloat("rating"), new DateTime(rs.getDate("created_at")));
+                rs.getLong("parent_id"), rs.getFloat("rating"), new DateTime(rs.getTimestamp("created_at").getTime()));
         }
         return result;
     }

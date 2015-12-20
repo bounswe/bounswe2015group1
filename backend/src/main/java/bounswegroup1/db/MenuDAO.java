@@ -30,10 +30,10 @@ import bounswegroup1.model.Recipe;
 public abstract class MenuDAO {
 
     @GetGeneratedKeys
-    @SqlUpdate("insert into menus (name, user_id, created_at, period, description) values (:name, :userId, now(), :period, :description)")
+    @SqlUpdate("insert into menus (name, user_id, created_at, period, description) values (:name, :userId, :createdAt, :period, :description)")
     abstract protected Long _addMenu(@BindBean Menu menu);
     
-    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
+    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
     " from menus a,recipes b,menu_recipes c"+
     " where a.id = c.menu_id"+
     " and b.id = c.recipe_id"+
@@ -56,7 +56,7 @@ public abstract class MenuDAO {
     abstract protected List<List<Recipe>> _getRecipesForMenu(@Bind("id") Long id);
 
     @Mapper(MenuMapper.class)
-    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
+    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating,   b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
     " from menus a,recipes b,menu_recipes c"+
     " where a.id = :id"+
     " and b.id = c.recipe_id"+
