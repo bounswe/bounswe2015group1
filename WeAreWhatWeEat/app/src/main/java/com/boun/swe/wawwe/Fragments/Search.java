@@ -1,23 +1,19 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -74,12 +70,27 @@ public class Search extends LeafFragment {
     }
 
     private void makeSearch(String query, final FeedAdapter adapter) {
+        adapter.clear();
         API.searchRecipe(getTag(), query,
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
                         if (response != null)
-                            adapter.setData(response);
+                            adapter.addItems(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // No response...
+                    }
+                });
+        API.searchMenus(getTag(), query,
+                new Response.Listener<Menu[]>() {
+                    @Override
+                    public void onResponse(Menu[] response) {
+                        if (response != null)
+                            adapter.addItems(response);
                     }
                 },
                 new Response.ErrorListener() {

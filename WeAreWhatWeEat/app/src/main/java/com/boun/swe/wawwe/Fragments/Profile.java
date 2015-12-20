@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,14 +29,12 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextSurface;
-import su.levenetc.android.textsurface.animations.ChangeColor;
 import su.levenetc.android.textsurface.animations.Circle;
 import su.levenetc.android.textsurface.animations.Delay;
 import su.levenetc.android.textsurface.animations.Parallel;
 import su.levenetc.android.textsurface.animations.Rotate3D;
 import su.levenetc.android.textsurface.animations.Sequential;
 import su.levenetc.android.textsurface.animations.ShapeReveal;
-import su.levenetc.android.textsurface.animations.Slide;
 import su.levenetc.android.textsurface.common.Position;
 import su.levenetc.android.textsurface.contants.Align;
 import su.levenetc.android.textsurface.contants.Direction;
@@ -79,7 +75,7 @@ public class Profile extends BaseFragment {
 
         multipleActions = (FloatingActionsMenu) profileView.findViewById(R.id.multiple_actions);
 
-        API.getAllMenusforUser(getTag(),
+        API.getUserMenus(getTag(),
                 new Response.Listener<com.boun.swe.wawwe.Models.Menu[]>() {
                     @Override
                     public void onResponse(com.boun.swe.wawwe.Models.Menu[] response) {
@@ -219,7 +215,9 @@ public class Profile extends BaseFragment {
             ));
         }
         if (user.getDateOfBirth() != null) {
-            Text dateOfBirth = Commons.generateText(user.getDateOfBirth(), textSize, R.color.colorAccent);
+            Text dateOfBirth = Commons.generateText(
+                    Commons.prettifyDate(user.getDateOfBirth())[1],
+                    textSize, R.color.colorAccent);
             dateOfBirth.setPosition(new Position(Align.CENTER_OF, PHDateOfBirth));
             userTag.play(new Sequential(
                     Delay.duration(promptTime * 2),

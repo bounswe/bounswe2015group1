@@ -22,14 +22,14 @@ public class User implements Parcelable {
     private String password;
     private String fullName;
     private String location;
-    private String dateOfBirth;
+    private Date dateOfBirth;
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public User(int id, String email, String password, String fullName, String location, String dateOfBirth) {
+    public User(int id, String email, String password, String fullName, String location, Date dateOfBirth) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -39,7 +39,7 @@ public class User implements Parcelable {
     }
 
     //For Signup
-    public User(String email, boolean isRestaurant, String password, String fullName, String location, String dateOfBirth){
+    public User(String email, boolean isRestaurant, String password, String fullName, String location, Date dateOfBirth){
         this.email = email;
         this.isRestaurant = isRestaurant;
         this.password = password;
@@ -54,6 +54,7 @@ public class User implements Parcelable {
         password = in.readString();
         fullName = in.readString();
         location = in.readString();
+        dateOfBirth = new Date(in.readLong());
     }
 
     public int getId() {
@@ -88,11 +89,11 @@ public class User implements Parcelable {
         this.location = location;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -124,6 +125,7 @@ public class User implements Parcelable {
         dest.writeString(password);
         dest.writeString(fullName);
         dest.writeString(location);
+        dest.writeLong(dateOfBirth.getTime());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

@@ -4,6 +4,13 @@ import android.util.Log;
 
 import com.boun.swe.wawwe.Models.AutoComplete;
 import com.boun.swe.wawwe.Models.Nutrition;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
@@ -39,6 +46,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -138,17 +147,26 @@ public class API {
 
     public static void updateUser(String tag, User user, Response.Listener<User> successListener,
                                Response.ErrorListener failureListener) {
-        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes f) {
-                return f.getName().equals("id");
-            }
+        String postBody = new GsonBuilder()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return f.getName().equals("id");
+                    }
 
-            @Override
-            public boolean shouldSkipClass(Class<?> clazz) {
-                return false;
-            }
-        }).create().toJson(user, User.class);
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
+                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src,
+                                                 Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return new JsonPrimitive(src.getTime());
+                    }
+                }).create().toJson(user, User.class);
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/user/update", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
@@ -299,6 +317,14 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void getRecommendedRecipes(String tag, int rId,
+                                             Response.Listener<Recipe[]> successListener,
+                                             Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/recipe/recommend/%d", rId),
+                Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
     public static void searchIngredients(String tag, String query, Response.Listener<AutoComplete[]> successListener,
                                          Response.ErrorListener failureListener) {
         GeneralRequest<AutoComplete[]> request = new GeneralRequest<AutoComplete[]>(
@@ -381,8 +407,8 @@ public class API {
         mQueue.add(request.setTag(tag));
     }
 
-    public static void getAllMenusforUser(String tag, Response.Listener<Menu[]> successListener,
-                                      Response.ErrorListener failureListener) {
+    public static void getUserMenus(String tag, Response.Listener<Menu[]> successListener,
+                                    Response.ErrorListener failureListener) {
         if(isTest){
             String file1 = "test_menu1.json";
 
@@ -459,28 +485,16 @@ public class API {
     public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
                                       Response.ErrorListener failureListener) {
         if(isTest){
-            Comment c1;
-            Comment c2;
-            Comment c3;
-            Comment c4;
-//            if(type.equals("recipe")) {
-                c1 = new Comment("Onur Guler", type, parentID, Commons.getString(R.string.test_comment_recipe1));
-                c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
-                c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
-                c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
+            Comment c1 = new Comment("Onur Guler", type, parentID, Commons.getString(R.string.test_comment_recipe1));
+            Comment c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
+            Comment c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
+            Comment c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
 
-//            c1.setCreatedAt(new Date(1449020159));
-//            c2.setCreatedAt(new Date(1440517159));
-//            c3.setCreatedAt(new Date(1409507059));
-//            c4.setCreatedAt(new Date(1440505191));
-//            } else if (type.equals("menu")){
-//
-//            } else if (type.equals("user")){
-//
-//            }
-            Comment[] cArray = {c1, c2, c3, c4};
-
-            successListener.onResponse(cArray);
+            c1.setCreatedAt(new Date(1449020159));
+            c2.setCreatedAt(new Date(1440517159));
+            c3.setCreatedAt(new Date(1409507059));
+            c4.setCreatedAt(new Date(1440505191));
+            successListener.onResponse(new Comment[] {c1, c2, c3, c4});
         } else {
             mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
                     type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
@@ -488,25 +502,29 @@ public class API {
     }
 
     public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
-                                             Response.Listener<Comment[]> successListener, Response.ErrorListener failureListener) {
+                                             Response.Listener<Comment[]> successListener,
+                                             Response.ErrorListener failureListener) {
         if(isTest){
             Comment c1 = new Comment(App.getUser().getFullName(), type, App.getUserId(), Commons.getString(R.string.test_comment_recipe1));
-
         }
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d/%d",
                 type, parentID, userID), Comment[].class, successListener, failureListener).setTag(tag));
     }
 
-    public static void comment(String tag, Comment comment, Response.Listener<Comment> successListener,
+    public static void comment(String tag, Comment comment,
+                               Response.Listener<Comment> successListener,
                                Response.ErrorListener failureListener) {
         if(isTest) {
-//            comment.setCreatedAt(new Date(1449505191));
+            comment.setCreatedAt(new Date(1449505191));
             successListener.onResponse(comment);
         } else {
             String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
                 @Override
                 public boolean shouldSkipField(FieldAttributes f) {
-                    return (f.getName().equals("id") || f.getName().equals("userFullName") || f.getName().equals("userId"));
+                    return (f.getName().equals("id") ||
+                            f.getName().equals("userFullName") ||
+                            f.getName().equals("userId") ||
+                            f.getName().equals("createdAt"));
                 }
 
                 @Override
@@ -564,7 +582,7 @@ public class API {
         }
     }
 
-    public static void getAverageRating (String tag, String type, int parentId, Response.Listener<Rate> successListener,
+    public static void getAverageRating(String tag, String type, int parentId, Response.Listener<Rate> successListener,
                                          Response.ErrorListener failureListener) {
         if(isTest){
             float min = 0.0f; float max = 5.0f;
@@ -579,7 +597,7 @@ public class API {
         }
     }
 
-    public static void getRatingByUser (String tag, String type, int parentId, int userId,
+    public static void getRatingByUser(String tag, String type, int parentId, int userId,
                                         Response.Listener<Rate> successListener,
                                         Response.ErrorListener failureListener) {
         if(isTest){
@@ -648,7 +666,7 @@ public class API {
         private static final String PROTOCOL_CONTENT_TYPE =
                 String.format("application/json; charset=%s", PROTOCOL_CHARSET);
 
-        private Gson gson = new Gson();
+        private Gson gson;
         private Class<T> responseClazz;
         private Map<String, String> headers = new HashMap<>();
         private Response.Listener<T> listener;
@@ -660,6 +678,15 @@ public class API {
             super(method, url, errorListener);
             this.responseClazz = responseClazz;
             this.listener = listener;
+
+            gson = new GsonBuilder().registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json,
+                                        Type typeOfT,
+                                        JsonDeserializationContext context) throws JsonParseException {
+                    // Date comes as nano second...
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            }).create();
 
             Log.v("Request", url + ", method: " +
                     (method == Request.Method.GET ? "GET" : "POST"));

@@ -77,9 +77,7 @@ public class RecipeDetail extends LeafFragment {
                     @Override
                     public void onResponse(String[] response) {
                         if (response == null) {
-                            //TODO tag api returns null
-                            Toast.makeText(context, "Tag api returns null",
-                                    Toast.LENGTH_SHORT).show();
+                            // TODO do not show tags area...
                         } else {
                             tagGroupStatic.setTags(response);
                         }
@@ -88,8 +86,7 @@ public class RecipeDetail extends LeafFragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error getting tags",
-                                Toast.LENGTH_SHORT).show();
+                        // TODO do not show tags area...
                     }
                 });
         tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {

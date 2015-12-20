@@ -1,6 +1,7 @@
 package com.boun.swe.wawwe.Adapters;
 
 import android.content.Context;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,31 +26,70 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
 
     Context context;
     RecyclerView recyclerView;
-    ArrayList<Comment> data = new ArrayList<Comment>();
+    SortedList<Comment> data;
 
     public CommentAdapter(Context context) {
         this.context = context;
+        data = new SortedList<>(Comment.class, new SortedList.Callback<Comment>() {
+            @Override
+            public int compare(Comment o1, Comment o2) {
+                long o1CreatedAt = o1.getCreatedAt().getTime();
+                long o2CreatedAt = o2.getCreatedAt().getTime();
+                return o1CreatedAt > o2CreatedAt ? -1 :
+                        o1CreatedAt == o2CreatedAt ? 0 : 1;
+            }
+
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+
+            @Override
+            public boolean areContentsTheSame(Comment oldItem, Comment newItem) {
+                return oldItem.getBody().equals(newItem.getBody());
+            }
+
+            @Override
+            public boolean areItemsTheSame(Comment item1, Comment item2) {
+                return item1.getId() == item2.getId();
+            }
+        });
     }
 
     public void setData(Comment[] comments) {
-        if (data.size() != 0) {
+        if (data.size() != 0)
             data.clear();
-            notifyDataSetChanged();
-        }
         addItems(comments);
     }
 
     public void addItems(Comment[] comments) {
-        int start = data.size();
-        data.addAll(Arrays.asList(comments));
-        notifyItemRangeChanged(start, comments.length);
-        recyclerView.smoothScrollToPosition(getItemCount());
-
         if(comments.length > 0) {
             ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
             params.height = (int) Commons.dpToPx(200);
             recyclerView.setLayoutParams(params);
         }
+
+        data.beginBatchedUpdates();
+        for (Comment item : comments) {
+            data.add(item);
+        }
+        data.endBatchedUpdates();
+        recyclerView.smoothScrollToPosition(getItemCount());
     }
 
     @Override
@@ -79,13 +119,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
             holder.userName.setText(comment.getUserFullName());
             holder.body.setText(comment.getBody());
 
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(comment.getCreatedAt());
-//            int hours = calendar.get(Calendar.HOUR_OF_DAY);
-//            int minutes = calendar.get(Calendar.MINUTE);
-
-//            holder.createdAt.setText(String.format("%02d.%02d", hours, minutes));
-            holder.createdAt.setText(comment.getCreatedAt());
+            holder.createdAt.setText(Commons.prettifyDate(comment
+                    .getCreatedAt())[0]);
         }
     }
 

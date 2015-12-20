@@ -97,49 +97,6 @@ public class Login extends BaseFragment {
                             main.getSupportActionBar().show();
                             main.makeFragmentTransaction(Signup.getFragment(new Bundle()));
                         }
-                        /*final String email = emailEditText.getText().toString();
-                        final String password = passwordEditText.getText().toString();
-
-                        if (!isInputValid(new EditText[]{emailEditText, passwordEditText}))
-                            return;
-
-                        User user = new User(email, password);
-                        API.addUser(getTag(), user,
-                                new Response.Listener<User>() {
-
-                                    @Override
-                                    public void onResponse(final User user) {
-                                        API.login(getTag(), new User(email, password),
-                                                new Response.Listener<AccessToken>() {
-
-                                                    @Override
-                                                    public void onResponse(AccessToken response) {
-                                                        App.setAccessValues(response);
-                                                        if (rememberMe.isChecked()) {
-                                                            App.setRememberMe(true);
-                                                        }
-                                                        App.setUser(user);
-                                                        exitLoginFragment();
-                                                    }
-                                                },
-                                                new Response.ErrorListener() {
-                                                    @Override
-                                                    public void onErrorResponse(VolleyError error) {
-                                                        Toast.makeText(App.getInstance(),
-                                                                context.getString(R.string.error_loginAfterSignUpError),
-                                                                Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.d(getTag(), error.toString());
-                                        Toast.makeText(App.getInstance(), context.getString(R.string.error_signUpError),
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });*/
                     }
                 });
 

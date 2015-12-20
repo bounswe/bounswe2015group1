@@ -15,12 +15,13 @@ public class Recipe implements Parcelable {
     private int userId;
     private String name;
     private String description;
-    private String createdAt;
+    private Date createdAt;
     private List<String> tags;
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
 
     transient private boolean isSubItem = false;
+    transient private boolean isRecommended = false;
 
     public Recipe(int id, String name) {
         this.id = id;
@@ -41,6 +42,7 @@ public class Recipe implements Parcelable {
         tags = in.createStringArrayList();
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
         nutritions = in.readParcelable(Nutrition.class.getClassLoader());
+        createdAt = new Date(in.readLong());
     }
 
     public int getId() { return id; }
@@ -81,11 +83,11 @@ public class Recipe implements Parcelable {
         this.id = id;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -113,6 +115,14 @@ public class Recipe implements Parcelable {
         this.isSubItem = isSubItem;
     }
 
+    public boolean isRecommended() {
+        return isRecommended;
+    }
+
+    public void setIsRecommended(boolean isRecommended) {
+        this.isRecommended = isRecommended;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
@@ -122,6 +132,7 @@ public class Recipe implements Parcelable {
         dest.writeStringList(tags);
         dest.writeTypedList(ingredients);
         dest.writeParcelable(nutritions, flags);
+        dest.writeLong(createdAt.getTime());
     }
 
     @Override

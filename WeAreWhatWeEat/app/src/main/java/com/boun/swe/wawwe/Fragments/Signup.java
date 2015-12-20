@@ -22,9 +22,13 @@ import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by onurguler on 07/12/15.
@@ -35,8 +39,9 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
 
     EditText dateOfBirthEditText;
 
-    public Signup() {
-    }
+    Date dateOfBirth;
+
+    public Signup() { }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +91,6 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                 final String password = passwordEditText.getText().toString();
                 String fullname = fullNameEditText.getText().toString();
                 String location = locationEditText.getText().toString();
-                String dateOfBirth = dateOfBirthEditText.getText().toString();
                 boolean isRestaurant = isRestaurantCheckBox.isChecked();
 
                 if (!isInputValid(new EditText[]{
@@ -95,8 +99,8 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                     return;
                 }
 
-                User user = new User(email, isRestaurant, password, fullname, location, dateOfBirth);
-
+                User user = new User(email, isRestaurant, password,
+                        fullname, location, dateOfBirth);
                 API.addUser(getTag(), user,
                         new Response.Listener<User>() {
                             @Override
@@ -144,9 +148,13 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, 0, 0);
-        dateOfBirthEditText.setText(String.format("%d-%02d-%02d", year, month, day));
+        try {
+            dateOfBirth = new SimpleDateFormat("yyyy-mm-dd")
+                    .parse(String.format("%d-%02d-%02d", year, month, day));
+            dateOfBirthEditText.setText(Commons.prettifyDate(dateOfBirth)[1]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void exitSignupFragment() {

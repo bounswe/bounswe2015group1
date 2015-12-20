@@ -22,11 +22,13 @@ import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
-import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Mert on 09/11/15.
@@ -39,8 +41,10 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
     EditText password;
     EditText fullName;
     EditText location;
-    TextView dateOfBirth;
+    TextView dateOfBirthText;
     LinearLayout holderDateOfBirth;
+
+    Date dateOfBirth;
 
     public ProfileEdit() { }
 
@@ -64,7 +68,7 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
         password = (EditText) profileView.findViewById(R.id.profileEdit_password);
         fullName = (EditText) profileView.findViewById(R.id.profileEdit_fullName);
         location = (EditText) profileView.findViewById(R.id.profileEdit_location);
-        dateOfBirth = (TextView) profileView.findViewById(R.id.profileEdit_dateOfBirth);
+        dateOfBirthText = (TextView) profileView.findViewById(R.id.profileEdit_dateOfBirth);
         holderDateOfBirth = (LinearLayout) profileView.findViewById(R.id.profileEdit_holder_dateOfBirth);
         holderDateOfBirth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +94,13 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, 0, 0);
-        dateOfBirth.setText(String.format("%d-%02d-%02d", year, month, day));
+        try {
+            dateOfBirth = new SimpleDateFormat("yyyy-mm-dd")
+                    .parse(String.format("%d-%02d-%02d", year, month, day));
+            dateOfBirthText.setText(Commons.prettifyDate(dateOfBirth)[1]);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -115,7 +123,7 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
                     final String pass = password.getText().toString();
                     String name = fullName.getText().toString();
                     String loc = location.getText().toString();
-                    String date = dateOfBirth.getText().toString();
+                    String date = dateOfBirthText.getText().toString();
 
                     if (!mail.isEmpty())
                         user.setEmail(mail);
@@ -126,7 +134,7 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
                     if (!loc.isEmpty())
                         user.setLocation(loc);
                     if (!date.isEmpty())
-                        user.setDateOfBirth(date);
+                        user.setDateOfBirth(dateOfBirth);
 
                     API.updateUser(getTag(), user,
                             new Response.Listener<User>() {
@@ -166,8 +174,8 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
         if (user.getLocation() != null)
             location.setText(user.getLocation());
         if (user.getDateOfBirth() != null)
-            dateOfBirth.setText(new SimpleDateFormat("dd MM yyyy")
-                    .format(Date.valueOf(user.getDateOfBirth())));
+            dateOfBirthText.setText(Commons
+                    .prettifyDate(user.getDateOfBirth())[1]);
     }
 
     public static ProfileEdit getFragment(Bundle bundle) {

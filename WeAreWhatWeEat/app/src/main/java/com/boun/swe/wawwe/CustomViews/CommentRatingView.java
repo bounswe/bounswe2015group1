@@ -33,8 +33,6 @@ public class CommentRatingView {
 
     public static class Builder {
 
-        private Builder builder;
-
         private Context context;
         private BaseFragment fragment;
 
@@ -43,7 +41,6 @@ public class CommentRatingView {
 
         public Builder(Context context, BaseFragment fragment) {
             this.context = context;
-            this.builder = this;
             this.fragment = fragment;
         }
 
@@ -60,16 +57,18 @@ public class CommentRatingView {
                 type = "menu";
                 parentId = ((Menu) parent).getId();
             }
-            return builder;
+            return this;
         }
 
         public View create() {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
-            final View commentRatingView = inflater.inflate(R.layout.layout_view_comment_rating, null, false);
+            final View commentRatingView = inflater
+                    .inflate(R.layout.layout_view_comment_rating, null, false);
 
             // Prepare RecyclerView
-            final RecyclerView comments = (RecyclerView) commentRatingView.findViewById(R.id.comments);
+            final RecyclerView comments = (RecyclerView)
+                    commentRatingView.findViewById(R.id.comments);
             comments.setLayoutManager(new LinearLayoutManager(context));
             comments.setItemAnimator(new DefaultItemAnimator());
             final CommentAdapter adapter = new CommentAdapter(context);
@@ -92,7 +91,8 @@ public class CommentRatingView {
                     });
 
             // Make a Comment
-            final EditText commentText = (EditText) commentRatingView.findViewById(R.id.input_comment);
+            final EditText commentText = (EditText)
+                    commentRatingView.findViewById(R.id.input_comment);
             commentRatingView.findViewById(R.id.button_makeComment)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -119,7 +119,8 @@ public class CommentRatingView {
                         }
                     });
 
-            final RatingBar ratingBarAverage = (RatingBar) commentRatingView.findViewById(R.id.ratingBarAverage);
+            final RatingBar ratingBarAverage = (RatingBar)
+                    commentRatingView.findViewById(R.id.ratingBarAverage);
             API.getAverageRating(fragment.getTag(), type, parentId,
                     new Response.Listener<Rate>() {
                         @Override
@@ -135,7 +136,8 @@ public class CommentRatingView {
                         }
                     });
 
-            final RatingBar ratingBar = (RatingBar) commentRatingView.findViewById(R.id.ratingBar);
+            final RatingBar ratingBar = (RatingBar)
+                    commentRatingView.findViewById(R.id.ratingBar);
             API.getRatingByUser(fragment.getTag(), type, parentId, App.getUserId(),
                     new Response.Listener<Rate>() {
                         @Override

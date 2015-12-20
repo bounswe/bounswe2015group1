@@ -5,6 +5,10 @@ import android.util.DisplayMetrics;
 
 import com.boun.swe.wawwe.App;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import su.levenetc.android.textsurface.Text;
 import su.levenetc.android.textsurface.TextBuilder;
 import su.levenetc.android.textsurface.contants.Align;
@@ -51,6 +55,26 @@ public class Commons {
                 .setColor(App.getInstance().getResources().getColor(resColor))
                 .setPosition(Align.SURFACE_CENTER)
                 .build();
+    }
+
+    /**
+     * Gets date and returns time values as String.
+     * Ex: 01:12, 21 July 1993
+     *
+     * @param date Date to be converted to String format
+     * @return
+     */
+    public static String[] prettifyDate(Date date) {
+        if (date == null) return new String[] { "", "" };
+        return new String[] {
+                new SimpleDateFormat("HH:mm",
+                        App.getInstance().getResources()
+                                .getConfiguration().locale)
+                        .format(date),
+                new SimpleDateFormat("dd MMMM yyyy",
+                        App.getInstance().getResources()
+                                .getConfiguration().locale)
+                        .format(date) };
     }
 
     public static String getString(int resourceId){

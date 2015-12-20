@@ -16,7 +16,7 @@ public class Comment implements Parcelable {
     private String type;//(Can be "user" | "recipe" | "menu")
     private int parentId;
     private String body;
-    private String createdAt;
+    private Date createdAt;
 
     public Comment(String userFullName, String type, int parentId, String body){
         this.userFullName = userFullName;
@@ -32,6 +32,7 @@ public class Comment implements Parcelable {
         type = in.readString();
         parentId = in.readInt();
         body = in.readString();
+        createdAt = new Date(in.readLong());
     }
 
     public int getId() {
@@ -82,11 +83,11 @@ public class Comment implements Parcelable {
         this.body = body;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -103,6 +104,7 @@ public class Comment implements Parcelable {
         dest.writeString(type);
         dest.writeInt(parentId);
         dest.writeString(body);
+        dest.writeLong(createdAt.getTime());
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {

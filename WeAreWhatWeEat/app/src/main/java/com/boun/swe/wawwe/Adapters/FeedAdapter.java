@@ -56,6 +56,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyItemRangeChanged(start, data.length);
     }
 
+    public void clear() {
+        int size = items.size();
+        items.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
     @Override
     public int getItemViewType(int position) {
         Object data = items.get(position);

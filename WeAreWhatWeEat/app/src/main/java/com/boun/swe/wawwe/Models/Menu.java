@@ -3,6 +3,7 @@ package com.boun.swe.wawwe.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class Menu implements Parcelable {
     private List<Integer> recipeIds;
     private List<String> recipeNames;
     private String description;
-    private String createdAt;
+    private Date createdAt;
 
     transient private boolean isExpanded = false;
 
@@ -35,7 +36,7 @@ public class Menu implements Parcelable {
         period = in.readString();
         recipeNames = in.createStringArrayList();
         description = in.readString();
-        createdAt = in.readString();
+        createdAt = new Date(in.readLong());
     }
 
 
@@ -87,11 +88,11 @@ public class Menu implements Parcelable {
         this.description = description;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -123,7 +124,7 @@ public class Menu implements Parcelable {
         dest.writeString(period);
         dest.writeStringList(recipeNames);
         dest.writeString(description);
-        dest.writeString(createdAt);
+        dest.writeLong(createdAt.getTime());
     }
 
     public static final Creator<Menu> CREATOR = new Creator<Menu>() {

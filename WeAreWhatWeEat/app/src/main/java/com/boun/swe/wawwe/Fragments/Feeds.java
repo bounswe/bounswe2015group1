@@ -5,9 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -61,25 +59,7 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
-//        API.getMenu(getTag(), 1,
-//                new Response.Listener<Menu>() {
-//                    @Override
-//                    public void onResponse(Menu response) {
-//                        if (response != null) {
-//                            Object[] o = {response};
-//                            adapter.addItems(o);
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(context, context.getString(R.string.error_feed),
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-        API.getAllMenusforUser(getTag(),
+        API.getUserMenus(getTag(),
                 new Response.Listener<Menu[]>() {
                     @Override
                     public void onResponse(Menu[] response) {
