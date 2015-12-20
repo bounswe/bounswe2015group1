@@ -32,8 +32,8 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 
 		$scope.getAvgRating = function() {
 			communityService.getAvgRating("recipe", $scope.recipeId).then(function(response) {
-				console.log("Average Rating " + response.data);
-				$scope.avgRate = response.data;
+				console.log("Average Rating " + response.data.rating);
+				$scope.avgRate = response.data.rating;
 			});
 		};
 

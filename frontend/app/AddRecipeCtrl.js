@@ -20,7 +20,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 				for(var i=0 ; i<$scope.ingredients.length; i++) {
 					var ing = $scope.ingredients[i];
 					//var multiplier = ing.amount / ing.ingredient.nf_serving_size_qty;
-					$scope.taglist = $scope.taglist.concat(ing.tags);
+					// $scope.taglist = $scope.taglist.concat(ing.tags);
 
 					//DEBUG
 					/*console.log("Cal: " +ing.ingredient.nf_calories );
@@ -52,12 +52,13 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 					nutrition.cholesterol += ing.nutritions.cholesterol;
 					nutrition.sugars += ing.nutritions.sugars;
 					nutrition.iron += ing.nutritions.iron;
+
+					// Removing nutritions attribute of each ingredient since it is not required on API.
+					delete ing.nutritions;
 				}
 
-				// NAME IS NOT TAG PROBABLY
-				$scope.taglist = $scope.taglist.concat($scope.recipeName.split());
 				if($scope.userTags != "")
-					$scope.taglist = $scope.taglist.concat($scope.userTags.split());
+					$scope.taglist = $scope.taglist.concat($scope.userTags.split(' '));
 				$scope.taglist = $scope.taglist.filter(function(e) { return e !== null; });
 				console.log("TAGS: " + JSON.stringify($scope.taglist));
 				console.log("NUTRITIONS: " + JSON.stringify(nutrition));
