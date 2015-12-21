@@ -139,10 +139,19 @@ public class API {
             public boolean shouldSkipClass(Class<?> clazz) {
                 return false;
             }
-        }).create().toJson(user, User.class);
+        })
+                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src,
+                                                 Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return new JsonPrimitive(src.getTime());
+                    }
+                }).create().toJson(user, User.class);
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/user", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
+
     }
 
     public static void updateUser(String tag, User user, Response.Listener<User> successListener,
