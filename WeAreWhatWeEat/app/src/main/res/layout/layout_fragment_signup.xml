@@ -66,6 +66,7 @@
                 android:id="@+id/dateOfBirth"
                 style="@style/CustomEditText"
                 android:hint="Date Of Birth"
+                android:focusable="false"
                 android:inputType="date" />
 
         </android.support.design.widget.TextInputLayout>

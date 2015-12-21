@@ -640,6 +640,7 @@ public class API {
 
     public static void logout(String tag, Response.Listener<User> successListener,
                                Response.ErrorListener failureListener) {
+
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/session/logout", User.class,
                 successListener, failureListener).setTag(tag));
