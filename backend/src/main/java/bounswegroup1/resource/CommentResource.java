@@ -51,11 +51,13 @@ public class CommentResource {
         return comment;
     }
 
- //    @POST
- //    @Path("/comment/delete/{id}")
-	// public void deleteComment(@PathParam("id") Long id){
- //        commentDAO.deleteComment(id);
- //    }
+     @POST
+     @Path("/delete")
+	 public Comment deleteComment(@Auth AccessToken accessToken, Comment comment){
+        comment.setUserId(accessToken.getUserId());
+        commentDAO.deleteComment(comment);
+        return comment;
+     }
 
     @GET
     @Path("/menu/{id}")

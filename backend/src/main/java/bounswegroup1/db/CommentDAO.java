@@ -24,7 +24,7 @@ public abstract class CommentDAO {
 
 	@SqlUpdate("delete from comments"+
 	" where comments.id = :id")
-	abstract protected Long _deleteComment(@Bind("id") Long id);
+	abstract protected void _deleteComment(@BindBean Comment comment);
 
 	@SqlQuery("select * from comments,menus"+
 	" where comments.parent_id = :id"+
@@ -78,8 +78,8 @@ public abstract class CommentDAO {
 		comment.setId(id);
 	}
 
-	public void deleteComment(Long id){
-		_deleteComment(id);
+	public void deleteComment(Comment comment){
+		_deleteComment(comment);
 	}
 
 	public List<Comment> getCommentsForMenu(Long menuId) {
