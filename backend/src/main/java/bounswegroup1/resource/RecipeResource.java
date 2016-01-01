@@ -56,6 +56,12 @@ public class RecipeResource {
         return recipeDAO.getRecommendedRecipeByRecipeId(id);
     }
 
+    @Path("/recommend")
+    @GET
+    public List<Recipe> getRecommendedRecipeForUser(@Auth AccessToken accessToken){
+        return recipeDAO.getRecommendedRecipeForUser(accessToken.getUserId());
+    }
+
     @POST
     public Recipe addRecipe(@Auth AccessToken accessToken, Recipe recipe) {
         // if id is present, edit, otherwise add.

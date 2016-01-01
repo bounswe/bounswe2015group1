@@ -105,6 +105,63 @@ public abstract class RecipeDAO {
     @Mapper(RecipesMapper.class)
     abstract protected List<List<Recipe>> _getRecommendedRecipeByRecipeId(@Bind("recId") Long recipeId);
 
+     @SqlQuery("with user_consumed_recipes as ( "+
+                "    select * from recipes "+
+                "    where id in( "+
+                "        select recipe_id from user_consumption "+
+                "        where user_id = :userId "+
+                "    ) "+
+                ") "+
+                " select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions "+
+                " where recipes.id = recipe_ingredients.recipe_id "+
+                " and recipes.id = tags.recipe_id "+
+                " and nutritions.id = nutrition_recipe.nutrition_id "+
+                " and recipes.id = nutrition_recipe.recipe_id "+
+                " and recipes.id in "+
+                "     ( "+
+                "         ( "+ //--recipes where tags are similar
+                "         select distinct(rec3.id) from recipes rec1,recipes rec3,tags tg1,tags tg2 "+
+                "         where rec1.user_id = :userId "+
+                "         and rec3.user_id != :userId "+
+                "         and tg2.recipe_id = rec3.id "+
+                "         and tg1.recipe_id = rec1.id "+
+                "         and (lower(tg1.tag) like lower('%'||tg2.tag||'%') "+
+                "             or lower(tg2.tag) like lower('%'||tg1.tag||'%')) "+
+                "         ) "+
+                "         union "+
+                "         ("+ //--recipes where name or descriptions are similar 
+                "         select distinct(rec2.id) from recipes rec1,recipes rec2 "+
+                "         where rec1.user_id = :userId "+
+                "         and rec2.user_id != :userId "+
+                "         and (lower(rec2.name) like lower('%'||rec1.name||'%') "+
+                "         or lower(rec2.description) like lower('%'||rec1.description||'%') "+
+                "         or lower(rec1.name) like lower('%'||rec2.name||'%') "+
+                "         or lower(rec1.description) like lower('%'||rec2.description||'%'))) "+
+                "         union "+
+                "         ( "+ //--recipes where user consumed tags are similar
+                "         select distinct(rec3.id) from user_consumed_recipes rec1,recipes rec3,tags tg1,tags tg2 "+
+                "         where rec1.user_id = :userId "+
+                "         and rec3.user_id != :userId "+
+                "         and tg2.recipe_id = rec3.id "+
+                "         and tg1.recipe_id = rec1.id "+
+                "         and (lower(tg1.tag) like lower('%'||tg2.tag||'%') "+
+                "         or lower(tg2.tag) like lower('%'||tg1.tag||'%')) "+
+                "         ) "+
+                "         union "+
+                "         ("+ //--recipes user consumed where name or descriptions are similar 
+                "         select distinct(rec2.id) from user_consumed_recipes rec1,recipes rec2 "+
+                "         where rec1.user_id = :userId "+
+                "         and rec2.user_id != :userId "+
+                "         and (lower(rec2.name) like lower('%'||rec1.name||'%') "+
+                "         or lower(rec2.description) like lower('%'||rec1.description||'%') "+
+                "         or lower(rec1.name) like lower('%'||rec2.name||'%') "+
+                "         or lower(rec1.description) like lower('%'||rec2.description||'%')) "+
+                "         ) "+
+                "     )"+
+                " order by recipes.id,recipe_ingredients.ingredient_id") 
+    @Mapper(RecipesMapper.class)
+    abstract protected List<List<Recipe>> _getRecommendedRecipeForUser(@Bind("userId") Long userId);
+
     @SqlUpdate("delete from recipe_ingredients where recipe_id = :recipeId")
     abstract public void deleteRecipeIngredients(@Bind("recipeId") Long recipeId);
 
@@ -149,6 +206,16 @@ public abstract class RecipeDAO {
 
     public List<Recipe> getRecommendedRecipeByRecipeId(Long recipeId) {
         List<List<Recipe>> res = _getRecommendedRecipeByRecipeId(recipeId);
+
+        if (res == null || res.isEmpty()) {
+            return null;
+        }
+
+        return res.get(0);
+    }
+
+    public List<Recipe> getRecommendedRecipeForUser(Long userId) {
+        List<List<Recipe>> res = _getRecommendedRecipeForUser(userId);
 
         if (res == null || res.isEmpty()) {
             return null;
