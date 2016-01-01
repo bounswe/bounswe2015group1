@@ -70,4 +70,16 @@ public class RecipeResource {
         return recipe;
     }
 
+    @Path("/update")
+    @POST
+    public Recipe updateRecipe(@Auth AccessToken accessToken, Recipe recipe) {
+        // if id is present, edit, otherwise add.
+        
+        if(accessToken.getUserId() == recipe.getUserId()){
+            recipe  = recipeDAO.updateRecipe(recipe);
+        }
+
+        return recipe;
+    }
+
 }

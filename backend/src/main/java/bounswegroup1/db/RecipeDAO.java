@@ -105,14 +105,23 @@ public abstract class RecipeDAO {
     @Mapper(RecipesMapper.class)
     abstract protected List<List<Recipe>> _getRecommendedRecipeByRecipeId(@Bind("recId") Long recipeId);
 
+    @SqlUpdate("delete from recipe_ingredients where recipe_id = :recipeId")
+    abstract public void deleteRecipeIngredients(@Bind("recipeId") Long recipeId);
+
+    @SqlUpdate("delete from tags where recipe_id = :recipeId")
+    abstract public void deleteRecipeTags(@Bind("recipeId") Long recipeId);
+
+    @SqlUpdate("UPDATE recipes"+
+                " SET name = :name, description = :description"+
+                " WHERE id = :id")
+    abstract public void _updateRecipe(@BindBean Recipe recipe);
+
     public void createRecipe(Recipe recipe) {
         Long id = _createRecipe(recipe);
         recipe.setId(id);
         recipe.createIngredients(this);
         recipe.createTags(this);
         if (recipe.getNutritions() != null) {
-            System.out.println("girdi");
-            System.out.println(recipe.getNutritions().toString());
             recipe.createNutrition(this);
         }
         
@@ -166,5 +175,19 @@ public abstract class RecipeDAO {
         }
 
         return res;
+    }
+
+    public Recipe updateRecipe(Recipe recipe){
+        deleteRecipeTags(recipe.getId());
+        deleteRecipeIngredients(recipe.getId());
+        _updateRecipe(recipe);
+
+        recipe.createIngredients(this);
+        recipe.createTags(this);
+        if (recipe.getNutritions() != null) {
+            recipe.createNutrition(this);
+        }
+
+        return recipe;
     }
 }
