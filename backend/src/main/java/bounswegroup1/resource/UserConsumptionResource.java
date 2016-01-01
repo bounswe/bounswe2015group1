@@ -31,26 +31,24 @@ public class UserConsumptionResource {
 
 
     public UserConsumptionResource(ConsumeDAO consumeDAO) {
+
         super();
         this.consumeDAO = consumeDAO;
     }
  
     @POST
-    public Long consume(@Auth AccessToken accessToken, Long recipeId) {
-    	consumeDAO.saveUserConsumption(accessToken.getUserId(), recipeId);
-    	
-    	return recipeId;
+    public Recipe consume(@Auth AccessToken accessToken, Recipe recipe) {
 
-        //rating.setUserId(accessToken.getUserId());
-        //ratingDAO.deleteRating(rating);
-        //ratingDAO.addRating(rating);
+        Long recipeId = recipe.getId();
+        consumeDAO.saveUserConsumption(accessToken.getUserId(), recipeId);
 
-        //return rating;
+        return recipe;
     }
 
     @GET
     @Path("/{id}")
     public List<Recipe> getConsumedRecipesForUser(@PathParam("id") Long id){
+        System.out.println("CONSUMEEEEEEEEEEEEEE");
         return consumeDAO.getConsumedRecipesForUser(id);
     }
 }

@@ -45,6 +45,8 @@ public class UserResource {
     public User addUser(@Valid User user) {
         Long id = dao.addUser(user);
         user.setId(id);
+        user.setRating(0.0f);
+        
         return user;
     }
 

@@ -30,7 +30,7 @@ import bounswegroup1.model.Recipe;
 public abstract class MenuDAO {
 
     @GetGeneratedKeys
-    @SqlUpdate("insert into menus (name, user_id, created_at, period, description) values (:name, :userId, :createdAt, :period, :description)")
+    @SqlUpdate("insert into menus (name, user_id, created_at, period, description, rating) values (:name, :userId, :createdAt, :period, :description, :rating)")
     abstract protected Long _addMenu(@BindBean Menu menu);
     
     @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
