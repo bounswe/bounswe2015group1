@@ -23,6 +23,7 @@ import bounswegroup1.resource.CommentResource;
 import bounswegroup1.resource.RatingResource;
 import bounswegroup1.resource.SearchResource;
 import bounswegroup1.resource.UserConsumptionResource;
+import bounswegroup1.resource.UserAllergyResource;
 import bounswegroup1.auth.OAuthAuthenticator;
 import bounswegroup1.db.AccessTokenDAO;
 import bounswegroup1.db.RecipeDAO;
@@ -32,6 +33,7 @@ import bounswegroup1.db.CommentDAO;
 import bounswegroup1.db.RatingDAO;
 import bounswegroup1.db.SearchDAO;
 import bounswegroup1.db.ConsumeDAO;
+import bounswegroup1.db.UserAllergyDAO;
 
 import bounswegroup1.model.AccessToken;
 
@@ -88,6 +90,7 @@ public class App extends Application<AppConfig> {
         final RatingDAO ratingDAO = jdbi.onDemand(RatingDAO.class);
         final SearchDAO searchDAO = jdbi.onDemand(SearchDAO.class);
         final ConsumeDAO consumeDAO = jdbi.onDemand(ConsumeDAO.class);
+        final UserAllergyDAO userAllergyDAO = jdbi.onDemand(UserAllergyDAO.class);
 
 
         final Client httpClient = new JerseyClientBuilder(env).using(config.getHttpClient())
@@ -104,6 +107,7 @@ public class App extends Application<AppConfig> {
         final RatingResource ratingResource = new RatingResource(ratingDAO, userDAO);
         final SearchResource searchResource = new SearchResource(searchDAO);
         final UserConsumptionResource userConsumptionResource = new UserConsumptionResource(consumeDAO);
+        final UserAllergyResource userAllergyResource = new UserAllergyResource(userAllergyDAO);
 
         final AvatarUploader avatarUploader = new AvatarUploader(config.getAvatarFactorOne(), config.getAvatarFactorTwo());
         
@@ -124,6 +128,7 @@ public class App extends Application<AppConfig> {
         env.jersey().register(ratingResource);
         env.jersey().register(searchResource);
         env.jersey().register(userConsumptionResource);
+        env.jersey().register(userAllergyResource);
 
     }
 

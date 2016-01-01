@@ -332,4 +332,17 @@
 		</addColumn> 
 	</changeSet>
 
+	<changeSet id="14" author="group1">
+     	<createTable tableName="user_allergy">
+			
+			<column name="user_id" type="integer">
+				<constraints nullable="false" foreignKeyName="fk_user_allergy_user" references="users(id)" />
+			</column>
+			
+			<column name="ingredient_id" type="text">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
 </databaseChangeLog>
