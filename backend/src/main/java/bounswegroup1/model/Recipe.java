@@ -21,6 +21,16 @@ public class Recipe {
 
     private Nutrition nutritions;
 
+    private Float rating;
+
+    public Float getRating(){
+        return rating;
+    }
+
+    public void setRating(Float rating){
+        this.rating = rating;
+    }
+
     public Nutrition getNutritions(){
         return nutritions;
     }
@@ -80,7 +90,7 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(Long id, Long userId, String name, String description,DateTime createdAt) {
+    public Recipe(Long id, Long userId, String name, String description,DateTime createdAt,Float rating) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -88,6 +98,7 @@ public class Recipe {
         this.createdAt = createdAt;
         this.ingredients = new ArrayList<Ingredient>();
         this.tags = new ArrayList<String>();
+        this.rating = rating;
     }
 
     public String getDescription() {

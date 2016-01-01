@@ -32,7 +32,9 @@ public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
     public List<Recipe> map(int idx, ResultSet rs, StatementContext ctx) throws SQLException {
         if (rs.getLong("id") != lastId) {
             curr = new Recipe(rs.getLong("id"), rs.getLong("user_id"), rs.getString("name"),
-                    rs.getString("description"),new DateTime(rs.getDate("created_at")));
+                    rs.getString("description"),new DateTime(rs.getTimestamp("created_at").getTime()),
+                    rs.getFloat("rating"));
+            
             lastId = rs.getLong("id");
 
             curr.addNutritions(new Nutrition(rs.getLong("nutrition_id"),rs.getFloat("calories"),
