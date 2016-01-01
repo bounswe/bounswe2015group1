@@ -38,6 +38,7 @@ public class MenuResource {
         
         menu.setUserId(accessToken.getUserId());
         menu.setCreatedAt(new DateTime());
+        menu.setRating(0.0f);
         menuDAO.addMenu(menu);
 
         return menu;

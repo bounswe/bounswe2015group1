@@ -20,6 +20,7 @@ import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Menu;
 import bounswegroup1.model.User;
 import bounswegroup1.model.Rating;
+import bounswegroup1.model.Nutrition;
 
 import io.dropwizard.auth.Auth;
 
@@ -28,7 +29,6 @@ import io.dropwizard.auth.Auth;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserConsumptionResource {
 	private final ConsumeDAO consumeDAO;
-
 
     public UserConsumptionResource(ConsumeDAO consumeDAO) {
 
@@ -48,7 +48,14 @@ public class UserConsumptionResource {
     @GET
     @Path("/{id}")
     public List<Recipe> getConsumedRecipesForUser(@PathParam("id") Long id){
-        System.out.println("CONSUMEEEEEEEEEEEEEE");
         return consumeDAO.getConsumedRecipesForUser(id);
     }
+
+    @GET
+    @Path("/daily/average/{id}")
+    public Nutrition getDailyAverageNutritionConsumptionForUser(@PathParam("id") Long id){
+        return consumeDAO.getDailyAverageNutritionConsumptionForUser(id);
+    }
+
+
 }
