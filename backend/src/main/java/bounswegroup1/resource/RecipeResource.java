@@ -9,6 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.joda.time.DateTime;
+
 import bounswegroup1.db.RecipeDAO;
 import bounswegroup1.model.AccessToken;
 import bounswegroup1.model.Recipe;
@@ -60,6 +62,9 @@ public class RecipeResource {
         
         
         recipe.setUserId(accessToken.getUserId());
+        recipe.setCreatedAt(new DateTime());
+        recipe.setRating(new Float(0));
+
         recipeDAO.createRecipe(recipe);
 
         return recipe;
