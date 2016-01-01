@@ -6,6 +6,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import java.util.List;
+
 import bounswegroup1.db.CommentDAO;
 import bounswegroup1.db.RecipeDAO;
 import bounswegroup1.db.MenuDAO;
@@ -44,5 +46,11 @@ public class UserConsumptionResource {
         //ratingDAO.addRating(rating);
 
         //return rating;
+    }
+
+    @GET
+    @Path("/{id}")
+    public List<Recipe> getConsumedRecipesForUser(@PathParam("id") Long id){
+        return consumeDAO.getConsumedRecipesForUser(id);
     }
 }
