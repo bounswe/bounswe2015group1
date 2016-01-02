@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
@@ -107,7 +108,23 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                             public void onResponse(User response) {
                                 response.setPassword(password);
                                 App.setUser(response);
-                                exitSignupFragment();
+                                API.login(App.class.getSimpleName(), response,
+                                        new Response.Listener<AccessToken>() {
+                                            @Override
+                                            public void onResponse(AccessToken response) {
+                                                App.setAccessValues(response);
+                                                exitSignupFragment();
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                ((MainActivity) context).onBackPressed();
+                                                Toast.makeText(App.getInstance(),
+                                                        "User created but could not be logged in:(",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                             }
                         },
                         new Response.ErrorListener() {

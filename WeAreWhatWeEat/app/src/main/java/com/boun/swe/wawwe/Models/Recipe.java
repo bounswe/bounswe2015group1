@@ -19,9 +19,14 @@ public class Recipe implements Parcelable {
     private List<String> tags;
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
+    private long rating;
 
     transient private boolean isSubItem = false;
     transient private boolean isRecommended = false;
+
+    public Recipe() {
+        nutritions = new Nutrition();
+    }
 
     public Recipe(int id, String name) {
         this.id = id;
@@ -121,6 +126,14 @@ public class Recipe implements Parcelable {
 
     public void setIsRecommended(boolean isRecommended) {
         this.isRecommended = isRecommended;
+    }
+
+    public long getRating() {
+        return rating;
+    }
+
+    public void setRating(long rating) {
+        this.rating = rating;
     }
 
     @Override

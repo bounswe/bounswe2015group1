@@ -157,17 +157,6 @@ public class API {
     public static void updateUser(String tag, User user, Response.Listener<User> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder()
-                .setExclusionStrategies(new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                        return f.getName().equals("id");
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                        return false;
-                    }
-                })
                 .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
                     @Override
                     public JsonElement serialize(Date src,
@@ -222,17 +211,15 @@ public class API {
         }
     }
 
-    //Not Tested and No Api yet
-    public static void editRecipe(String tag, Recipe recipe, int recipeId, Response.Listener<Recipe> successListener,
+    public static void editRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                   Response.ErrorListener failureListener) {
-
         if (isTest) {
             successListener.onResponse(recipe);
         } else {
             String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
                 @Override
                 public boolean shouldSkipField(FieldAttributes f) {
-                    return f.getName().equals("id") || f.getName().equals("userId");
+                    return f.getName().equals("createdAt");
                 }
 
                 @Override
@@ -241,7 +228,7 @@ public class API {
                 }
             }).create().toJson(recipe, Recipe.class);
             mQueue.add(new GeneralRequest<>(Request.Method.POST,
-                    BASE_URL + String.format("/recipe/edit/%d", recipeId), Recipe.class, successListener, failureListener)
+                    BASE_URL + "/recipe/update", Recipe.class, successListener, failureListener)
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
@@ -269,8 +256,9 @@ public class API {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
-                return (f.getDeclaringClass().equals(Recipe.class) && f.getName().equals("id"))
-                        || f.getName().equals("userId");
+                return (f.getDeclaringClass().equals(Recipe.class) && f.getName().equals("id")) ||
+                        (f.getDeclaringClass().equals(Ingredient.class) && f.getName().equals("nutritions")) ||
+                        f.getName().equals("userId") || f.getName().equals("rating");
             }
 
             @Override
@@ -338,7 +326,7 @@ public class API {
                                          Response.ErrorListener failureListener) {
         GeneralRequest<AutoComplete[]> request = new GeneralRequest<AutoComplete[]>(
                 Request.Method.GET,
-                BASE_URL + String.format("/ingredient/search/%s", query),
+                BASE_URL + String.format("/ingredient/search/%s*", query),
                 AutoComplete[].class, successListener, failureListener) {
             @Override
             protected Response<AutoComplete[]> parseNetworkResponse(NetworkResponse response) {
@@ -369,6 +357,17 @@ public class API {
         mQueue.add(request.setTag(tag));
     }
 
+    /**
+     * This call is deprecated due to wrong frequent server answer http 500,
+     * use {@link #searchIngredients(String, String, Response.Listener, Response.ErrorListener)}
+     * call instead.
+     *
+     * @param tag
+     * @param query
+     * @param successListener
+     * @param failureListener
+     */
+    @Deprecated
     public static void autocompleteIngredients(String tag, String query,
                                                Response.Listener<AutoComplete[]> successListener,
                                                Response.ErrorListener failureListener) {
@@ -394,16 +393,17 @@ public class API {
 
                     responseModel.setIngredientId(responseObject.optString("item_id", ""));
                     responseModel.setName(responseObject.optString("item_name", ""));
+                    responseModel.setAmount(1);
 
-                    nutrition.setCalories((float) responseObject.getDouble("nf_calories"));
-                    nutrition.setCarbohydrate((float) responseObject.getDouble("nf_total_carbohydrate"));
-                    nutrition.setFats((float) responseObject.getDouble("nf_total_fat"));
-                    nutrition.setProteins((float) responseObject.getDouble("nf_protein"));
-                    nutrition.setSodium((float) responseObject.getDouble("nf_sodium"));
-                    nutrition.setFiber((float) responseObject.getDouble("nf_dietary_fiber"));
-                    nutrition.setCholesterol((float) responseObject.getDouble("nf_cholesterol"));
-                    nutrition.setSugars((float) responseObject.getDouble("nf_sugars"));
-                    nutrition.setIron((float) responseObject.getDouble("nf_iron_dv"));
+                    nutrition.setCalories((float) responseObject.optDouble("nf_calories", 0.0));
+                    nutrition.setCarbohydrate((float) responseObject.optDouble("nf_total_carbohydrate", 0.0));
+                    nutrition.setFats((float) responseObject.optDouble("nf_total_fat", 0.0));
+                    nutrition.setProteins((float) responseObject.optDouble("nf_protein", 0.0));
+                    nutrition.setSodium((float) responseObject.optDouble("nf_sodium", 0.0));
+                    nutrition.setFiber((float) responseObject.optDouble("nf_dietary_fiber", 0.0));
+                    nutrition.setCholesterol((float) responseObject.optDouble("nf_cholesterol", 0.0));
+                    nutrition.setSugars((float) responseObject.optDouble("nf_sugars", 0.0));
+                    nutrition.setIron((float) responseObject.optDouble("nf_iron_dv", 0.0));
 
                     responseModel.setNutritions(nutrition);
                 } catch (JSONException e) {

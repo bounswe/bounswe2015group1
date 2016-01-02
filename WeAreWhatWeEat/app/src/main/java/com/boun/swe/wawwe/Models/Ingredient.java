@@ -8,10 +8,10 @@ import android.os.Parcelable;
  */
 public class Ingredient implements Parcelable {
 
-    private String ingredientId = "PlaceHolder";
+    private String ingredientId;
     private String name;
     private int amount;
-    transient private Nutrition nutritions;
+    private Nutrition nutritions;
 
     public Ingredient() { }
 

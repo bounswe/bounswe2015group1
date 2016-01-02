@@ -115,7 +115,7 @@ public class Profile extends BaseFragment {
                     public void onClick(View v) {
                         if (context instanceof MainActivity) {
                             MainActivity main = (MainActivity) context;
-                            main.makeFragmentTransaction(RecipeCreator.getFragment(null));
+                            main.makeFragmentTransaction(RecipeCreator.getFragment(null, false));
                         }
                     }
                 });
@@ -166,7 +166,7 @@ public class Profile extends BaseFragment {
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
 
-                    main.makeFragmentTransaction(RecipeCreator.getFragment(null));
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(null, false));
                 }
                 return true;
             default:

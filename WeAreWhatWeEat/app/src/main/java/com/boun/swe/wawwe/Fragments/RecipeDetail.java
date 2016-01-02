@@ -227,7 +227,7 @@ public class RecipeDetail extends LeafFragment {
             case R.id.menu_profile_editDone:
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
-                    main.makeFragmentTransaction(RecipeCreator.getFragment(recipe));
+                    main.makeFragmentTransaction(RecipeCreator.getFragment(recipe, true));
                 }
                 return true;
 

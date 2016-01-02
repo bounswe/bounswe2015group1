@@ -19,7 +19,7 @@
         android:background="@drawable/border_style" />
 
 
-    <com.boun.swe.wawwe.CustomViews.CustomAutoCompleteTextView
+    <AutoCompleteTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="80"
