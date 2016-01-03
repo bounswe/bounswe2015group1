@@ -97,10 +97,8 @@ public class User implements Parcelable {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) throws ParseException {
-        DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
-        Date date = format.parse(dateOfBirth);
-        this.dateOfBirth = date;
+    public void setDateOfBirth(Date dateOfBirth) throws ParseException {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPassword() {

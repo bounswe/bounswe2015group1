@@ -25,10 +25,12 @@ import com.boun.swe.wawwe.Utils.API;
 import com.boun.swe.wawwe.Utils.Commons;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Mert on 09/11/15.
@@ -128,7 +130,14 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
                     final String pass = password.getText().toString();
                     String name = fullName.getText().toString();
                     String loc = location.getText().toString();
-                    String date = dateOfBirthText.getText().toString();
+                    String date_str = dateOfBirthText.getText().toString();
+                    DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+                    Date date = null;
+                    try {
+                        date = format.parse(date_str);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     if (!mail.isEmpty())
                         user.setEmail(mail);
@@ -138,7 +147,7 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
                         user.setFullName(name);
                     if (!loc.isEmpty())
                         user.setLocation(loc);
-                    if (!date.isEmpty())
+                    if (!date_str.isEmpty())
                         try {
                             user.setDateOfBirth(date);
                         } catch (ParseException e) {
