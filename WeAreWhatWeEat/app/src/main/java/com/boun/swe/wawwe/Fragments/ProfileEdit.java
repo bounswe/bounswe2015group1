@@ -44,6 +44,8 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
     TextView dateOfBirthText;
     LinearLayout holderDateOfBirth;
 
+    final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
     Date dateOfBirth;
 
     public ProfileEdit() { }
@@ -96,8 +98,11 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
         try {
             dateOfBirth = new SimpleDateFormat("yyyy-mm-dd")
-                    .parse(String.format("%d-%02d-%02d", year, month, day));
-            dateOfBirthText.setText(Commons.prettifyDate(dateOfBirth)[1]);
+                    .parse(String.format("%d-%d-%d", year, month, day));
+
+            String temp_date = day + " " + months[month] + " " + year;
+            dateOfBirthText.setText(temp_date);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -134,7 +139,11 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
                     if (!loc.isEmpty())
                         user.setLocation(loc);
                     if (!date.isEmpty())
-                        user.setDateOfBirth(dateOfBirth);
+                        try {
+                            user.setDateOfBirth(date);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
                     API.updateUser(getTag(), user,
                             new Response.Listener<User>() {

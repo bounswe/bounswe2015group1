@@ -5,7 +5,11 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Mert on 16/10/15.
@@ -93,8 +97,10 @@ public class User implements Parcelable {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirth(String dateOfBirth) throws ParseException {
+        DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+        Date date = format.parse(dateOfBirth);
+        this.dateOfBirth = date;
     }
 
     public String getPassword() {
