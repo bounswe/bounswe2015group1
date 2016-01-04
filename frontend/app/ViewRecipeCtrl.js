@@ -1,4 +1,5 @@
 myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $stateParams, $http, userService, recipeService, communityService) {
+		
 		$scope.max = 5;
 		$scope.rate = 3;
 		$scope.avgRate = 3;
@@ -59,6 +60,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 					if(response.data.userId == userService.getUser().id) {
 						$scope.editAllowed = true;
 					}
+					$scope.ownerName=userService.getUser().fullName;
 					for(var i=0; i < $scope.recipe.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.recipe.ingredients[i].ingredientId).then(function(response){
 	    						if(response.data.status_code == 404) {
@@ -108,6 +110,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		$scope.isOwner = function(id) {
 			return id == userService.getUser().id;
 		}
+
 
 		$scope.back = function() {
 			//console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
