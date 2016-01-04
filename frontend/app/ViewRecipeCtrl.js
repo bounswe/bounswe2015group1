@@ -60,7 +60,8 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 					if(response.data.userId == userService.getUser().id) {
 						$scope.editAllowed = true;
 					}
-					$scope.ownerName=userService.getUser().fullName;
+					$scope.owner=userService.getUserWithId(recipe.userId);
+					$scope.ownerName=owner.fullName;
 					for(var i=0; i < $scope.recipe.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.recipe.ingredients[i].ingredientId).then(function(response){
 	    						if(response.data.status_code == 404) {

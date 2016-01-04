@@ -125,6 +125,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
     				});
       			}
   			}
+  			
 
   			var init = function() {
   				console.log("STATE PARAMS ADD RECIPE " + $stateParams.editID)

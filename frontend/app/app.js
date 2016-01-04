@@ -118,6 +118,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 				loggedIn = false;
 				$state.go('login', { incorrect : "incorrect"});
 			});
+
 		};
 
 	var unauth = function() {
@@ -175,6 +176,12 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		login : login,
 		logout : logout,
 		register: register,
+		getUserWithId : function(id){
+			
+			return $http.get($rootScope.baseUrl + '/api/user/' + id);
+
+		},
+
 		getUser : function() {
 			return user;
 		},
