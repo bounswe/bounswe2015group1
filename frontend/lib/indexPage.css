@@ -89,3 +89,17 @@
     -webkit-border-radius:16px;
     border-radius:16px;
 }
+.tags {
+    margin: 10px 0;
+}
+.tags .tag {
+    border-radius: 6px;
+    background-color: #EFEFEF;
+    border: 1px solid #DDD;
+    padding: 5px;
+    margin-right: 10px;
+}
+.tags .tag:hover {
+    color: red;
+    text-decoration: none;
+}

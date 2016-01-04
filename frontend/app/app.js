@@ -212,6 +212,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 			console.log('auth: ' + userService.getToken().accessToken );
 			$http(req).then(function(response){
 				recipeAddStatus = 200;
+				alert("Your recipe added successfully!");
 				console.log("Recipe Added");
 			}, function(response){
 				console.log('RESPONSE STATUS: ' + response.status);
@@ -310,7 +311,16 @@ angular.module('FoodApp').factory('menuService', function($http, $rootScope, $q,
 			 },
 			 data : { "name" : name, "recipeIds" : recipeIds, "period" : period , "description": desc }
 			};
-			return $http(req);
+			$http(req).then(function(response){
+				recipeAddStatus = 200;
+				alert("Your menu added successfully!");
+				console.log("Menu Added");
+			}, function(response){
+				console.log('RESPONSE STATUS: ' + response.status);
+				if(response.status==401) {
+					unauth();
+				}
+			});
 
 		};
 	var fetchAllMenus = function() {
@@ -507,5 +517,44 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 		rate : rate,
 		getRatingByCurrentUser : getRatingByCurrentUser,
 		deleteComment : deleteComment
+	};
+});
+
+angular.module('FoodApp').directive('tagManager', function() {
+	return {
+		restrict: 'E',
+		scope: { tags: '=' },
+		template:
+			'<div class="tags">' +
+			'<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}} ' +
+			'<span class="glyphicon glyphicon-remove" aria-hidden="true"></a>' +
+			'</div>' +
+			'<input type="text" class="form-control" placeholder="Add a tag..." ng-model="userTags"></input> ' +
+			'<button class="btn btn-default" ng-click="add()">Add</button>',
+		link: function ( $scope, $element ) {
+
+		var input = angular.element( $element.children()[1] );
+
+		// This adds the new tag to the tags array
+		$scope.add = function() {
+			if($.inArray($scope.userTags, $scope.tags) == -1){
+				$scope.tags.push( $scope.userTags );
+				$scope.userTags = "";
+			}
+		};
+
+		// This is the ng-click handler to remove an item
+		$scope.remove = function ( idx ) {
+			$scope.tags.splice( idx, 1 );
+		};
+
+		// Capture all keypresses
+		input.bind( 'keypress', function ( event ) {
+		// But we only care when Enter was pressed
+		if ( event.keyCode == 13 ) {
+			$scope.$apply( $scope.add );
+			}
+			});
+		}
 	};
 });
