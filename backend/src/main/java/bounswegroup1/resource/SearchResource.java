@@ -16,6 +16,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.MultivaluedMap;
+
 
 import bounswegroup1.model.AccessToken;
 import io.dropwizard.auth.Auth;
@@ -48,5 +52,27 @@ public class SearchResource{
     @Path("/menu/{q}")
     public List<Menu> getMenuResults(@PathParam("q") String q) {
         return dao.getMenuResults(q);
+    }
+
+    @GET
+    @Path("/advancedSearch/recipe/{q}")
+    public List<Menu> getAdvancedRecipeResults(@PathParam("q") String q,
+                                             @Context UriInfo uriInfo) {
+        MultivaluedMap<String, String> map = uriInfo.getQueryParameters();
+
+        System.out.println("CONTEXT URIINFO CONTENT:" + uriInfo.getQueryParameters());
+
+        return dao.getAdvancedRecipeResults(q, map);
+    }
+
+    @GET
+    @Path("/advancedSearch/recipe/{q}")
+    public List<Menu> getAdvancedMenuResults(@PathParam("q") String q,
+                                             @Context UriInfo uriInfo) {
+        MultivaluedMap<String, String> map = uriInfo.getQueryParameters();
+        
+        System.out.println("CONTEXT URIINFO CONTENT:" + uriInfo.getQueryParameters());
+
+        return dao.getAdvancedMenuResults(q, map);
     }
 }
