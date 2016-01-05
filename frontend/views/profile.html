@@ -6,23 +6,82 @@
   </div>
   <div class="col-md-9">
 	<uib-tabset>
-    	<uib-tab heading="Profile"></uib-tab>
+    	<uib-tab heading="Profile">
+          <form ng-show="individual" name="RegisterFormIndividiual" role="form" style="width : 50%; margin-left : 25%" novalidate>
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" placeholder="Your name..." ng-model="nameRegister">
+            </div>
+            <div class="form-group" ng-class="{'has-error' : RegisterFormIndividiual.email.$invalid && !RegisterFormIndividiual.email.$pristine}">
+              <label>E-mail Address</label>
+              <input type="text" name="email" class="form-control" placeholder="Your e-mail address..." ng-model="emailRegister" required>
+              <p ng-show="RegisterFormIndividiual.email.$invalid && !RegisterFormIndividiual.email.$pristine" class="help-block">E-mail address is required.</p>
+            </div>
+            <div class="form-group">
+              <label>Birth Date</label>
+              <input type="date" class="form-control" placeholder="YYYY-MM-DD" ng-model="birthDateRegister">
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" class="form-control" placeholder="Your location..." ng-model="locationRegister">
+            </div>
+            <div class="form-group" ng-class="{'has-error' : RegisterFormIndividiual.password.$invalid && !RegisterFormIndividiual.password.$pristine}">
+              <label>Password</label>
+              <input type="password" name="password" class="form-control" placeholder="Password..." ng-model="passRegister" required>
+              <p ng-show="RegisterFormIndividiual.password.$invalid && !RegisterFormIndividiual.password.$pristine" class="help-block">Password is required.</p>
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="register()" ng-disabled="RegisterFormIndividiual.$invalid">Register</button>
+          </form> 
+
+      </uib-tab>
     	<uib-tab heading="My Recipes">
         <div class="table-responsive">
 
           <table class="table table-striped table-bordered">
             <tr class="info" ng-repeat="_ in userRecipes | orderBy:'name'">
               <td ng-show="($parent.$index % 3 == 0) && ($parent.$index + 3 > $index) && ($parent.$index <= $index)" ng-repeat="recipe in userRecipes | orderBy:'name'">
-                        <a href="#" ng-click="viewRecipe(recipe.id)"> {{recipe.name}} </a>
+                        <a href="#" ui-sref="viewRecipe({ recipeID : '' + recipe.id})"> {{recipe.name}} </a>
+                        
                     </td>
             <tr>
           </table>
           
         </div>
       </uib-tab>
-    	<uib-tab heading="Followed Users"></uib-tab>
-      <uib-tab heading="Options"></uib-tab>
-      <uib-tab heading="Messages"></uib-tab>
+      <uib-tab heading="Preferences">
+        <div class="form-group form-inline col-xs-12 col-sm-12 col-md-9 col-lg-9 ">
+          <h3>Allergens</h3>
+            <p ng-repeat="allergen in allergens">
+            {{ allergen.item_name }} 
+          </p>
+        </div>
+        <div class="form-group form-inline col-xs-12 col-sm-12 col-md-9 col-lg-9 ">
+          <input type="text" class="form-control col-md-2 col-lg-3 col-xs-12" ng-model="newAllergen" placeholder="New Allergen" uib-typeahead="ingredient as ingredient.fields.item_name for ingredient in getCompletions($viewValue)" typeahead-select-on-blur="true" typeahead-on-select="onAllergenSelect($item,$model,$label)">
+          <button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-show="!!newAllergen" ng-click="addAllergen()" aria-label="Add Ingredient">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span></button>
+        </div>
+      </uib-tab>
+      <uib-tab heading="Consumption">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 ">
+          <h3>Daily Average Consumption</h3>
+             <div ng-repeat="(id,nutritionLiteral) in nutritionLiterals">
+               <b>{{ nutritionLiteral.charAt(0).toUpperCase() + nutritionLiteral.slice(1) }}</b> : {{ avgNutrition[nutritionLiteral] }} {{ nutritionUnits[id] }}
+             </div>
+          </p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 ">
+          <h3>Previously Consumed Recipes</h3>
+          <table class="table table-striped table-bordered">
+            <tr class="info" ng-repeat="_ in consumedRecipes | orderBy:'name'">
+              <td ng-show="($parent.$index % 3 == 0) && ($parent.$index + 3 > $index) && ($parent.$index <= $index)" ng-repeat="recipe in consumedRecipes | orderBy:'name'">
+                        <a href="#" ui-sref="viewRecipe({ recipeID : '' + recipe.id})"> {{recipe.name}} </a>
+                        
+                    </td>
+            <tr>
+          </table>
+          </p>
+        </div>
+      </uib-tab>
   	</uib-tabset>
   </div>
 

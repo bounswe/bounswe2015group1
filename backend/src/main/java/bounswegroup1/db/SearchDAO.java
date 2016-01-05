@@ -15,6 +15,8 @@ import bounswegroup1.mapper.RecipesMapper;
 import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Menu;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 public abstract class SearchDAO{
 
 	 @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
@@ -55,6 +57,11 @@ public abstract class SearchDAO{
     @Mapper(MenusMapper.class)
     abstract protected List<List<Menu>> _getMenuResults(@Bind("search") String query);
 
+    @Mapper(MenusMapper.class)
+    abstract protected List<List<Menu>> _getAdvancedMenuResults(@Bind("search") String query);
+
+    @Mapper(MenusMapper.class)
+    abstract protected List<List<Menu>> _getAdvancedRecipeResults(@Bind("search") String query);
 
     public List<Recipe> getRecipeResults(String query){
     	List<List<Recipe>> res = _getRecipeResults(query);
@@ -68,6 +75,27 @@ public abstract class SearchDAO{
 
     public List<Menu> getMenuResults(String query){
     	List<List<Menu>> res = _getMenuResults(query);
+
+        if (res == null || res.isEmpty()) {
+            return null;
+        }
+
+        return res.get(0);
+    }
+
+
+    public List<Recipe> getAdvancedRecipeResults(String query, MultivaluedMap<String,String> map){
+    	List<List<Recipe>> res = _getAdvancedRecipeResults(query);
+
+        if (res == null || res.isEmpty()) {
+            return null;
+        }
+
+        return res.get(0);
+    }
+
+    public List<Menu> getAdvancedMenuResults(String query, MultivaluedMap<String,String> map){
+    	List<List<Menu>> res = _getAdvancedMenuResults(query);
 
         if (res == null || res.isEmpty()) {
             return null;

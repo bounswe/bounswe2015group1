@@ -3,8 +3,7 @@ package com.boun.swe.wawwe.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -14,9 +13,8 @@ import java.util.Date;
  * be serialized and saved or shared across
  * activities.
  */
-public class User implements Parcelable {
+public class User extends BaseModel implements Parcelable {
 
-    private int id;
     private String email;
     private boolean isRestaurant;
     private String password;
@@ -54,15 +52,8 @@ public class User implements Parcelable {
         password = in.readString();
         fullName = in.readString();
         location = in.readString();
+        rating = in.readDouble();
         dateOfBirth = new Date(in.readLong());
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -125,6 +116,7 @@ public class User implements Parcelable {
         dest.writeString(password);
         dest.writeString(fullName);
         dest.writeString(location);
+        dest.writeDouble(rating);
         dest.writeLong(dateOfBirth.getTime());
     }
 

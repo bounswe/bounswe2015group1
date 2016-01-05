@@ -1,8 +1,7 @@
 myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $stateParams, recipeService) {
 			$scope.ingredients=[];
 			$scope.ingredientUnits = [];
-			$scope.taglist = [];
-			$scope.userTags = ""
+			$scope.tags = [];
 			$scope.isEmpty = true;
 			var makeid =function() {
     			var text = "";
@@ -16,11 +15,10 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 
 			$scope.addRecipe = function() {
 				var nutrition = { "calories" : 0, "carbohydrate" : 0, "fats" : 0, "proteins" : 0, "sodium" : 0, "fiber" : 0, "cholesterol" : 0, "sugars" : 0, "iron" : 0};
-				$scope.taglist = [];
 				for(var i=0 ; i<$scope.ingredients.length; i++) {
 					var ing = $scope.ingredients[i];
 					//var multiplier = ing.amount / ing.ingredient.nf_serving_size_qty;
-					// $scope.taglist = $scope.taglist.concat(ing.tags);
+					// $scope.tags = $scope.tags.concat(ing.tags);
 
 					//DEBUG
 					/*console.log("Cal: " +ing.ingredient.nf_calories );
@@ -57,12 +55,9 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 					delete ing.nutritions;
 				}
 
-				if($scope.userTags != "")
-					$scope.taglist = $scope.taglist.concat($scope.userTags.split(' '));
-				$scope.taglist = $scope.taglist.filter(function(e) { return e !== null; });
-				console.log("TAGS: " + JSON.stringify($scope.taglist));
+				console.log("TAGS: " + JSON.stringify($scope.tags));
 				console.log("NUTRITIONS: " + JSON.stringify(nutrition));
-				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.taglist, nutrition);
+				recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.tags, nutrition);
 				$scope.tags = "";
 				$scope.ingredients=[];
 				$scope.newIngredientName = "";
@@ -130,6 +125,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
     				});
       			}
   			}
+  			
 
   			var init = function() {
   				console.log("STATE PARAMS ADD RECIPE " + $stateParams.editID)
@@ -141,7 +137,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
   						$scope.ingredients = response.data.ingredients;
   						$scope.recipeName = response.data.name;
   						$scope.recipeDesc = response.data.description
-  						$scope.userTags = response.data.tags.join(' ');
+  						$scope.tags = response.data.tags;
   						for(var i=0; i < $scope.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.ingredients[i].ingredientId).then(function(response){
 	    						if(response.data.status_code == 404) {

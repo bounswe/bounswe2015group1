@@ -36,15 +36,15 @@
     <!-- Recipe Detail -->
     <string name="title_nutrition">Nutritions</string>
     <string-array name="prompt_nutritions">
-        <item>Calories : %.2f</item>
-        <item>Carbohydrate : %.2f</item>
-        <item>Fats : %.2f</item>
-        <item>Proteins : %.2f</item>
-        <item>Sodium : %.2f</item>
-        <item>Fiber : %.2f</item>
-        <item>Cholesterol : %.2f</item>
-        <item>Sugar : %.2f</item>
-        <item>Iron : %.2f</item>
+        <item>kCal: %.1f</item>
+        <item>Carbs: %.1f</item>
+        <item>Fats: %.1f</item>
+        <item>Proteins: %.1f</item>
+        <item>Sodium: %.1f</item>
+        <item>Fiber: %.1f</item>
+        <item>Chol: %.1f</item>
+        <item>Sugar: %.1f</item>
+        <item>Iron: %.1f</item>
     </string-array>
 
     <!-- Profile -->

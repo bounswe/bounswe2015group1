@@ -118,6 +118,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 				loggedIn = false;
 				$state.go('login', { incorrect : "incorrect"});
 			});
+
 		};
 
 	var unauth = function() {
@@ -161,6 +162,26 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 
 	};
 
+	var addAllergen = function(allergenId){
+		var req = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/allergy',
+		 headers: {
+		 	'Authorization': 'Bearer ' + token.accessToken,
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"ingredientId" : allergenId
+		 }
+		};
+		return $http(req);
+	};
+
+	var getAllergens = function(){
+		return $http.get($rootScope.baseUrl + '/api/allergy/user/' + user.id);
+	};
+
+
 	if($window.sessionStorage.token) {
 		console.log("Session Token: " + $window.sessionStorage.token);
 		token = JSON.parse($window.sessionStorage.token);
@@ -175,6 +196,14 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		login : login,
 		logout : logout,
 		register: register,
+		getAllergens : getAllergens,
+		addAllergen : addAllergen,
+		getUserWithId : function(id){
+			
+			return $http.get($rootScope.baseUrl + '/api/user/' + id);
+
+		},
+
 		getUser : function() {
 			return user;
 		},
@@ -212,6 +241,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 			console.log('auth: ' + userService.getToken().accessToken );
 			$http(req).then(function(response){
 				recipeAddStatus = 200;
+				alert("Your recipe added successfully!");
 				console.log("Recipe Added");
 			}, function(response){
 				console.log('RESPONSE STATUS: ' + response.status);
@@ -249,6 +279,11 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		}
 		else return $http.get($rootScope.baseUrl + '/api/recipe/user/' + id);
 	}
+	var getConsumedRecipes = function(id) {
+		if($rootScope.saveTheDay) {
+		}
+		else return $http.get($rootScope.baseUrl + '/api/consume/' + id);
+	}
 	var getRecommendedRecipes = function(id) {
 		if($rootScope.saveTheDay) {
 				return $q(function(resolve,reject) {
@@ -259,12 +294,20 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		}
 		else return $http.get($rootScope.baseUrl + '/api/recipe/recommend/' + id);
 	}
+
+	var getAvgConsumption = function(id) {
+		if($rootScope.saveTheDay) {
+		}
+		else return $http.get($rootScope.baseUrl + '/api/consume/daily/average/' + id);
+	}
 	return {
 		addRecipe : addRecipe,
 		fetchAllRecipes : fetchAllRecipes,
 		getAllRecipes : getAllRecipes,
 		getUserRecipes : getUserRecipes,
+		getConsumedRecipes : getConsumedRecipes,
 		getRecommendedRecipes : getRecommendedRecipes,
+		getAvgConsumption : getAvgConsumption,
 		getRecipes : function() {
 			return recipes;
 		},
@@ -284,6 +327,36 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 				});
 			}
 			else return $http.get($rootScope.baseUrl + '/api/recipe/view/' + id);
+		},
+		// Well this would be better if it could accept recipe id
+		consumeRecipe : function(recipeJSON) {
+			if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.addRecipe(userService.getUser().id,name,ingredients,desc,tags,nutrition)});
+					},$rootScope.saveTheDelay)
+				});
+			}
+			var req = {
+			 method: 'POST',
+			 url: $rootScope.baseUrl + '/api/consume',
+			 headers: {
+			   'Authorization': 'Bearer ' + userService.getToken().accessToken,
+			   'Content-Type': 'application/json'
+			 },
+			 data : JSON.parse(recipeJSON)
+			};
+			$http(req).then(function(response){
+				recipeAddStatus = 200;
+				alert("Consumed");
+				console.log("Recipe consumed");
+			}, function(response){
+				console.log('RESPONSE STATUS: ' + response.status);
+				if(response.status==401) {
+					unauth();
+				}
+			});
+
 		},
 		getRecipeWithIDNew : function(id) {
 			return $http.get($rootScope.baseUrl + '/api/recipe/all');
@@ -310,7 +383,16 @@ angular.module('FoodApp').factory('menuService', function($http, $rootScope, $q,
 			 },
 			 data : { "name" : name, "recipeIds" : recipeIds, "period" : period , "description": desc }
 			};
-			return $http(req);
+			$http(req).then(function(response){
+				recipeAddStatus = 200;
+				alert("Your menu added successfully!");
+				console.log("Menu Added");
+			}, function(response){
+				console.log('RESPONSE STATUS: ' + response.status);
+				if(response.status==401) {
+					unauth();
+				}
+			});
 
 		};
 	var fetchAllMenus = function() {
@@ -507,5 +589,44 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 		rate : rate,
 		getRatingByCurrentUser : getRatingByCurrentUser,
 		deleteComment : deleteComment
+	};
+});
+
+angular.module('FoodApp').directive('tagManager', function() {
+	return {
+		restrict: 'E',
+		scope: { tags: '=' },
+		template:
+			'<div class="tags">' +
+			'<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}} ' +
+			'<span class="glyphicon glyphicon-remove" aria-hidden="true"></a>' +
+			'</div>' +
+			'<input type="text" class="form-control" placeholder="Add a tag..." ng-model="userTags"></input> ' +
+			'<button class="btn btn-default" ng-click="add()">Add</button>',
+		link: function ( $scope, $element ) {
+
+		var input = angular.element( $element.children()[1] );
+
+		// This adds the new tag to the tags array
+		$scope.add = function() {
+			if($.inArray($scope.userTags, $scope.tags) == -1){
+				$scope.tags.push( $scope.userTags );
+				$scope.userTags = "";
+			}
+		};
+
+		// This is the ng-click handler to remove an item
+		$scope.remove = function ( idx ) {
+			$scope.tags.splice( idx, 1 );
+		};
+
+		// Capture all keypresses
+		input.bind( 'keypress', function ( event ) {
+		// But we only care when Enter was pressed
+		if ( event.keyCode == 13 ) {
+			$scope.$apply( $scope.add );
+			}
+			});
+		}
 	};
 });

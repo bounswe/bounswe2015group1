@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,16 +16,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.AccessToken;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
 import com.boun.swe.wawwe.Utils.Commons;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by onurguler on 07/12/15.
@@ -91,6 +91,18 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                 final String password = passwordEditText.getText().toString();
                 String fullname = fullNameEditText.getText().toString();
                 String location = locationEditText.getText().toString();
+
+                String temp_date = dateOfBirthEditText.getText().toString();
+                DateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+
+                Date date = dateOfBirth; // just to initiliaze
+                try {
+                    date = format.parse(temp_date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
                 boolean isRestaurant = isRestaurantCheckBox.isChecked();
 
                 if (!isInputValid(new EditText[]{
@@ -100,14 +112,30 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
                 }
 
                 User user = new User(email, isRestaurant, password,
-                        fullname, location, dateOfBirth);
+                        fullname, location, date);
                 API.addUser(getTag(), user,
                         new Response.Listener<User>() {
                             @Override
                             public void onResponse(User response) {
                                 response.setPassword(password);
                                 App.setUser(response);
-                                exitSignupFragment();
+                                API.login(App.class.getSimpleName(), response,
+                                        new Response.Listener<AccessToken>() {
+                                            @Override
+                                            public void onResponse(AccessToken response) {
+                                                App.setAccessValues(response);
+                                                exitSignupFragment();
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                ((MainActivity) context).onBackPressed();
+                                                Toast.makeText(App.getInstance(),
+                                                        "User created but could not be logged in:(",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                             }
                         },
                         new Response.ErrorListener() {
@@ -148,13 +176,8 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        try {
-            dateOfBirth = new SimpleDateFormat("yyyy-mm-dd")
-                    .parse(String.format("%d-%02d-%02d", year, month, day));
-            dateOfBirthEditText.setText(Commons.prettifyDate(dateOfBirth)[1]);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        dateOfBirth = Commons.getDate(year, month, day);
+        dateOfBirthEditText.setText(Commons.prettifyDate(dateOfBirth)[1]);
     }
 
     private void exitSignupFragment() {

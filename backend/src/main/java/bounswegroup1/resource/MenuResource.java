@@ -60,4 +60,10 @@ public class MenuResource {
     public List<Recipe> getRecipesForMenu(@PathParam("id") Long id){
     	return menuDAO.getRecipesForMenu(id);
     }
+
+    @GET
+    @Path("/user/{id}")
+    public List<Menu> getMenusForUser(@PathParam("id") Long id){
+        return menuDAO.getMenusForUser(id);
+    }
 }

@@ -9,16 +9,14 @@ import java.util.List;
 /**
  * Created by Mert on 05/12/15.
  */
-public class Menu implements Parcelable {
+public class Menu extends BaseModel implements Parcelable {
 
-    private int id;
     private int userId;
     private String name;
     private String period;  //(Can be "daily" | "weekly" | "monthly")
     private List<Integer> recipeIds;
     private List<String> recipeNames;
     private String description;
-    private Date createdAt;
 
     transient private boolean isExpanded = false;
 
@@ -36,6 +34,7 @@ public class Menu implements Parcelable {
         period = in.readString();
         recipeNames = in.createStringArrayList();
         description = in.readString();
+        rating = in.readDouble();
         createdAt = new Date(in.readLong());
     }
 
@@ -46,14 +45,6 @@ public class Menu implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getUserId() {
@@ -88,14 +79,6 @@ public class Menu implements Parcelable {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public List<String> getRecipeNames() {
         return recipeNames;
     }
@@ -124,6 +107,7 @@ public class Menu implements Parcelable {
         dest.writeString(period);
         dest.writeStringList(recipeNames);
         dest.writeString(description);
+        dest.writeDouble(rating);
         dest.writeLong(createdAt.getTime());
     }
 

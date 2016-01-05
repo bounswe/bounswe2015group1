@@ -128,6 +128,24 @@ public class Nutrition implements Parcelable {
         this.iron = iron;
     }
 
+    /**
+     * Adds or decrements this nutrition with given amount.
+     *
+     * @param nutrition
+     * @param amount
+     */
+    public void updateNutrition(Nutrition nutrition, int amount) {
+        calories += amount * nutrition.calories;
+        carbohydrate += amount * nutrition.carbohydrate;
+        fats += amount * nutrition.fats;
+        proteins += amount * nutrition.proteins;
+        sodium += amount * nutrition.sodium;
+        fiber += amount * nutrition.fiber;
+        cholesterol += amount * nutrition.cholesterol;
+        sugars += amount * nutrition.sugars;
+        iron += amount * nutrition.iron;
+    }
+
     @Override
     public int describeContents() {
         return 0;
