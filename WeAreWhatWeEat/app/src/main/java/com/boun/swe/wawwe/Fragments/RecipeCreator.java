@@ -147,8 +147,7 @@ public class RecipeCreator extends LeafFragment {
                 recipe.setDescription(directions);
                 recipe.setTags(Arrays.asList(allTags));
 
-                if (isEditMode) {
-                    recipe.setIngredients(new ArrayList<>(ingredients.values()));
+                if (isEditMode)
                     API.editRecipe(getTag(), recipe,
                             new Response.Listener<Recipe>() {
                                 @Override
@@ -166,24 +165,26 @@ public class RecipeCreator extends LeafFragment {
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
-                }
-                else API.createRecipe(getTag(), recipe,
+                else {
+                    recipe.setIngredients(new ArrayList<>(ingredients.values()));
+                    API.createRecipe(getTag(), recipe,
                             new Response.Listener<Recipe>() {
                                 @Override
-                            public void onResponse(Recipe response) {
-                                if (context instanceof MainActivity) {
-                                    MainActivity main = (MainActivity) context;
-                                    main.onBackPressed();
+                                public void onResponse(Recipe response) {
+                                    if (context instanceof MainActivity) {
+                                        MainActivity main = (MainActivity) context;
+                                        main.onBackPressed();
+                                    }
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, context.getString(R.string.error_createRecipe),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, context.getString(R.string.error_createRecipe),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
             }
         });
         recipeName.requestFocus();
@@ -192,18 +193,7 @@ public class RecipeCreator extends LeafFragment {
             recipeName.setText(recipe.getName());
             howTo.setText(recipe.getDescription());
             submit.setText(context.getString(R.string.button_edit_recipe));
-
-            API.getRecipeTags(getTag(), recipe.getId(), new Response.Listener<String[]>() {
-                @Override
-                public void onResponse(String[] response) {
-                    tagGroupStatic.setTags(response);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
+            tagGroupStatic.setTags(recipe.getTags());
 
             for (Ingredient ingredient: recipe.getIngredients()) {
                 View ingredientRow = addIngredientRow(ingredientHolder);

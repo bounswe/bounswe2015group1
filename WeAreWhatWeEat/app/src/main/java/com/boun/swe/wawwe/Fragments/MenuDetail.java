@@ -51,7 +51,6 @@ public class MenuDetail extends LeafFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         TAG = App.getInstance().getString(R.string.title_menu_menuDetail);
     }
 
@@ -156,28 +155,6 @@ public class MenuDetail extends LeafFragment {
         holder.addView(commentView);
 
         return menuDetailView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_profile_editDone:
-//                if (context instanceof MainActivity) {
-//                    MainActivity main = (MainActivity) context;
-//                    main.makeFragmentTransaction(MenuEdit.getFragment(new Bundle()));
-//                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public static MenuDetail getFragment(Menu menu) {
