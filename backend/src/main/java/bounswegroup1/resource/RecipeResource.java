@@ -70,6 +70,8 @@ public class RecipeResource {
         recipe.setUserId(accessToken.getUserId());
         recipe.setCreatedAt(new DateTime());
         recipe.setRating(new Float(0));
+        if(recipe.getDescription() == null)
+            recipe.setDescription("");
 
         recipeDAO.createRecipe(recipe);
 
