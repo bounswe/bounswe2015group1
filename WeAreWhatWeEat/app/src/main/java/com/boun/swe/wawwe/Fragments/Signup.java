@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,8 +40,6 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
     EditText dateOfBirthEditText;
 
     Date dateOfBirth;
-
-    final String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
     public Signup() { }
 
@@ -181,16 +176,8 @@ public class Signup extends LeafFragment implements DatePickerDialog.OnDateSetLi
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        try {
-            dateOfBirth = new SimpleDateFormat("yyyy-mm-dd")
-                    .parse(String.format("%d-%d-%d", year, month, day));
-
-            String temp_date = day + " " + months[month] + " " + year;
-            dateOfBirthEditText.setText(temp_date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        dateOfBirth = Commons.getDate(year, month, day);
+        dateOfBirthEditText.setText(Commons.prettifyDate(dateOfBirth)[1]);
     }
 
     private void exitSignupFragment() {

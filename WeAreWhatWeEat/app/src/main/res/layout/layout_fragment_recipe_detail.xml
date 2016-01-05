@@ -26,21 +26,13 @@
                     android:layout_height="185dp"
                     android:background="@drawable/image_placeholder"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <su.levenetc.android.textsurface.TextSurface
+                    android:id="@+id/rDetail_createdBy"
                     android:layout_alignParentBottom="true"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <su.levenetc.android.textsurface.TextSurface
-                        android:id="@+id/rDetail_createdBy"
-                        android:layout_weight="1"
-                        android:layout_margin="0dp"
-                        android:background="@color/black_lighter"
-                        style="@style/CustomTitleMedium" />
-
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:layout_margin="0dp"
+                    android:background="@color/black_lighter"
+                    style="@style/CustomTitleMedium" />
             </RelativeLayout>
 
             <su.levenetc.android.textsurface.TextSurface
@@ -50,7 +42,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/item_marginLow"
                 android:background="@drawable/border_style"
                 android:orientation="vertical">
 
@@ -69,7 +61,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/item_marginLow"
                 android:background="@drawable/border_style"
                 android:orientation="vertical">
 
@@ -94,7 +86,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/item_marginLow"
                 android:background="@drawable/border_style"
                 android:orientation="vertical">
 
@@ -119,7 +111,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:layout_margin="@dimen/item_marginLow"
                 android:background="@drawable/border_style"
                 android:orientation="vertical">
 
@@ -151,29 +143,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:weightSum="2" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Average Score"
-                    android:gravity="center_horizontal"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Your Rate"
-                    android:gravity="center_horizontal"/>
 
             </LinearLayout>
 

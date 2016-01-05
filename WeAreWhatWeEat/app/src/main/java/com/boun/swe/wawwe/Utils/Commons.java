@@ -57,6 +57,11 @@ public class Commons {
                 .build();
     }
 
+    public static Date getDate(int year, int month, int day) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, day, 0, 0);
+        return c.getTime();
+    }
     /**
      * Gets date and returns time values as String.
      * Ex: 01:12, 21 July 1993
@@ -65,6 +70,7 @@ public class Commons {
      * @return
      */
     public static String[] prettifyDate(Date date) {
+
         if (date == null) return new String[] { "", "" };
         return new String[] {
                 new SimpleDateFormat("HH:mm",

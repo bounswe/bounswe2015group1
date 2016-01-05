@@ -33,10 +33,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
         data = new SortedList<>(Comment.class, new SortedList.Callback<Comment>() {
             @Override
             public int compare(Comment o1, Comment o2) {
-                long o1CreatedAt = o1.getCreatedAt().getTime();
-                long o2CreatedAt = o2.getCreatedAt().getTime();
-                return o1CreatedAt > o2CreatedAt ? -1 :
-                        o1CreatedAt == o2CreatedAt ? 0 : 1;
+                return o1.compareTo(o2);
             }
 
             @Override

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="@dimen/item_margin"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:background="@drawable/border_style"
+    android:layout_marginBottom="@dimen/item_margin"
     android:padding="@dimen/item_padding">
 
     <ImageView
