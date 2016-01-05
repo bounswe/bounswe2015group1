@@ -251,6 +251,33 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 			});
 
 		};
+
+		var updateRecipe = function(id,name,ingredients,desc,tags, nutrition) {
+			if($rootScope.saveTheDay) {
+				return
+			}
+			var req = {
+			 method: 'POST',
+			 url: $rootScope.baseUrl + '/api/recipe/update',
+			 headers: {
+			   'Authorization': 'Bearer ' + userService.getToken().accessToken,
+			   'Content-Type': 'application/json'
+			 },
+			 data : { "id": id, "name" : name, "ingredients" : ingredients, "description": desc, "tags" : tags , "nutritions" : nutrition}
+			};
+			$http(req).then(function(response){
+				recipeAddStatus = 200;
+				alert("Your recipe updated successfully!");
+				console.log("Recipe updated");
+			}, function(response){
+				console.log('RESPONSE STATUS: ' + response.status);
+				if(response.status==401) {
+					unauth();
+				}
+			});
+
+		};
+
 	var fetchAllRecipes = function() {
 		// DELETE WHEN API IS READY
 		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
@@ -302,6 +329,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 	}
 	return {
 		addRecipe : addRecipe,
+		updateRecipe : updateRecipe,
 		fetchAllRecipes : fetchAllRecipes,
 		getAllRecipes : getAllRecipes,
 		getUserRecipes : getUserRecipes,

@@ -45,10 +45,12 @@
 			<textarea rows="10" class="form-control" style="resize:none" ng-model="recipeDesc"></textarea>
 		</div>
 
-		<div class="col-md-9">
+		<div class="col-md-9" ng-show="!editMode">
 			<button type="submit" class="btn btn-default" ng-disabled="AddRecipe.$invalid" ng-click="addRecipe()">Create Recipe</button>
 		</div>
-
+		<div class="col-md-9" ng-show="editMode">
+			<button type="submit" class="btn btn-default" ng-disabled="AddRecipe.$invalid" ng-click="addRecipe()">Edit Recipe</button>
+		</div>
 	</form>
 	</div>
 </div>
