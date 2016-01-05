@@ -37,13 +37,15 @@
                         android:id="@+id/mDetail_createdBy"
                         android:layout_weight="1"
                         android:layout_margin="0dp"
-                        style="@style/CustomTitle" />
+                        android:background="@color/black_lighter"
+                        style="@style/CustomTitleMedium" />
 
                     <su.levenetc.android.textsurface.TextSurface
                         android:id="@+id/mDetail_period"
                         android:layout_weight="1"
                         android:layout_margin="0dp"
-                        style="@style/CustomTitle" />
+                        android:background="@color/black_lighter"
+                        style="@style/CustomTitleMedium" />
 
                 </LinearLayout>
 
