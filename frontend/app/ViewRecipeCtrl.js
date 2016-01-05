@@ -6,6 +6,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		$scope.recipeId = parseInt($stateParams.recipeID);
 		//$scope.recipe =  recipeService.getRecipeWithID(parseInt($stateParams.recipeID));
 		$scope.editAllowed = false;
+		$scope.commentAllowed = false;
 		console.log("Recipe view: " + JSON.stringify($scope.recipe));
 		$scope.recommendedRecipes = [];
 		/*
@@ -60,6 +61,9 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 					console.log("User data : " + JSON.stringify(userService.getUser()));
 					if(response.data.userId == userService.getUser().id) {
 						$scope.editAllowed = true;
+					}
+					if(userService.getUser().id >= 0){
+						$scope.commentAllowed = true;
 					}
 					userService.getUserWithId($scope.recipe.userId).then(
 						function(response) {

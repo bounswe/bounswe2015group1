@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		
-		<div>
+		<div ng-hide="!commentAllowed">
 			<label>Add Comment</label>
 			<input type="text" class="form-control" ng-model="commentText" placeholder="Write Your Comment Here...">
 			<button type="button" ng-click="addComment()" class="btn">Send</button>
