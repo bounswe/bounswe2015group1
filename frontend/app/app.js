@@ -132,7 +132,8 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 			$window.location.href = "/";
 	};
 	var register = function (fullName, email, password, dateOfBirth, location, isRestaurant) {
-		var req = {
+		var req;
+		var reqConsumerUser = {
 		 method : 'POST',
 		 url : $rootScope.baseUrl + '/api/user',
 		 headers: {
@@ -147,7 +148,26 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		 	"isRestaurant" : isRestaurant
 		 }
 		};
-		console.log(email + " " + password + " " + fullName + " " + location + " " + dateOfBirth);
+
+		var reqProviderUser = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/user',
+		 headers: {
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"email" : email,
+		 	"password" : password,
+		 	"fullName" : fullName,
+		 	"location" : location,
+		 	"isRestaurant" : isRestaurant
+		 }
+		};
+		console.log(email + " " + password + " " + fullName + " " + location + " " + dateOfBirth + " " + isRestaurant);
+		if(!isRestaurant)
+			req = reqConsumerUser;
+		else
+			req = reqProviderUser;
 		$http(req).then(function(response){
 			console.log("Register Success");
 			console.log(JSON.stringify(response.data));
