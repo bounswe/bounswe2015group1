@@ -17,7 +17,14 @@
 		</p>
 	</div>
 	<div class="col-md-7">
-		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ recipe.name }} </h3>
+		<h3 style="font-family: Montserrat;color: #F4A73B;">{{ recipe.name }}
+
+		<button type="button" ng-click="consume()" class="btn btn-warning pull-right" ng-hide="!loggedIn">
+		<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Consume</button>
+		</h3>
+
+
+
 		<br/>
 		<h4 style="font-family: Montserrat;color: #F4A73B;">Created by {{ownerName}}</h4>
 		<br/>		

@@ -52,6 +52,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 
 		// CALL INIT WHEN API IS READY
 		var init = function() {
+			$scope.loggedIn = userService.getLoggedIn();
 			recipeService.getRecipeWithID($scope.recipeId).then(
 				function(response){
 					$scope.recipe = response.data;
@@ -60,8 +61,13 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 					if(response.data.userId == userService.getUser().id) {
 						$scope.editAllowed = true;
 					}
-					$scope.owner=userService.getUserWithId(recipe.userId);
-					$scope.ownerName=owner.fullName;
+					userService.getUserWithId($scope.recipe.userId).then(
+						function(response) {
+							$scope.owner = response.data;
+							$scope.ownerName=$scope.owner.fullName;
+						}
+					);
+
 					for(var i=0; i < $scope.recipe.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.recipe.ingredients[i].ingredientId).then(function(response){
 	    						if(response.data.status_code == 404) {
@@ -119,6 +125,19 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 			//$rootScope.back();
 			window.history.back();
 		};
+
+		$scope.consume = function() {
+			var rawRecipe = $scope.recipe;
+			delete rawRecipe.userId;
+			delete rawRecipe.createdAt;
+			delete rawRecipe.rating;
+			delete rawRecipe.nutritions.id;
+			for(var i=0; i < rawRecipe.ingredients.length; i++) {
+				delete rawRecipe.ingredients[i].unit;
+				console.log("Deleted Unit")
+			}
+			recipeService.consumeRecipe(JSON.stringify(rawRecipe))
+		}
 
 		init();
 	});

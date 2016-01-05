@@ -162,6 +162,25 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 
 	};
 
+	var addAllergen = function(allergenId){
+		var req = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/allergy',
+		 headers: {
+		 	'Authorization': 'Bearer ' + token.accessToken,
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"ingredientId" : allergenId
+		 }
+		};
+		return $http(req);
+	};
+
+	var getAllergens = function(){
+		return $http.get($rootScope.baseUrl + '/api/allergy/user/' + user.id);
+	};
+
 	if($window.sessionStorage.token) {
 		console.log("Session Token: " + $window.sessionStorage.token);
 		token = JSON.parse($window.sessionStorage.token);
@@ -176,6 +195,8 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		login : login,
 		logout : logout,
 		register: register,
+		getAllergens : getAllergens,
+		addAllergen : addAllergen,
 		getUserWithId : function(id){
 			
 			return $http.get($rootScope.baseUrl + '/api/user/' + id);
@@ -292,6 +313,36 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 				});
 			}
 			else return $http.get($rootScope.baseUrl + '/api/recipe/view/' + id);
+		},
+		// Well this would be better if it could accept recipe id
+		consumeRecipe : function(recipeJSON) {
+			if($rootScope.saveTheDay) {
+				return $q(function(resolve,reject) {
+					setTimeout(function() {
+						resolve({"data" : standinDB.addRecipe(userService.getUser().id,name,ingredients,desc,tags,nutrition)});
+					},$rootScope.saveTheDelay)
+				});
+			}
+			var req = {
+			 method: 'POST',
+			 url: $rootScope.baseUrl + '/api/consume',
+			 headers: {
+			   'Authorization': 'Bearer ' + userService.getToken().accessToken,
+			   'Content-Type': 'application/json'
+			 },
+			 data : JSON.parse(recipeJSON)
+			};
+			$http(req).then(function(response){
+				recipeAddStatus = 200;
+				alert("Consumed");
+				console.log("Recipe consumed");
+			}, function(response){
+				console.log('RESPONSE STATUS: ' + response.status);
+				if(response.status==401) {
+					unauth();
+				}
+			});
+
 		},
 		getRecipeWithIDNew : function(id) {
 			return $http.get($rootScope.baseUrl + '/api/recipe/all');
