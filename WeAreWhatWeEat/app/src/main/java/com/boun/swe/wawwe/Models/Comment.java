@@ -8,12 +8,12 @@ import java.util.Date;
 /**
  * Created by Mert on 05/12/15.
  */
-public class Comment implements Parcelable {
+public class Comment implements Parcelable, Comparable<Comment> {
 
     private int id;
     private int userId;
     private String userFullName;
-    private String type;//(Can be "user" | "recipe" | "menu")
+    private String type;// (Can be "user" | "recipe" | "menu")
     private int parentId;
     private String body;
     private Date createdAt;
@@ -118,4 +118,10 @@ public class Comment implements Parcelable {
             return new Comment[size];
         }
     };
+
+    @Override
+    public int compareTo(Comment another) {
+        return createdAt.getTime() < another.getCreatedAt().getTime() ? -1 :
+                createdAt.getTime() == another.getCreatedAt().getTime() ? 0 : 1;
+    }
 }

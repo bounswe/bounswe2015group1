@@ -10,5 +10,6 @@
     <color name="red_lighter">#99FF4081</color>
     <color name="green">#FF48FF48</color>
     <color name="green_lighter">#9948FF48</color>
+    <color name="black_lighter">#99000000</color>
 
 </resources>

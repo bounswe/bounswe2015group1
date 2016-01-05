@@ -9,19 +9,17 @@ import java.util.List;
 /**
  * Created by Mert on 31/10/15.
  */
-public class Recipe implements Parcelable {
+public class Recipe extends BaseModel implements Parcelable {
 
-    private int id;
+
     private int userId;
     private String name;
     private String description;
-    private Date createdAt;
     private List<String> tags;
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
-    private long rating;
-
-    transient private boolean isSubItem = false;
+    transient private boolean isSubItem
+= false;
     transient private boolean isRecommended = false;
 
     public Recipe() {
@@ -48,9 +46,8 @@ public class Recipe implements Parcelable {
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
         nutritions = in.readParcelable(Nutrition.class.getClassLoader());
         createdAt = new Date(in.readLong());
+        rating = in.readDouble();
     }
-
-    public int getId() { return id; }
 
     public String getName() {
         return name;
@@ -82,18 +79,6 @@ public class Recipe implements Parcelable {
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public List<String> getTags() {
@@ -128,14 +113,6 @@ public class Recipe implements Parcelable {
         this.isRecommended = isRecommended;
     }
 
-    public long getRating() {
-        return rating;
-    }
-
-    public void setRating(long rating) {
-        this.rating = rating;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
@@ -146,6 +123,7 @@ public class Recipe implements Parcelable {
         dest.writeTypedList(ingredients);
         dest.writeParcelable(nutritions, flags);
         dest.writeLong(createdAt.getTime());
+        dest.writeDouble(rating);
     }
 
     @Override

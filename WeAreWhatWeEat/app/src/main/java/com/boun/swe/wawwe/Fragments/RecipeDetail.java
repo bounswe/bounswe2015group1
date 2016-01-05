@@ -22,6 +22,7 @@ import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Nutrition;
 import com.boun.swe.wawwe.Models.Recipe;
+import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
 import com.boun.swe.wawwe.Utils.Commons;
@@ -64,7 +65,7 @@ public class RecipeDetail extends LeafFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View recipeDetailView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
+        final View recipeDetailView = inflater.inflate(R.layout.layout_fragment_recipe_detail,
                 container, false);
         recipe = getArguments().getParcelable("recipe");
 
@@ -116,6 +117,37 @@ public class RecipeDetail extends LeafFragment {
                                     .getColor(R.color.colorAccent))
                     )));
         }
+
+
+        API.getUserInfo(getTag(), recipe.getUserId(),
+                new Response.Listener<User>() {
+                    @Override
+                    public void onResponse(User response) {
+                        int[] headerIds = new int[]{
+                                R.id.rDetail_createdBy};
+                        String[] headerTexts = new String[] {
+                                response.getFullName()
+                        };
+                        for (int i = 0; i < headerIds.length; i++) {
+                            TextSurface header = (TextSurface) recipeDetailView.findViewById(headerIds[i]);
+                            Text text = Commons.generateText(headerTexts[i], 20, R.color.white);
+                            header.play(new Sequential(
+                                    Delay.duration(i * 100),
+                                    new Parallel(
+                                            Slide.showFrom(Side.LEFT, text, 500)
+                                    )));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(App.getInstance(), "Could not get the user",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
 
         // Show ingredients
         directions.setText(recipe.getDescription());

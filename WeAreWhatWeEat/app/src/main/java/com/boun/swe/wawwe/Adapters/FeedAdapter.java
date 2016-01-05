@@ -1,6 +1,7 @@
 package com.boun.swe.wawwe.Adapters;
 
 import android.content.Context;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.MenuDetail;
 import com.boun.swe.wawwe.Fragments.RecipeDetail;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.BaseModel;
+import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
@@ -27,22 +30,59 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by onurguler on 08/12/15.
  */
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<Object> items = new ArrayList<>();
+    SortedList<BaseModel> items;
     Context context;
 
     private final int RECIPE = 0, MENU = 1, USER = 2, SUB_RECIPE = 4;
 
     public FeedAdapter(Context context) {
         this.context = context;
+        items = new SortedList<>(BaseModel.class, new SortedList.Callback<BaseModel>() {
+            @Override
+            public int compare(BaseModel o1, BaseModel o2) {
+                return o1.compareTo(o2);
+            }
+
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+
+            @Override
+            public boolean areContentsTheSame(BaseModel oldItem, BaseModel newItem) {
+                return true;
+            }
+
+            @Override
+            public boolean areItemsTheSame(BaseModel item1, BaseModel item2) {
+                return item1.getId() == item2.getId();
+            }
+        });
     }
 
-    public void setData(Object[] data) {
+    public void setData(BaseModel[] data) {
         if (items.size() != 0) {
             items.clear();
             notifyDataSetChanged();
@@ -50,7 +90,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         addItems(data);
     }
 
-    public void addItems(Object[] data) {
+    public void addItems(BaseModel[] data) {
         int start = items.size();
         items.addAll(Arrays.asList(data));
         notifyItemRangeChanged(start, data.length);
@@ -196,18 +236,18 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     else {
                         menu.setIsExpanded(true);
 
-                        List<Recipe> recipes = new ArrayList<Recipe>();
+                        List<BaseModel> recipes = new ArrayList<>();
 
                         Iterator<String> names = menu.getRecipeNames().iterator();
                         Iterator<Integer> ids = menu.getRecipeIds().iterator();
                         while (names.hasNext() && ids.hasNext()) {
                             Recipe recipe = new Recipe(ids.next(), names.next());
                             recipe.setIsSubItem(true);
+                            recipe.setRating(menu.getRating());
                             recipes.add(recipe);
                         }
 
-                        items.addAll(holder.getAdapterPosition() + 1, recipes);
-                        notifyItemRangeInserted(holder.getAdapterPosition() + 1, recipes.size());
+                        items.addAll(recipes);
                     }
                 }
             });
