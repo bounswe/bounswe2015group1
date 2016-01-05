@@ -73,23 +73,7 @@ public class RecipeDetail extends LeafFragment {
         TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
 
         final TagGroup tagGroupStatic = (TagGroup) recipeDetailView.findViewById(R.id.tag_group_static);
-        API.getRecipeTags(getTag(), recipe.getId(),
-                new Response.Listener<String[]>() {
-                    @Override
-                    public void onResponse(String[] response) {
-                        if (response == null) {
-                            // TODO do not show tags area...
-                        } else {
-                            tagGroupStatic.setTags(response);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO do not show tags area...
-                    }
-                });
+        tagGroupStatic.setTags(recipe.getTags());
         tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
             public void onTagClick(String tag) {
@@ -118,7 +102,6 @@ public class RecipeDetail extends LeafFragment {
                     )));
         }
 
-
         API.getUserInfo(getTag(), recipe.getUserId(),
                 new Response.Listener<User>() {
                     @Override
@@ -146,8 +129,6 @@ public class RecipeDetail extends LeafFragment {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
 
         // Show ingredients
         directions.setText(recipe.getDescription());
@@ -220,21 +201,6 @@ public class RecipeDetail extends LeafFragment {
         return recipeDetailView;
     }
 
-    private void addIngredientRow(LinearLayout ingredientHolder, Ingredient ingredient) {
-        TextView text = new TextView(context);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        int margin = (int) context.getResources().
-                getDimension(R.dimen.activity_horizontal_margin);
-        params.setMargins(margin, margin, margin, margin);
-        text.setTextColor(context.getResources().getColor(R.color.black));
-        text.setTextAppearance(context, android.R.style.TextAppearance);
-        text.setLayoutParams(params);
-        text.setText(String.format(" - %d %s", ingredient.getAmount(), ingredient.getName()));
-        ingredientHolder.addView(text, ingredientHolder.getChildCount() - 1);
-    }
-
     public static RecipeDetail getFragment(Recipe recipe) {
         RecipeDetail recipeDetailFragment = new RecipeDetail();
 
@@ -248,7 +214,8 @@ public class RecipeDetail extends LeafFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ||
+                recipe.getUserId() == App.getUserId())
             menu.findItem(R.id.menu_profile_add).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }

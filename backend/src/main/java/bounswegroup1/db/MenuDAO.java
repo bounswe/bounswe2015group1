@@ -56,13 +56,22 @@ public abstract class MenuDAO {
     abstract protected List<List<Recipe>> _getRecipesForMenu(@Bind("id") Long id);
 
     @Mapper(MenuMapper.class)
-    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating,   b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
+    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
     " from menus a,recipes b,menu_recipes c"+
     " where a.id = :id"+
     " and b.id = c.recipe_id"+
     " and c.menu_id = :id"+
     " order by a.id,c.recipe_id")
     abstract protected List<Menu> _getMenuById(@Bind("id") Long id);
+
+    @SqlQuery("select a.id, a.name as menu_name, a.user_id, a.description, a.created_at, a.period, a.rating, b.name as recipe_name, b.id, c.recipe_id, c.menu_id"+
+    " from menus a,recipes b,menu_recipes c"+
+    " where a.id = c.menu_id"+
+    " and b.id = c.recipe_id"+
+    " and a.user_id = :id"+
+    " order by a.id,c.recipe_id")
+    @Mapper(MenusMapper.class)
+    abstract protected List<List<Menu>> _getMenusForUser(@Bind("id") Long id);
 
     @SqlUpdate("insert into menu_recipes (recipe_id, menu_id) "
             + "values (:recipe_id, :menu_id)")
@@ -104,4 +113,15 @@ public abstract class MenuDAO {
 
         return res.get(0);
     }
+
+    public List<Menu> getMenusForUser(Long userId) {
+        List<List<Menu>> res = _getMenusForUser(userId);
+
+        if (res == null || res.isEmpty()) {
+            return null;
+        }
+
+        return res.get(0);
+    }
+
 }

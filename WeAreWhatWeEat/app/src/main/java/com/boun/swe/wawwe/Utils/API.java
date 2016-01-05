@@ -238,7 +238,7 @@ public class API {
         }
     }
 
-    //Not Tested and No Api yet
+    @Deprecated
     public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
                                   Response.ErrorListener failureListener) {
         if (isTest) successListener.onResponse(new String[] { "Egg", "Salty", "Breakfast" });

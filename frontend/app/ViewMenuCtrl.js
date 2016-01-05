@@ -4,6 +4,7 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 		$scope.avgRate = 3;
 		$scope.menuId = parseInt($stateParams.menuID);
 		$scope.menu =  recipeService.getRecipeWithID(parseInt($stateParams.recipeID));
+		$scope.commentAllowed = false;
 		console.log("Menu view: " + JSON.stringify($scope.menu));
 
 		/*$scope.comments=[{"id" : 1,"body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"},
@@ -40,6 +41,9 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 			menuService.getMenuWithID($scope.menuId).then(
 				function(response){
 					console.log("Menu View : " + JSON.stringify(response.data) );
+					if(userService.getUser().id >= 0){
+						$scope.commentAllowed = true;
+					}
 					$scope.menu = response.data;
 				}
 			);
