@@ -106,8 +106,8 @@ public class API {
 
     public static void getUserInfo(String tag, Response.Listener<User> successListener,
                                 Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/user/%s",
-                App.getUserId()), User.class, successListener, failureListener).setTag(tag));
+        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +
+                String.format("/user/%s", App.getUserId()), User.class, successListener, failureListener).setTag(tag));
     }
 
     public static void getUserInfo(String tag, int userId,
@@ -129,17 +129,18 @@ public class API {
      */
     public static void addUser(String tag, User user, Response.Listener<User> successListener,
                                 Response.ErrorListener failureListener) {
-        String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes f) {
-                return f.getName().equals("id");
-            }
+        String postBody = new GsonBuilder()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return f.getName().equals("id");
+                    }
 
-            @Override
-            public boolean shouldSkipClass(Class<?> clazz) {
-                return false;
-            }
-        })
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
                 .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
                     @Override
                     public JsonElement serialize(Date src,
@@ -147,7 +148,10 @@ public class API {
                                                  JsonSerializationContext context) {
                         return new JsonPrimitive(src.getTime());
                     }
-                }).create().toJson(user, User.class);
+                })
+                .create()
+                .toJson(user, User.class);
+
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/user", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
@@ -319,6 +323,48 @@ public class API {
                                              Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/recipe/recommend/%d", rId),
+                Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getRecommendedRecipesForUser(String tag,
+                                                    Response.Listener<Recipe[]> successListener,
+                                                    Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + "/recipe/recommend/",
+                Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void addConsumed(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
+                               Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src,
+                                                 Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return new JsonPrimitive(src.getTime());
+                    }
+                })
+                .create()
+                .toJson(recipe, Recipe.class);
+
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/consume", Recipe.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+
+    }
+
+    public static void getDailyAverageConsumed(String tag, Response.Listener<Nutrition> successListener,
+                                             Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("consume/daily/average/%d", App.getUserId()),
+                Nutrition.class, successListener, failureListener).setTag(tag));
+    }
+
+    public static void getAllRecipesConsumed(String tag, Response.Listener<Recipe[]> successListener,
+                                             Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("consume/%d", App.getUserId()),
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
