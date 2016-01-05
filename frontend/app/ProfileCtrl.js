@@ -1,4 +1,4 @@
-myApp.controller('ProfileCtrl', function($scope,userService,recipeService) {
+myApp.controller('ProfileCtrl', function($rootScope,$scope,$http,userService,recipeService) {
 		var init = function() {
 			console.log(JSON.stringify(userService.getUser()));
 			$scope.userName = userService.getUser().fullName;
@@ -13,21 +13,32 @@ myApp.controller('ProfileCtrl', function($scope,userService,recipeService) {
 				console.log(JSON.stringify($scope.userRecipes));
 			});
 
+			recipeService.getConsumedRecipes(usrId).then(function(response) {
+				$scope.consumedRecipes = response.data;
+			});
+
+			recipeService.getAvgConsumption(usrId).then(function(response) {
+				$scope.avgNutrition = response.data;
+				console.log("AVG Consumption " +JSON.stringify($scope.avgNutrition));
+			});
+
 			getAllergens();
 		}
 
+		$scope.nutritionLiterals = ['calories', 'carbohydrate', 'fats', 'proteins', 'sodium', 'fiber', 'cholesterol', 'sugars', 'iron'];
+		$scope.nutritionUnits = ['cal', 'g', 'g', 'g', 'mg', 'g', 'mg', 'g', '%'];
+
 		$scope.onAllergenSelect = function($item, $model, $label) {
   			console.log("Current Allergen is " + JSON.stringify($item))
-  			if(typeof $scope.newAllergen.fields != undefined) {
-  			$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.newAllergen.fields.item_id).then(function(response){
+  			$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $item.fields.item_id).then(function(response){
 	    			if(response.data.status_code == 404) {
 	    				console.log("Ingredient not found");
 	    			}
 	    			else {
-	    				$scope.newAllergenID = response.data;
+	    				console.log("Allergen Data : " + JSON.stringify(response.data));
+	    				$scope.newAllergenData = response.data;
 	    			}
     			});
-      		}
   		}
 
   		$scope.getCompletions = function(val) {
@@ -38,14 +49,26 @@ myApp.controller('ProfileCtrl', function($scope,userService,recipeService) {
   		};
 
 		$scope.addAllergen = function() {
-			userService.addAllergen($scope.newAllergenID).then(function(response) {
+			userService.addAllergen($scope.newAllergenData.item_id).then(function(response) {
 				getAllergens();
 			});
 		}
 
 		var getAllergens = function () {
 			userService.getAllergens().then(function(response) {
+					$scope.allergens = [];
 					var allergenIds = response.data;
+					for(var i=0; i < allergenIds.length; i++) {
+						$http.get($rootScope.baseUrl + '/api/ingredient/item/' + allergenIds[i].ingredientId).then(function(response){
+	    					if(response.data.status_code == 404) {
+	    						console.log("Ingredient not found");
+	    					}
+	    					else {
+	    						console.log("Allergen Data : " + JSON.stringify(response.data));
+	    						$scope.allergens.push(response.data);
+	    					}
+    					});
+					}
 					console.log("USER ALLERGENS: " + JSON.stringify(allergenIds));
 				});
 		}

@@ -181,6 +181,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		return $http.get($rootScope.baseUrl + '/api/allergy/user/' + user.id);
 	};
 
+
 	if($window.sessionStorage.token) {
 		console.log("Session Token: " + $window.sessionStorage.token);
 		token = JSON.parse($window.sessionStorage.token);
@@ -278,6 +279,11 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		}
 		else return $http.get($rootScope.baseUrl + '/api/recipe/user/' + id);
 	}
+	var getConsumedRecipes = function(id) {
+		if($rootScope.saveTheDay) {
+		}
+		else return $http.get($rootScope.baseUrl + '/api/consume/' + id);
+	}
 	var getRecommendedRecipes = function(id) {
 		if($rootScope.saveTheDay) {
 				return $q(function(resolve,reject) {
@@ -288,12 +294,20 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		}
 		else return $http.get($rootScope.baseUrl + '/api/recipe/recommend/' + id);
 	}
+
+	var getAvgConsumption = function(id) {
+		if($rootScope.saveTheDay) {
+		}
+		else return $http.get($rootScope.baseUrl + '/api/consume/daily/average/' + id);
+	}
 	return {
 		addRecipe : addRecipe,
 		fetchAllRecipes : fetchAllRecipes,
 		getAllRecipes : getAllRecipes,
 		getUserRecipes : getUserRecipes,
+		getConsumedRecipes : getConsumedRecipes,
 		getRecommendedRecipes : getRecommendedRecipes,
+		getAvgConsumption : getAvgConsumption,
 		getRecipes : function() {
 			return recipes;
 		},
