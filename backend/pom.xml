@@ -137,5 +137,14 @@
 		<version>2.22.1</version>
 	</dependency>
 	
+
+  <dependency>
+      <groupId>edu.smu.tspell.wordnet</groupId>
+      <artifactId>wordnet</artifactId>
+      <version>1</version>
+  </dependency>
+
+
+  
   </dependencies>
 </project>
