@@ -2,6 +2,7 @@ package com.boun.swe.wawwe.Utils;
 
 import android.util.Log;
 
+import com.boun.swe.wawwe.Models.Allergy;
 import com.boun.swe.wawwe.Models.AutoComplete;
 import com.boun.swe.wawwe.Models.Nutrition;
 import com.google.gson.JsonDeserializationContext;
@@ -334,6 +335,13 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
+    public static void getUserAllergy(String tag, Response.Listener<Allergy[]> successListener,
+                                               Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("allergy/user/%d", App.getUserId()),
+                Allergy[].class, successListener, failureListener).setTag(tag));
+    }
+
     public static void addConsumed(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder()
@@ -350,6 +358,28 @@ public class API {
 
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/consume", Recipe.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+
+    }
+
+    public static void addAllergy(String tag, Allergy allergy, Response.Listener<Allergy> successListener,
+                                   Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return f.getName().equals("userId");
+                    }
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
+                .create()
+                .toJson(allergy, Allergy.class);
+
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/allergy", Allergy.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
 
     }
