@@ -111,7 +111,7 @@ public class Filter {
         }
         
         if(map.getFirst("period") == null){
-            setPeriod("weekly");
+            setPeriod(null);
         }else{
             setPeriod(map.getFirst("period"));
         }

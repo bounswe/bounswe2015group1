@@ -119,7 +119,7 @@ public abstract class SearchDAO{
             "    )"+
             "    and a.rating >= :minRating "+
             "    and a.rating \\<= :maxRating "+
-            "    and a.period = :period "+
+            "    and a.period = COALESCE(:period,a.period) "+
             "and nutritions.calories >= :minNutrition.calories "+
             "and nutritions.calories \\<= :maxNutrition.calories "+
             "and nutritions.carbohydrate >= :minNutrition.carbohydrate "+
