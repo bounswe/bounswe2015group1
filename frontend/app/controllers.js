@@ -2,15 +2,24 @@ var myApp = angular.module('FoodApp.Controllers', []);
 
 myApp.controller('MainCtrl', function($scope, $state, $http, $rootScope, recipeService, menuService) {
 				$scope.recipes = [];
-
+				$scope.menus = [];
 		var init = function() {
 			recipeService.getAllRecipes().then(function(response) {
-				$scope.recipes = response.data;
+				var allRecipes = response.data;
+				allRecipes.sort( function() { return 0.5 - Math.random() } );
+				var recipeLength = allRecipes.length < 9 ? allRecipes.length : 9;
+				for(var i=0; i <recipeLength; i++) {
+					$scope.recipes.push(allRecipes[i])
+				}
 				//console.log(JSON.stringify($scope.recipes));
 			});
 			menuService.fetchAllMenus().then(function(response) {
-				$scope.menus = response.data;
-				//console.log(JSON.stringify($scope.recipes));
+				var allMenus = response.data;
+				allMenus.sort( function() { return 0.5 - Math.random() } );
+				var menuLength = allMenus.length < 9 ? allMenus.length : 9;
+				for(var i=0; i < menuLength; i++) {
+					$scope.menus.push(allMenus[i])
+				}
 			});
 		};
 

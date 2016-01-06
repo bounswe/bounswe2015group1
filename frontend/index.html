@@ -114,44 +114,53 @@
                                   <div uib-collapse="isCollapsed">
                                     <div class="well well-lg" ng-init="isRecipe = true;">
                                       <form name="AdvancedSearchForm" role="form" novalidate>
-                                        <div ng-init="">
-                                            <input type="radio" ng-model="typeName" value="recipe" ng-checked="true" ng-click="isRecipe = true;"/>Recipe
-                                            <input type="radio" ng-model="typeName" value="menu" ng-click="isRecipe = false;"/>Menu<br />
-                                        </div>
                                         <div>
                                             <label>Min Rating:</label>
                                             <input type="number" ng-model="minRating"  name="minRating" min="1" max="5" integer />
                                             <label>Max Rating:</label>
                                             <input  type="number" ng-model="maxRating" name="maxRating" min="1" max="5" integer />
                                         </div>
-                                        <div ng-show="!isRecipe">
+                                        <div>
                                           <label>Period</label>
-                                          <select class="form-control" ng-model="period">
+                                          <select class="form-control" ng-model="period" default="none">
+                                            <option value="none" selected>None</option>
                                             <option value="daily" selected>Daily</option>
                                             <option value="weekly">Weekly</option>
                                             <option value="monthly">Monthly</option>
                                           </select>
                                         </div>
+                                        <div class="col-md-9">
+                                          <label>Included Ingredients</label>
+                                          <tag-manager tags="includedIngredients"></tag-manager>
+                                        </div>
+                                        <div class="col-md-9">
+                                          <label>Excluded Ingredients</label>
+                                          <tag-manager tags="excludedIngredients"></tag-manager>
+                                        </div>
+                                        <div>
+                                          <table>
+                                            <th>
+                                              <td>Min</td>
+                                              <td>Max</td>
+                                            </th>
+                                            <tr ng-repeat="nutritionType in nutritionList">
+                                              <td>
+                                                <label>{{ nutritionType.charAt(0).toUpperCase() + nutritionType.slice(1)}}</label>
+                                              </td>
+                                              <td>
+                                                <input type="number" ng-model="mins[nutritionType]" min="0" step="0.1" />
+                                              </td>
+                                              <td>
+                                                <input type="number" ng-model="maxs[nutritionType]"  min="0" step="0.1" />
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </div>
                                       </form>
-
-
-                                      <div>
-                                        <label>Excludes</label>
-                                        <input type="text" ng-model="excludesText" placeholder="Excluding Ingredients">
-                                      </div>
-                                      <div>
-                                        <label>Provider</label>
-                                        <input type="text" ng-model="providerName" placeholder="Provider Name">
-                                      </div>
-                                      <div>
-                                        <label>Location</label>
-                                        <input type="text" ng-model="location" placeholder="Location">
-                                      </div>
-                                    </div>
                                   </div>
                         </div>
                   </div>
-                        
+                  </div>
                 </form>
             </div>    
           </div>

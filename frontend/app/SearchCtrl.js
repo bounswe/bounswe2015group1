@@ -13,18 +13,45 @@ myApp.controller('SearchCtrl', function($scope, $rootScope, $state, $stateParams
 		};
 
 		$scope.search = function(query) {
+			$scope.recipeResults = [];
+			$scope.menuResults = [];
 			searchService.recipeSearch(query).then(function(response) {
-				$scope.recipeResults = response.data;
+				if(response.status == 200)
+					$scope.recipeResults = response.data;
 			});
 			searchService.menuSearch(query).then(function(response) {
 				console.log("SearchCtrl Menu Results: " + JSON.stringify(response.data));
-				$scope.menuResults = response.data;
+				if(response.status == 200)
+					$scope.menuResults = response.data;
 			});
 		}
 
-		$scope.search($stateParams.query);
+		$scope.advancedSearch = function(query, params) {
+			$scope.recipeResults = [];
+			$scope.menuResults = [];
+			searchService.recipeAdvancedSearch(query, params).then(function(response) {
+				if(response.status == 200)
+					$scope.recipeResults = response.data;
+			});
+			searchService.menuAdvancedSearch(query, params).then(function(response) {
+				console.log("SearchCtrl Menu Results: " + JSON.stringify(response.data));
+				if(response.status == 200)
+					$scope.menuResults = response.data;
+			});
+		}
+		
 		/*$scope.$watch(searchService.getResults, function() {
 				$scope.results = searchService.getResults();
 				console.log('Results Fetched');
 		});*/
+		var init = function() {
+			if($stateParams.params !== null && $stateParams.params != '' && typeof $stateParams.params != 'undefined' ) {
+				$scope.advancedSearch($stateParams.query, JSON.parse($stateParams.params));
+			}
+			else {
+				$scope.search($stateParams.query);
+			}
+		}
+
+		init();
 	});

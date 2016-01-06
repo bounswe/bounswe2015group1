@@ -34,7 +34,7 @@ angular.module('FoodApp').config(function($stateProvider, $urlRouterProvider, $l
 		controller : 'ViewMenuCtrl',
 		templateUrl : '/views/viewMenu.html'
 	}).state('search', {
-		url : '/search/:query',
+		url : '/search/:query/:params',
 		controller : 'SearchCtrl',
 		templateUrl : '/views/search.html'
 	});
@@ -75,6 +75,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 	var user = { "id" : -1};
 	var token = null;
 	var loggedIn = false;
+	var initialized = false;
 	var logout = function() {
 			var req = {
 			 method: 'POST',
@@ -256,15 +257,20 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 	};
 
 
-	if($window.sessionStorage.token) {
-		console.log("Session Token: " + $window.sessionStorage.token);
-		token = JSON.parse($window.sessionStorage.token);
-		$http.get($rootScope.baseUrl + '/api/user/'+ token.userId).then(function(response) {
-			user = response.data;
-			console.log("User exists :" + JSON.stringify(user));
-			loggedIn = true;
-		});
+	var init = function() {
+		if($window.sessionStorage.token) {
+			console.log("Session Token: " + $window.sessionStorage.token);
+			token = JSON.parse($window.sessionStorage.token);
+			$http.get($rootScope.baseUrl + '/api/user/'+ token.userId).then(function(response) {
+				user = response.data;
+				console.log("User exists :" + JSON.stringify(user));
+				loggedIn = true;
+			});
+		}
+		initialized = true;
 	}
+
+	init();
 
 	return {
 		login : login,
@@ -280,6 +286,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		},
 
 		getUser : function() {
+			if(initialized == false) init();
 			return user;
 		},
 		getToken : function() {
@@ -562,20 +569,23 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, $
 			return response.data;
 		});*/
 	};
+	var recipeAdvancedSearch = function(query, sParams) {
+		return $http({url: $rootScope.baseUrl + '/api/search/advancedSearch/recipe/' + query,
+					  method : 'GET',
+					  params : sParams
+					});
+	};
+	var menuAdvancedSearch = function(query, sParams) {
+		return $http({url: $rootScope.baseUrl + '/api/search/advancedSearch/menu/' + query,
+					  method : 'GET',
+					  params : sParams
+					});
+	}
 	return {
 		recipeSearch : recipeSearch,
 		menuSearch : menuSearch,
-		/*getResults : function() {
-			return results;
-		},
-		getResultWithID : function(id) {
-			var arrLen = results.length;
-			for (var i = 0; i < arrLen; i++) {
-    			if(results[i].id == id) {
-    				return results[i];
-    			}
-			}
-		}*/
+		recipeAdvancedSearch : recipeAdvancedSearch,
+		menuAdvancedSearch : menuAdvancedSearch
 	};
 });
 

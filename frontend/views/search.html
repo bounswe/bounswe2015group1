@@ -1,7 +1,7 @@
 <div ng-controller="SearchCtrl">
 	<uib-tabset>
     	<uib-tab heading="Recipes">
-    		<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+    		<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" ng-show="recipeResults.length > 0"></uib-pagination>
 				<div class="row" ng-repeat=" recipe in recipeResults.slice(((recipesCurrentPage-1)*maxSize),recipesCurrentPage*maxSize)">
 					<div class="col-md-3">
 		              	<img src="img/chefhat.png" class="img-thumbnail">
@@ -11,7 +11,8 @@
 	       				<p>{{ recipe.description}}</p>
 	            	</div>
 				</div>
-			<uib-pagination total-items="recipeResults.length" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+			<uib-pagination total-items="recipeResults.length" ng-show="recipeResults.length > 0" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+			<p ng-hide="recipeResults.length > 0">No recipe is found</p>
     	</uib-tab>
     		<!--
     		<div ng-repeat="result in menuResults" class="well well-lg row"> 
@@ -28,7 +29,7 @@
 				</div>
 			</div>-->
     	<uib-tab heading="Menus">
-    	    <uib-pagination total-items="menuResults.length" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+    	    <uib-pagination total-items="menuResults.length" ng-show="menuResults.length > 0" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
 				<div class="row" ng-repeat=" menu in menuResults.slice(((menusCurrentPage-1)*maxSize),menusCurrentPage*maxSize)">
 					<div class="col-md-3">
 		              	<img src="img/chefhat.png" class="img-thumbnail">
@@ -38,7 +39,8 @@
 	       				<p>{{ menu.description}}</p>
 	            	</div>
 				</div>
-			<uib-pagination total-items="menuResults.length" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+			<uib-pagination total-items="menuResults.length"  ng-show="menuResults.length > 0" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+			<p ng-hide="menuResults.length > 0">No menu is found</p>
     	</uib-tab>
   	</uib-tabset>
 	
