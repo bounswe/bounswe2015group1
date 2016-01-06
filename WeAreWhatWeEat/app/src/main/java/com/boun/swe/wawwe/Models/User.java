@@ -52,7 +52,7 @@ public class User extends BaseModel implements Parcelable {
         password = in.readString();
         fullName = in.readString();
         location = in.readString();
-        rating = in.readDouble();
+        rating = in.readFloat();
         dateOfBirth = new Date(in.readLong());
     }
 
@@ -116,7 +116,7 @@ public class User extends BaseModel implements Parcelable {
         dest.writeString(password);
         dest.writeString(fullName);
         dest.writeString(location);
-        dest.writeDouble(rating);
+        dest.writeFloat(rating);
         dest.writeLong(dateOfBirth.getTime());
     }
 

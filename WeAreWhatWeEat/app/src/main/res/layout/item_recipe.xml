@@ -10,6 +10,21 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/item_paddingLow" >
 
+        <TextView
+            android:id="@+id/textView_recommended"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/item_margin"
+            android:padding="@dimen/item_marginLow"
+            android:visibility="gone"
+            android:text="Recommended" />
+
         <ImageView
             android:id="@+id/recipePic_small"
             android:layout_width="@dimen/image_width_bigger"

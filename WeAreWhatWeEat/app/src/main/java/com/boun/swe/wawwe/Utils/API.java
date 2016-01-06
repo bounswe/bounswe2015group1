@@ -177,7 +177,6 @@ public class API {
     //Not Tested and No Api yet
     public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
-        //TODO build the post body or make the method GET with url /recipe/search/{srchTxt}
         if (isTest) {
             String file1 = "test_recipe1.json";
             String file2 = "test_recipe2.json";
@@ -335,31 +334,12 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
+    // TODO unimplemented new calls
     public static void getUserAllergy(String tag, Response.Listener<Allergy[]> successListener,
                                                Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("allergy/user/%d", App.getUserId()),
                 Allergy[].class, successListener, failureListener).setTag(tag));
-    }
-
-    public static void addConsumed(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
-                               Response.ErrorListener failureListener) {
-        String postBody = new GsonBuilder()
-                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
-                    @Override
-                    public JsonElement serialize(Date src,
-                                                 Type typeOfSrc,
-                                                 JsonSerializationContext context) {
-                        return new JsonPrimitive(src.getTime());
-                    }
-                })
-                .create()
-                .toJson(recipe, Recipe.class);
-
-        mQueue.add(new GeneralRequest<>(Request.Method.POST,
-                BASE_URL + "/consume", Recipe.class, successListener, failureListener)
-                .setPostBodyInJSONForm(postBody).setTag(tag));
-
     }
 
     public static void addAllergy(String tag, Allergy allergy, Response.Listener<Allergy> successListener,
@@ -380,6 +360,26 @@ public class API {
 
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/allergy", Allergy.class, successListener, failureListener)
+                .setPostBodyInJSONForm(postBody).setTag(tag));
+
+    }
+
+    public static void addConsumed(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
+                                   Response.ErrorListener failureListener) {
+        String postBody = new GsonBuilder()
+                .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+                    @Override
+                    public JsonElement serialize(Date src,
+                                                 Type typeOfSrc,
+                                                 JsonSerializationContext context) {
+                        return new JsonPrimitive(src.getTime());
+                    }
+                })
+                .create()
+                .toJson(recipe, Recipe.class);
+
+        mQueue.add(new GeneralRequest<>(Request.Method.POST,
+                BASE_URL + "/consume", Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
 
     }
@@ -514,8 +514,9 @@ public class API {
                 successListener, failureListener).setTag(tag));
     }
 
-    public static void getMenu(String tag, int menuID, Response.Listener<Menu> successListener,
-                                      Response.ErrorListener failureListener) {
+    public static void getMenu(String tag, int menuID,
+                               Response.Listener<Menu> successListener,
+                               Response.ErrorListener failureListener) {
         if(isTest){
             String file1 = "test_menu1.json";
 
@@ -586,6 +587,16 @@ public class API {
         }
     }
 
+    /**
+     * Brings all comments that have written by given User
+     *
+     * @param tag required for thread safety, caller has to provide this and call to cancel request on its destroy
+     * @param type
+     * @param parentID
+     * @param userID
+     * @param successListener
+     * @param failureListener
+     */
     public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
                                              Response.Listener<Comment[]> successListener,
                                              Response.ErrorListener failureListener) {
@@ -696,6 +707,7 @@ public class API {
                 BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)),
                 Rate.class, successListener, failureListener).setTag(tag));
     }
+
     public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
                                Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {

@@ -1,17 +1,13 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Gallery;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.CustomViews.CommentRatingView;
-import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;

@@ -1,12 +1,9 @@
 package com.boun.swe.wawwe.Fragments;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -50,7 +47,6 @@ public class MenuCreator extends LeafFragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
         TAG = context.getString(R.string.title_menu_menu);
     }
 
@@ -128,16 +124,18 @@ public class MenuCreator extends LeafFragment{
                 String description = menuDesc.getText().toString();
                 List<Integer> recipeIds = new ArrayList<Integer>();
 
-                int count = recipeHolder.getChildCount();
-                for(int i=0;i<count;i++){
-                    View view = recipeHolder.getChildAt(i);
-                    if(view instanceof Spinner){
-                        int itemPos = ((Spinner) view).getSelectedItemPosition();
-                        recipeIds.add(userSpecificRecipes.get(itemPos).getId());
+                for(int i = 0;i < recipeHolder.getChildCount() -1;i++) {
+                    ViewGroup recipeRow = (ViewGroup) recipeHolder.getChildAt(i);
+                    for(int c = 0;c < recipeHolder.getChildCount();c++) {
+                        View view = recipeRow.getChildAt(c);
+                        if(view instanceof Spinner){
+                            int itemPos = ((Spinner) view).getSelectedItemPosition();
+                            recipeIds.add(userSpecificRecipes.get(itemPos).getId());
+                        }
                     }
                 }
 
-                com.boun.swe.wawwe.Models.Menu menu = new com.boun.swe.wawwe.Models.Menu(name,period,recipeIds,description);
+                Menu menu = new Menu(name, period, recipeIds, description);
 
                 API.createMenu(getTag(), menu,
                         new Response.Listener<com.boun.swe.wawwe.Models.Menu>() {
@@ -190,19 +188,6 @@ public class MenuCreator extends LeafFragment{
 
         recipeHolder.addView(recipeRow, recipeHolder.getChildCount() - 1);
         return recipeRow;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 
     public static MenuCreator getFragment(Menu menu) {

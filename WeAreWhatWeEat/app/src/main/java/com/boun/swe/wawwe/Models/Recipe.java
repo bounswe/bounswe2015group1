@@ -18,9 +18,6 @@ public class Recipe extends BaseModel implements Parcelable {
     private List<String> tags;
     private List<Ingredient> ingredients;
     private Nutrition nutritions;
-    transient private boolean isSubItem
-= false;
-    transient private boolean isRecommended = false;
 
     public Recipe() {
         nutritions = new Nutrition();
@@ -46,7 +43,7 @@ public class Recipe extends BaseModel implements Parcelable {
         ingredients = in.createTypedArrayList(Ingredient.CREATOR);
         nutritions = in.readParcelable(Nutrition.class.getClassLoader());
         createdAt = new Date(in.readLong());
-        rating = in.readDouble();
+        rating = in.readFloat();
     }
 
     public String getName() {
@@ -97,22 +94,6 @@ public class Recipe extends BaseModel implements Parcelable {
         this.nutritions = nutritions;
     }
 
-    public boolean isSubItem() {
-        return isSubItem;
-    }
-
-    public void setIsSubItem(boolean isSubItem) {
-        this.isSubItem = isSubItem;
-    }
-
-    public boolean isRecommended() {
-        return isRecommended;
-    }
-
-    public void setIsRecommended(boolean isRecommended) {
-        this.isRecommended = isRecommended;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
@@ -123,7 +104,7 @@ public class Recipe extends BaseModel implements Parcelable {
         dest.writeTypedList(ingredients);
         dest.writeParcelable(nutritions, flags);
         dest.writeLong(createdAt.getTime());
-        dest.writeDouble(rating);
+        dest.writeFloat(rating);
     }
 
     @Override

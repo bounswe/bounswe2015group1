@@ -72,19 +72,11 @@
                 style="@style/CustomTitle" />
 
             <me.gujun.android.taggroup.TagGroup
-                android:id="@+id/tag_group_static"
-                style="@style/TagGroup.Large"
-
-                app:atg_borderColor="@color/colorAccent"
-                app:atg_textColor="@color/colorAccent"
-                android:layout_margin="10dp"/>
-
-            <me.gujun.android.taggroup.TagGroup
                 android:id="@+id/tag_group"
                 style="@style/TagGroup.Large"
                 app:atg_isAppendMode="true"
-                app:atg_borderColor="@color/colorPrimaryDark"
-                app:atg_textColor="@color/colorPrimaryDark" />
+                app:atg_borderColor="@color/colorAccent"
+                app:atg_textColor="@color/colorAccent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
