@@ -14,11 +14,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.stream.JsonReader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -430,7 +425,7 @@ public class API {
                                       Response.Listener<Allergy[]> successListener,
                                       Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("allergy/user/%d", App.getUserId()),
+                BASE_URL + String.format("/allergy/user/%d", App.getUserId()),
                 Allergy[].class, successListener, failureListener).setTag(tag));
     }
     /**
