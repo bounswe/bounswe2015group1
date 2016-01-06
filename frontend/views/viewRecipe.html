@@ -33,7 +33,9 @@
 			<tr ng-repeat="ingredient in recipe.ingredients">
 				<td class="success">{{ ingredient.amount }}</td>
 				<td class="danger">{{ ingredient.unit }}</td>
-				<td class="info">{{ ingredient.name  }}</td>
+				<td class="info">{{ ingredient.name  }}
+					<b ng-show="ingredient.allergenic">! Allergenic !</b>
+				</td>
 			</tr>
 		</table>
 		<h4 style="font-family: Montserrat;color: #F4A73B;"><u>Description</u></h4>

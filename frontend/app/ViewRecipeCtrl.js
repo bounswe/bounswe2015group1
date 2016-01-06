@@ -22,6 +22,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		$scope.getComments = function() {
 			communityService.getComments("recipe",$scope.recipeId).then(function(response) {
 				comments = response.data;
+				comments.forEach( (comm) => { comm.createdAt = timestampToDate(comm.createdAt) })
 				console.log("COMMENTS :" + JSON.stringify(comments));
 				comments.sort(function(a,b) {
 					if(a.createdAt < b.createdAt) return -1;
@@ -31,6 +32,18 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 				$scope.comments = comments;
 			});
 		};
+
+
+
+		var timestampToDate = function(timestamp){
+		  var d = new Date(timestamp);
+		  var year = d.getFullYear();
+		  var month = d.getMonth() + 1;
+		  var date = d.getDate();
+		  return year + "-" + month + "-" + date;
+		}
+
+
 
 		$scope.getAvgRating = function() {
 			communityService.getAvgRating("recipe", $scope.recipeId).then(function(response) {
@@ -71,7 +84,17 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 							$scope.ownerName=$scope.owner.fullName;
 						}
 					);
-
+					userService.getAllergens().then(function(response){
+						$scope.allergens = response.data;
+						for(var i=0; i < $scope.recipe.ingredients.length; i++) {
+							$scope.recipe.ingredients[i].allergenic = true;
+							for(var j=0; j < $scope.allergens.length; j++) {
+								if($scope.recipe.ingredients[i].ingredientId == $scope.allergens.ingredientId) {
+									$scope.recipe.ingredients[i].allergenic = true;
+								}
+							}
+						}
+					});
 					for(var i=0; i < $scope.recipe.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.recipe.ingredients[i].ingredientId).then(function(response){
 	    						if(response.data.status_code == 404) {
