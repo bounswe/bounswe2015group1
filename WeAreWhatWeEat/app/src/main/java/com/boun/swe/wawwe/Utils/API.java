@@ -321,7 +321,7 @@ public class API {
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
 
-    public static void getRecommendedRecipes(String tag, int rId,
+    public static void getRecommendedRecipesForRecipe(String tag, int rId,
                                              Response.Listener<Recipe[]> successListener,
                                              Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
