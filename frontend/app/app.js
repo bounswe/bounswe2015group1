@@ -182,6 +182,58 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 
 	};
 
+	var update = function(id, fullName, email, password, dateOfBirth, location, isRestaurant){
+		var req;
+		var reqConsumerUser = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/user/update',
+		 headers: {
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"id" : id,
+		 	"email" : email,
+		 	"password" : password,
+		 	"fullName" : fullName,
+		 	"location" : location,
+		 	"dateOfBirth" : dateOfBirth,
+		 	"isRestaurant" : isRestaurant
+		 }
+		};
+
+		var reqProviderUser = {
+		 method : 'POST',
+		 url : $rootScope.baseUrl + '/api/user/update',
+		 headers: {
+		    'Content-Type' : 'application/json'	
+		 },
+		 data: {
+		 	"id" : id,
+		 	"email" : email,
+		 	"password" : password,
+		 	"fullName" : fullName,
+		 	"location" : location,
+		 	"isRestaurant" : isRestaurant
+		 }
+		};
+		console.log(id + " " + email + " " + password + " " + fullName + " " + location + " " + dateOfBirth + " " + isRestaurant);
+		if(!isRestaurant)
+			req = reqConsumerUser;
+		else
+			req = reqProviderUser;
+		$http(req).then(function(response){
+			console.log("Update Success");
+			console.log(JSON.stringify(response.data));
+			// alert("You have updated your profile successfully...");
+			//$window.location.href = "/profile";
+
+		}, function(){
+			console.log("Update Error");
+			// alert("An error occured while updating your profile. Try again...");
+			//$window.location.href = "/profile";
+		});
+	}
+
 	var addAllergen = function(allergenId){
 		var req = {
 		 method : 'POST',
@@ -215,7 +267,8 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 	return {
 		login : login,
 		logout : logout,
-		register: register,
+		register : register,
+		update : update,
 		getAllergens : getAllergens,
 		addAllergen : addAllergen,
 		getUserWithId : function(id){

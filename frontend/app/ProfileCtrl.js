@@ -1,10 +1,10 @@
 myApp.controller('ProfileCtrl', function($rootScope,$scope,$http,userService,recipeService) {
 		var init = function() {
 			console.log(JSON.stringify(userService.getUser()));
-			$scope.userName = userService.getUser().fullName;
-			$scope.address = userService.getUser().location;
-			$scope.email = userService.getUser().email;
-			$scope.birthDate=userService.getUser().dateOfBirth;
+			$scope.nameProfile = userService.getUser().fullName;
+			$scope.emailProfile = userService.getUser().email;
+			$scope.locationProfile = userService.getUser().location;
+			$scope.isRestaurantProfile = userService.getUser().isRestaurant;
 
 			var usrId = userService.getUser().id;
 			
@@ -71,6 +71,18 @@ myApp.controller('ProfileCtrl', function($rootScope,$scope,$http,userService,rec
 					}
 					console.log("USER ALLERGENS: " + JSON.stringify(allergenIds));
 				});
+		}
+
+		$scope.updateProfile = function(){
+			console.log($scope.nameProfile);
+			console.log($scope.emailProfile);
+			console.log($scope.passProfile);
+			console.log($scope.birthDateProfile);
+			console.log($scope.locationProfile);
+			
+			userService.update(userService.getUser().id, $scope.nameProfile, $scope.emailProfile, 
+				$scope.passProfile, $scope.birthDateProfile,
+				$scope.locationProfile, userService.getUser().isRestaurant);
 		}
 
 		init();
