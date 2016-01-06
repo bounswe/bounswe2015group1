@@ -86,10 +86,13 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 					);
 					userService.getAllergens().then(function(response){
 						$scope.allergens = response.data;
+						console.log("Allergens " + JSON.stringify($scope.allergens))
 						for(var i=0; i < $scope.recipe.ingredients.length; i++) {
-							$scope.recipe.ingredients[i].allergenic = true;
+							$scope.recipe.ingredients[i].allergenic = false;
 							for(var j=0; j < $scope.allergens.length; j++) {
-								if($scope.recipe.ingredients[i].ingredientId == $scope.allergens.ingredientId) {
+								console.log("Comparing  :" + $scope.recipe.ingredients[i].ingredientId + " with " +  $scope.allergens[j].ingredientId)
+
+								if($scope.recipe.ingredients[i].ingredientId == $scope.allergens[j].ingredientId) {
 									$scope.recipe.ingredients[i].allergenic = true;
 								}
 							}

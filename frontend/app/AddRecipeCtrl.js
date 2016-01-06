@@ -154,7 +154,8 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 	    							console.log("Ingredient Unit Fetched")
 	    							for(var ind=0; ind < $scope.ingredients.length; ind++) {
 	    								if($scope.ingredients[ind].ingredientId == response.data.item_id) {
-	    									var ing = $scope.ingredients[ind];
+	    									console.log("Fetched ingredient:" + JSON.stringify(response.data));
+	    									var ing = response.data;
 	    									$scope.ingredientUnits[ind] = response.data.nf_serving_size_unit; 
     										var nutrition = { "calories" : 0, "carbohydrate" : 0, "fats" : 0, "proteins" : 0, "sodium" : 0, "fiber" : 0, "cholesterol" : 0, "sugars" : 0, "iron" : 0};
 											nutrition.calories = ing.nf_calories;
@@ -166,7 +167,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 											nutrition.cholesterol = ing.nf_cholesterol;
 											nutrition.sugars = ing.nf_sugars;
 											nutrition.iron = ing.nf_iron_dv;
-											$scope.ingredients[ind].nutrition = nutrition;
+											$scope.ingredients[ind].nutritions = nutrition;
 	    								}
 	    							}
 	    							console.log("Ingredient Units " + JSON.stringify($scope.ingredientUnits))

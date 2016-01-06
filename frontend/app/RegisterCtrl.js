@@ -4,7 +4,8 @@ myApp.controller('RegisterCtrl', function($scope, userService) {
 				$scope.passRegister, $scope.birthDateRegister, $scope.locationRegister, false);
 		}
 		$scope.registerAsRestaurant= function(){
+			// 4102358400000 is like a default date for Restaurants as not to disturb user object.
 			userService.register($scope.restNameRegister, $scope.restEmailRegister,
-				$scope.resPassRegister, "31.12.2099", $scope.resLocationRegister, true);
+				$scope.resPassRegister, "4102358400000", $scope.resLocationRegister, true);
 		}
 	});

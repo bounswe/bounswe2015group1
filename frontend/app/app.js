@@ -177,7 +177,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		}, function(){
 			console.log("Register Error");
 			alert("An error occured while registering. Try again...");
-			$window.location.href = "/register";
+			//$window.location.href = "/";
 		});
 
 	};
@@ -188,6 +188,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		 method : 'POST',
 		 url : $rootScope.baseUrl + '/api/user/update',
 		 headers: {
+		 	'Authorization': 'Bearer ' + token.accessToken,
 		    'Content-Type' : 'application/json'	
 		 },
 		 data: {
@@ -205,6 +206,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		 method : 'POST',
 		 url : $rootScope.baseUrl + '/api/user/update',
 		 headers: {
+		 	'Authorization': 'Bearer ' + token.accessToken,
 		    'Content-Type' : 'application/json'	
 		 },
 		 data: {
@@ -224,12 +226,12 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		$http(req).then(function(response){
 			console.log("Update Success");
 			console.log(JSON.stringify(response.data));
-			// alert("You have updated your profile successfully...");
+			alert("You have updated your profile successfully...");
 			//$window.location.href = "/profile";
 
 		}, function(){
 			console.log("Update Error");
-			// alert("An error occured while updating your profile. Try again...");
+			alert("An error occured while updating your profile. Try again...");
 			//$window.location.href = "/profile";
 		});
 	}
@@ -731,3 +733,15 @@ angular.module('FoodApp').directive('tagManager', function() {
 		}
 	};
 });
+
+angular.module('FoodApp').directive('stringToTimestamp', function() {
+        return {
+            require: 'ngModel',
+            link: function(scope, ele, attr, ngModel) {
+                // view to model
+                ngModel.$parsers.push(function(value) {
+                    return Date.parse(value);
+                });
+            }
+        }
+    });
