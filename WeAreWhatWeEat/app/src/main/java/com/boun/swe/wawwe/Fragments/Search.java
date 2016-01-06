@@ -6,6 +6,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -13,6 +15,8 @@ import android.widget.EditText;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.boun.swe.wawwe.App;
+import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
@@ -109,6 +113,29 @@ public class Search extends LeafFragment {
         searchFragment.setArguments(searchBundle);
 
         return searchFragment;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        menu.findItem(R.id.menu_profile_editDone).setVisible(true);
+        menu.findItem(R.id.menu_profile_add).setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_profile_editDone:
+                if (context instanceof MainActivity) {
+                    MainActivity main = (MainActivity) context;
+                    main.makeFragmentTransaction(AdvancedSearch.getFragment(null));
+                }
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

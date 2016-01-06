@@ -74,6 +74,7 @@
     <string name="title_menu_search">Search</string>
     <string name="title_menu_menu">Create Menu</string>
     <string name="title_menu_stats">Statistics</string>
+    <string name="title_menu_advanced_search">Filters</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
     <string name="title_menu_recipeDetail">Recipe Detail</string>
