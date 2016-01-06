@@ -177,7 +177,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		}, function(){
 			console.log("Register Error");
 			alert("An error occured while registering. Try again...");
-			$window.location.href = "/register";
+			$window.location.href = "/";
 		});
 
 	};
