@@ -341,7 +341,7 @@ public class API {
     public static void getUserAllergy(String tag, Response.Listener<Allergy[]> successListener,
                                                Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("allergy/user/%d", App.getUserId()),
+                BASE_URL + String.format("/allergy/user/%d", App.getUserId()),
                 Allergy[].class, successListener, failureListener).setTag(tag));
     }
 
