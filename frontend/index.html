@@ -112,7 +112,29 @@
                         <div>
                             <label class="active" style="color:#DDDDDD;" ng-click="isCollapsed = !isCollapsed">Advanced Options</label>
                                   <div uib-collapse="isCollapsed">
-                                    <div class="well well-lg">
+                                    <div class="well well-lg" ng-init="isRecipe = true;">
+                                      <form name="AdvancedSearchForm" role="form" novalidate>
+                                        <div ng-init="">
+                                            <input type="radio" ng-model="typeName" value="recipe" ng-checked="true" ng-click="isRecipe = true;"/>Recipe
+                                            <input type="radio" ng-model="typeName" value="menu" ng-click="isRecipe = false;"/>Menu<br />
+                                        </div>
+                                        <div>
+                                            <label>Min Rating:</label>
+                                            <input type="number" ng-model="minRating"  name="minRating" min="1" max="5" integer />
+                                            <label>Max Rating:</label>
+                                            <input  type="number" ng-model="maxRating" name="maxRating" min="1" max="5" integer />
+                                        </div>
+                                        <div ng-show="!isRecipe">
+                                          <label>Period</label>
+                                          <select class="form-control" ng-model="period">
+                                            <option value="daily" selected>Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                          </select>
+                                        </div>
+                                      </form>
+
+
                                       <div>
                                         <label>Excludes</label>
                                         <input type="text" ng-model="excludesText" placeholder="Excluding Ingredients">

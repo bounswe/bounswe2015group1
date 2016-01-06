@@ -14,11 +14,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.stream.JsonReader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -80,11 +75,19 @@ public class API {
 
         }
     }
-
+    /**
+     * Sets UUID.
+     *
+     * @param UUID bearer Id to be used for authorization.
+     */
     public static void setUUID(String UUID) {
         instance.UUID = UUID;
     }
-
+    /**
+     * Cancels all ongoing requests in the queue
+     *
+     * @param tag tag to be matched.
+     */
     public static void cancelRequestByTag(final String tag) {
         mQueue.cancelAll(new RequestQueue.RequestFilter() {
             @Override
@@ -107,13 +110,27 @@ public class API {
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/user",
                 User[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getUserInfo(String tag, Response.Listener<User> successListener,
-                                Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +
-                String.format("/user/%s", App.getUserId()), User.class, successListener, failureListener).setTag(tag));
+    /**
+     * Retrieves {@link User user} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link User user} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getUserInfo(String tag,
+                                   Response.Listener<User> successListener,
+                                   Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/user/%s", App.getUserId()),
+                User.class, successListener, failureListener).setTag(tag));
     }
-
+    /**
+     * Retrieves {@link User user} for given id via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link User user} object.
+     * @param failureListener will be called when call fails.
+     */
     public static void getUserInfo(String tag, int userId,
                                    Response.Listener<User> successListener,
                                    Response.ErrorListener failureListener) {
@@ -161,9 +178,18 @@ public class API {
                 .setPostBodyInJSONForm(postBody).setTag(tag));
 
     }
-
-    public static void updateUser(String tag, User user, Response.Listener<User> successListener,
-                               Response.ErrorListener failureListener) {
+    /**
+     * Edits {@link User user} via POST request to server.
+     * Reformats {@link Recipe#createdAt createdAt} field in post body.
+     *
+     * @param tag used as request tag.
+     * @param user {@link User user} with updated values.
+     * @param successListener will be called with same {@link User user} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void updateUser(String tag, User user,
+                                  Response.Listener<User> successListener,
+                                  Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder()
                 .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
                     @Override
@@ -177,48 +203,59 @@ public class API {
                 BASE_URL + "/user/update", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
-    //Not Tested and No Api yet
-    public static void searchRecipe(String tag, String srchTxt, Response.Listener<Recipe[]> successListener,
+    /**
+     * Returns {@link Recipe recipes} for query via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param query text to be searched.
+     * @param successListener will be called with {@link Recipe recipes} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void searchRecipe(String tag, String query,
+                                    Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
         if (isTest) {
-            String file1 = "test_recipe1.json";
-            String file2 = "test_recipe2.json";
-            String postBody1 = Commons.loadJSONFromAsset(file1);
-            String postBody2 = Commons.loadJSONFromAsset(file2);
+            String postBody1 = Commons.loadJSONFromAsset("test_recipe1.json");
+            String postBody2 = Commons.loadJSONFromAsset("test_recipe2.json");
 
-            Gson gson1 = new Gson();
-            Gson gson2 = new Gson();
-            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
-            JsonReader reader2 = new JsonReader(new StringReader(postBody2));
-            reader1.setLenient(true);
-            reader2.setLenient(true);
+            Gson gson = new Gson();
 
-            Recipe testRcp1 = gson1.fromJson(postBody1, Recipe.class);
-            Recipe testRcp2 = gson2.fromJson(postBody2, Recipe.class);
+            Recipe testRcp1 = gson.fromJson(postBody1, Recipe.class);
+            Recipe testRcp2 = gson.fromJson(postBody2, Recipe.class);
 
             Recipe[] searchResults = {testRcp1, testRcp2};
             successListener.onResponse(searchResults);
-
-        } else {
-            mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                    BASE_URL + String.format("/search/recipe/%s", srchTxt),
-                    Recipe[].class, successListener, failureListener).setTag(tag));
-
-        }
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/search/recipe/%s", query),
+                Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static  void searchMenus(String tag, String srchTxt, Response.Listener<Menu[]> successListener,
+    /**
+     * Returns {@link Menu menus} for query via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param query text to be searched.
+     * @param successListener will be called with {@link Menu menu} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static  void searchMenus(String tag, String query,
+                                    Response.Listener<Menu[]> successListener,
                                     Response.ErrorListener failureListener) {
-        if(isTest){
-
-        } else {
-            mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                    BASE_URL + String.format("/search/menu/%s", srchTxt),
+        if(isTest);
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/search/menu/%s", query),
                     Menu[].class, successListener, failureListener).setTag(tag));
-        }
     }
-
-    public static void editRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
+    /**
+     * Edits {@link Recipe recipe} via POST request to server.
+     * Excludes {@link Recipe#createdAt createdAt} field from post body.
+     *
+     * @param tag used as request tag.
+     * @param recipe {@link Recipe recipe} to be added.
+     * @param successListener will be called with same {@link Recipe recipe} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void editRecipe(String tag, Recipe recipe,
+                                  Response.Listener<Recipe> successListener,
                                   Response.ErrorListener failureListener) {
         if (isTest) {
             successListener.onResponse(recipe);
@@ -239,24 +276,51 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-
+    /**
+     * Returns {@link Recipe recipe} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param recipeId {@link Recipe#id id} of recipe for tags.
+     * @param successListener will be called with string array.
+     * @param failureListener will be called when call fails.
+     */
     @Deprecated
-    public static void getRecipeTags(String tag, int recipeId, Response.Listener<String[]> successListener,
-                                  Response.ErrorListener failureListener) {
+    public static void getRecipeTags(String tag, int recipeId,
+                                     Response.Listener<String[]> successListener,
+                                     Response.ErrorListener failureListener) {
         if (isTest) successListener.onResponse(new String[] { "Egg", "Salty", "Breakfast" });
         else mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/recipe/tags/%d", recipeId),
                 String[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getRecipe(String tag, int recipeID, Response.Listener<Recipe> successListener,
-                                      Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/view/%d",
-                recipeID), Recipe.class, successListener, failureListener).setTag(tag));
+    /**
+     * Returns {@link Recipe recipe} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with same {@link Recipe recipe} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getRecipe(String tag, int recipeId,
+                                 Response.Listener<Recipe> successListener,
+                                 Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + String.format("/recipe/view/%d", recipeId),
+                Recipe.class, successListener, failureListener).setTag(tag));
     }
-
-    public static void createRecipe(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
-                                     Response.ErrorListener failureListener) {
+    /**
+     * Creates new {@link Recipe recipe} for user via POST request to server.
+     * Excludes {@link Recipe#userId userId}, {@link Recipe#rating rating} and
+     * internal class {@link Ingredient#nutritions nutritions},
+     * {@link Recipe#id id} fields from post body.
+     *
+     * @param tag used as request tag.
+     * @param recipe {@link Recipe recipe} to be added.
+     * @param successListener will be called with same {@link Recipe recipe} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void createRecipe(String tag, Recipe recipe,
+                                    Response.Listener<Recipe> successListener,
+                                    Response.ErrorListener failureListener) {
         if(isTest){
             successListener.onResponse(recipe);
         }
@@ -277,32 +341,26 @@ public class API {
                 BASE_URL + "/recipe", Recipe.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
+    /**
+     * Returns all user {@link Recipe recipes} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with same {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getUserRecipes(String tag,
+                                      Response.Listener<Recipe[]> successListener,
+                                      Response.ErrorListener failureListener) {
+        if(isTest) {
+            String postBody1 = Commons.loadJSONFromAsset("test_recipe1.json");
+            String postBody2 = Commons.loadJSONFromAsset("test_recipe2.json");
+            String postBody3 = Commons.loadJSONFromAsset("test_recipe3.json");
 
-    public static void getUserRecipes(String tag, Response.Listener<Recipe[]> successListener,
-                                    Response.ErrorListener failureListener) {
-        if(isTest){
-            String file1 = "test_recipe1.json";
-            String file2 = "test_recipe2.json";
-            String file3 = "test_recipe3.json";
+            Gson gson = new Gson();
 
-            String postBody1 = Commons.loadJSONFromAsset(file1);
-            String postBody2 = Commons.loadJSONFromAsset(file2);
-            String postBody3 = Commons.loadJSONFromAsset(file3);
-
-            Gson gson1 = new Gson();
-            Gson gson2 = new Gson();
-            Gson gson3 = new Gson();
-            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
-            JsonReader reader2 = new JsonReader(new StringReader(postBody2));
-            JsonReader reader3 = new JsonReader(new StringReader(postBody3));
-
-            reader1.setLenient(true);
-            reader2.setLenient(true);
-            reader3.setLenient(true);
-
-            Recipe testRcp1 = gson1.fromJson(postBody1, Recipe.class);
-            Recipe testRcp2 = gson2.fromJson(postBody2, Recipe.class);
-            Recipe testRcp3 = gson3.fromJson(postBody3, Recipe.class);
+            Recipe testRcp1 = gson.fromJson(postBody1, Recipe.class);
+            Recipe testRcp2 = gson.fromJson(postBody2, Recipe.class);
+            Recipe testRcp3 = gson.fromJson(postBody3, Recipe.class);
 
             testRcp1.setUserId(App.getUserId());
             testRcp2.setUserId(App.getUserId());
@@ -314,21 +372,41 @@ public class API {
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/recipe/user/%s",
                 App.getUserId()), Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getAllRecipes(String tag, Response.Listener<Recipe[]> successListener,
+    /**
+     * Returns all {@link Recipe recipes} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with same {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getAllRecipes(String tag,
+                                     Response.Listener<Recipe[]> successListener,
                                     Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/recipe/all",
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getRecommendedRecipesForRecipe(String tag, int rId,
+    /**
+     * Returns {@link Recipe recipes} recommended for given id via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param recipeId related recipe {@link Recipe#id id}.
+     * @param successListener will be called with same {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getRecommendedRecipesForRecipe(String tag, int recipeId,
                                              Response.Listener<Recipe[]> successListener,
                                              Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("/recipe/recommend/%d", rId),
+                BASE_URL + String.format("/recipe/recommend/%d", recipeId),
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
+    /**
+     * Returns {@link Recipe recipes} recommended for user via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with same {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
     public static void getRecommendedRecipesForUser(String tag,
                                                     Response.Listener<Recipe[]> successListener,
                                                     Response.ErrorListener failureListener) {
@@ -336,17 +414,32 @@ public class API {
                 BASE_URL + "/recipe/recommend/",
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    // TODO unimplemented new calls
-    public static void getUserAllergy(String tag, Response.Listener<Allergy[]> successListener,
-                                               Response.ErrorListener failureListener) {
+    /**
+     * Returns {@link Allergy allergys} for user via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with same {@link Allergy allergy} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getUserAllergy(String tag,
+                                      Response.Listener<Allergy[]> successListener,
+                                      Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/allergy/user/%d", App.getUserId()),
                 Allergy[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void addAllergy(String tag, Allergy allergy, Response.Listener<Allergy> successListener,
-                                   Response.ErrorListener failureListener) {
+    /**
+     * Adds new {@link Allergy allergy} for user via POST request to server.
+     * Excludes {@link Menu#userId userId} field from post body.
+     *
+     * @param tag used as request tag.
+     * @param allergy {@link Allergy allergy} to be added.
+     * @param successListener will be called with same {@link Allergy allergy} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void addAllergy(String tag, Allergy allergy,
+                                  Response.Listener<Allergy> successListener,
+                                  Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder()
                 .setExclusionStrategies(new ExclusionStrategy() {
                     @Override
@@ -367,8 +460,17 @@ public class API {
                 .setPostBodyInJSONForm(postBody).setTag(tag));
 
     }
-
-    public static void addConsumed(String tag, Recipe recipe, Response.Listener<Recipe> successListener,
+    /**
+     * Adds new consumption data for this recipe via POST request to server.
+     * Reformats {@link Recipe#createdAt createdAt} field in post body.
+     *
+     * @param tag used as request tag.
+     * @param recipe used as request tag.
+     * @param successListener will be called with {@link Nutrition nutrition} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void addConsumed(String tag, Recipe recipe,
+                                   Response.Listener<Recipe> successListener,
                                    Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder()
                 .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
@@ -387,22 +489,45 @@ public class API {
                 .setPostBodyInJSONForm(postBody).setTag(tag));
 
     }
-
-    public static void getDailyAverageConsumed(String tag, Response.Listener<Nutrition> successListener,
-                                             Response.ErrorListener failureListener) {
+    /**
+     * Retrieves daily average nutrition values consumed by user via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link Nutrition nutrition} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getDailyAverageConsumed(String tag,
+                                               Response.Listener<Nutrition> successListener,
+                                               Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/consume/daily/average/%d", App.getUserId()),
                 Nutrition.class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getAllRecipesConsumed(String tag, Response.Listener<Recipe[]> successListener,
+    /**
+     * Retrieves recipes that is consumed by user via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getAllRecipesConsumed(String tag,
+                                             Response.Listener<Recipe[]> successListener,
                                              Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
                 BASE_URL + String.format("/consume/%d", App.getUserId()),
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void searchIngredients(String tag, String query, Response.Listener<AutoComplete[]> successListener,
+    /**
+     * Retrieves ingredient names and ids for given query
+     * via GET request to nutritionix server through our server.
+     *
+     * @param tag used as request tag.
+     * @param query query text to retrieve igredients
+     * @param successListener will be called with {@link AutoComplete autoComplete} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void searchIngredients(String tag, String query,
+                                         Response.Listener<AutoComplete[]> successListener,
                                          Response.ErrorListener failureListener) {
         GeneralRequest<AutoComplete[]> request = new GeneralRequest<AutoComplete[]>(
                 Request.Method.GET,
@@ -436,16 +561,15 @@ public class API {
         };
         mQueue.add(request.setTag(tag));
     }
-
     /**
      * This call is deprecated due to wrong frequent server answer http 500,
-     * use {@link #searchIngredients(String, String, Response.Listener, Response.ErrorListener)}
+     * use {@link #searchIngredients(String, String, Response.Listener, Response.ErrorListener) searchIngredients}
      * call instead.
      *
-     * @param tag
-     * @param query
-     * @param successListener
-     * @param failureListener
+     * @param tag used as request tag.
+     * @param query query text to retrieve igredients
+     * @param successListener will be called with {@link AutoComplete autoComplete} objects array.
+     * @param failureListener will be called when call fails.
      */
     @Deprecated
     public static void autocompleteIngredients(String tag, String query,
@@ -455,7 +579,14 @@ public class API {
                 BASE_URL + String.format("/ingredient/autocomplete/%s", query),
                 AutoComplete[].class, successListener, failureListener).setTag(tag));
     }
-
+    /**
+     * Gets all menus via GET request to nutritionix server through our server.
+     *
+     * @param tag used as request tag.
+     * @param itemId nutritionix item id.
+     * @param successListener will be called with {@link Ingredient ingredient} object.
+     * @param failureListener will be called when call fails.
+     */
     public static void getIngredientItem(String tag, String itemId,
                                          Response.Listener<Ingredient> successListener,
                                          Response.ErrorListener failureListener) {
@@ -495,88 +626,107 @@ public class API {
         };
         mQueue.add(request.setTag(tag));
     }
-
-    public static void getAllMenus(String tag, Response.Listener<Menu[]> successListener,
+    /**
+     * Gets all menus via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link Menu menu} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getAllMenus(String tag,
+                                   Response.Listener<Menu[]> successListener,
                                    Response.ErrorListener failureListener) {
-        if(isTest){
-            String file1 = "test_menu1.json";
+        if(isTest) {
+            String postBody1 = Commons.loadJSONFromAsset("test_menu1.json");
 
-            String postBody1 = Commons.loadJSONFromAsset(file1);
+            Gson gson = new Gson();
 
-            Gson gson1 = new Gson();
+            Menu testMenu = gson.fromJson(postBody1, Menu.class);
+            Menu testMenu1 = gson.fromJson(postBody1, Menu.class);
+            Menu testMenu2 = gson.fromJson(postBody1, Menu.class);
 
-            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+            successListener.onResponse(new Menu[] { testMenu, testMenu1, testMenu2 });
 
-            reader1.setLenient(true);
-
-            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
-            Menu testMenu1 = gson1.fromJson(postBody1, Menu.class);
-            Menu testMenu2 = gson1.fromJson(postBody1, Menu.class);
-
-            successListener.onResponse(new Menu[] {testMenu, testMenu1, testMenu2});
-        } else mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/menu", Menu[].class,
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + "/menu", Menu[].class,
                 successListener, failureListener).setTag(tag));
     }
+    /**
+     * Gets menus for user via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link Menu menu} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getUserMenus(String tag,
+                                    Response.Listener<Menu[]> successListener,
+                                    Response.ErrorListener failureListener) {
+        if(isTest) {
+            String postBody1 = Commons.loadJSONFromAsset("test_menu1.json");
+            Gson gson = new Gson();
 
-    public static void getUserMenus(String tag, Response.Listener<Menu[]> successListener,
-                                   Response.ErrorListener failureListener) {
-        if(isTest){
-            String file1 = "test_menu1.json";
+            Menu testMenu = gson.fromJson(postBody1, Menu.class);
+            Menu testMenu1 = gson.fromJson(postBody1, Menu.class);
+            Menu testMenu2 = gson.fromJson(postBody1, Menu.class);
 
-            String postBody1 = Commons.loadJSONFromAsset(file1);
-
-            Gson gson1 = new Gson();
-
-            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
-
-            reader1.setLenient(true);
-
-            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
-            Menu testMenu1 = gson1.fromJson(postBody1, Menu.class);
-            Menu testMenu2 = gson1.fromJson(postBody1, Menu.class);
-
-            successListener.onResponse(new Menu[] {testMenu, testMenu1, testMenu2});
-        } else mQueue
-                .add(new GeneralRequest<>(Request.Method.GET,
-                        String.format("%s%s%d", BASE_URL, "/menu/user/", App.getUserId()),
-                        Menu[].class, successListener, failureListener)
-                        .setTag(tag));
+            successListener.onResponse(new Menu[] { testMenu, testMenu1, testMenu2 });
+        }
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                String.format("%s%s%d", BASE_URL, "/menu/user/", App.getUserId()),
+                Menu[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void getMenu(String tag, int menuID,
+    /**
+     * Gets menu with {@link Menu#id id} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param menuId {@link Menu#id id} of menu to be retrieved.
+     * @param successListener will be called with {@link Menu menu} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getMenu(String tag, int menuId,
                                Response.Listener<Menu> successListener,
                                Response.ErrorListener failureListener) {
         if(isTest){
-            String file1 = "test_menu1.json";
-
-            String postBody1 = Commons.loadJSONFromAsset(file1);
-
-            Gson gson1 = new Gson();
-
-            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
-
-            reader1.setLenient(true);
-
-            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
+            String postBody1 = Commons.loadJSONFromAsset("test_menu1.json");
+            Menu testMenu = new Gson().fromJson(postBody1, Menu.class);
 
             testMenu.setUserId(App.getUserId());
-            testMenu.setId(menuID);
+            testMenu.setId(menuId);
 
             successListener.onResponse(testMenu);
         } else {
-            mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d",
-                    menuID), Menu.class, successListener, failureListener).setTag(tag));
+            mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                    BASE_URL + String.format("/menu/%d",  menuId), Menu.class,
+                    successListener, failureListener).setTag(tag));
         }
     }
-
-    public static void getRecipesforMenu(String tag, int menuID, Response.Listener<Recipe[]> successListener,
-                               Response.ErrorListener failureListener) {
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/menu/%d/recipes",
-                menuID), Recipe[].class, successListener, failureListener).setTag(tag));
+    /**
+     * Gets recipes fot menu with {@link Menu#id id} via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param menuId {@link Menu#id id} of menu to be retrieved.
+     * @param successListener will be called with {@link Recipe recipe} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getRecipesforMenu(String tag, int menuId,
+                                         Response.Listener<Recipe[]> successListener,
+                                         Response.ErrorListener failureListener) {
+        mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL +String.format("/menu/%d/recipes", menuId),
+                Recipe[].class, successListener, failureListener).setTag(tag));
     }
-
-    public static void createMenu(String tag, Menu menu, Response.Listener<Menu> successListener,
-                             Response.ErrorListener failureListener) {
+    /**
+     * Adds menu as a contribution via POST request to server.
+     * Excludes {@link Menu#id id} field from post body.
+     *
+     * @param tag used as request tag.
+     * @param menu {@link Menu menu} to be added.
+     * @param successListener will be called with {@link Menu menu} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void createMenu(String tag, Menu menu,
+                                  Response.Listener<Menu> successListener,
+                                  Response.ErrorListener failureListener) {
         if (isTest) {
             successListener.onResponse(menu);
         } else {
@@ -596,13 +746,14 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-    public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
+
+    public static void getAllComments(String tag, String type, int parentId, Response.Listener<Comment[]> successListener,
                                       Response.ErrorListener failureListener) {
         if(isTest){
-            Comment c1 = new Comment("Onur Guler", type, parentID, Commons.getString(R.string.test_comment_recipe1));
-            Comment c2 = new Comment("Cagla Balcik", type, parentID, Commons.getString(R.string.test_comment_recipe2));
-            Comment c3 = new Comment("Mert Tiftikci", type, parentID, Commons.getString(R.string.test_comment_recipe3));
-            Comment c4 = new Comment("Gorkem Onder", type, parentID, Commons.getString(R.string.test_comment_recipe4));
+            Comment c1 = new Comment("Onur Guler", type, parentId, Commons.getString(R.string.test_comment_recipe1));
+            Comment c2 = new Comment("Cagla Balcik", type, parentId, Commons.getString(R.string.test_comment_recipe2));
+            Comment c3 = new Comment("Mert Tiftikci", type, parentId, Commons.getString(R.string.test_comment_recipe3));
+            Comment c4 = new Comment("Gorkem Onder", type, parentId, Commons.getString(R.string.test_comment_recipe4));
 
             c1.setCreatedAt(new Date(1449020159));
             c2.setCreatedAt(new Date(1440517159));
@@ -611,30 +762,41 @@ public class API {
             successListener.onResponse(new Comment[] {c1, c2, c3, c4});
         } else {
             mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d",
-                    type, parentID), Comment[].class, successListener, failureListener).setTag(tag));
+                    type, parentId), Comment[].class, successListener, failureListener).setTag(tag));
         }
     }
-
     /**
-     * Brings all comments that have written by given User
+     * Brings all comments that have written by given user via GET request to server..
      *
-     * @param tag required for thread safety, caller has to provide this and call to cancel request on its destroy
-     * @param type
-     * @param parentID
-     * @param userID
-     * @param successListener
-     * @param failureListener
+     * @param tag used as request tag.
+     * @param type one of ["user", "recipe", "menu"]. Items that could be rated.
+     * @param parentId id of model that requested.
+     * @param userId id of the user that is requested for the comment.
+     * @param successListener will be called with {@link Comment comment} objects array.
+     * @param failureListener will be called when call fails.
      */
-    public static void getAllCommentsForUser(String tag, String type, int parentID, int userID,
+    public static void getAllCommentsForUser(String tag, String type, int parentId, int userId,
                                              Response.Listener<Comment[]> successListener,
                                              Response.ErrorListener failureListener) {
         if(isTest){
-            Comment c1 = new Comment(App.getUser().getFullName(), type, App.getUserId(), Commons.getString(R.string.test_comment_recipe1));
+            Comment c1 = new Comment(App.getUser().getFullName(), type,
+                    App.getUserId(), Commons.getString(R.string.test_comment_recipe1));
         }
-        mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + String.format("/comment/%s/%d/%d",
-                type, parentID, userID), Comment[].class, successListener, failureListener).setTag(tag));
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +
+                String.format("/comment/%s/%d/%d", type, parentId, userId),
+                Comment[].class, successListener, failureListener).setTag(tag));
     }
-
+    /**
+     * Comments on a contribution via POST request to server.
+     * Excludes {@link Comment#id id}, {@link Comment#userFullName userFullName},
+     * {@link Comment#userId userId}, {@link Comment#createdAt createdAt}
+     * fields from post body.
+     *
+     * @param tag used as request tag.
+     * @param comment {@link Comment comment} to be added.
+     * @param successListener will be called with same {@link Comment comment} object.
+     * @param failureListener will be called when call fails.
+     */
     public static void comment(String tag, Comment comment,
                                Response.Listener<Comment> successListener,
                                Response.ErrorListener failureListener) {
@@ -661,8 +823,17 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-
-    public static void deleteComment(String tag, Comment comment, Response.Listener<Comment> successListener,
+    /**
+     * Deletes given comment via POST request to server.
+     * Excludes {@link Comment#userId userId} field from post body.
+     *
+     * @param tag used as request tag.
+     * @param comment {@link Comment comment} to be deleted.
+     * @param successListener will be called with same {@link Comment comment} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void deleteComment(String tag, Comment comment,
+                                     Response.Listener<Comment> successListener,
                                      Response.ErrorListener failureListener) {
         if(isTest) {
             successListener.onResponse(comment);
@@ -683,8 +854,17 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-
-    public static void rate(String tag, Rate rate, Response.Listener<Rate> successListener,
+    /**
+     * Rates a contribution via POST request to server.
+     * Excludes {@link Rate#id id} and {@link Rate#userId userId} fields from post body.
+     *
+     * @param tag used as request tag.
+     * @param rate {@link Rate rate} object that will be delivered.
+     * @param successListener will be called with same {@link Rate rate} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void rate(String tag, Rate rate,
+                            Response.Listener<Rate> successListener,
                             Response.ErrorListener failureListener) {
         if(isTest){
             successListener.onResponse(rate);
@@ -705,22 +885,38 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-
-    public static void getAverageRating(String tag, String type, int parentId, Response.Listener<Rate> successListener,
-                                         Response.ErrorListener failureListener) {
+    /**
+     * Brings average rate of described model via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param type one of ["user", "recipe", "menu"]. Items that could be rated.
+     * @param parentId id of model that requested.
+     * @param successListener will be called with {@link Rate rate} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void getAverageRating(String tag, String type, int parentId,
+                                        Response.Listener<Rate> successListener,
+                                        Response.ErrorListener failureListener) {
         if(isTest){
             float min = 0.0f; float max = 5.0f;
             Random rand = new Random();
             float avg = rand.nextFloat()*(max-min);
             Rate r1 = new Rate(type, parentId, avg);
             successListener.onResponse(r1);
-        } else{
-            mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                    BASE_URL + (String.format("/rate/%s/%d", type, parentId)),
-                    Rate.class, successListener, failureListener).setTag(tag));
-        }
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                BASE_URL + (String.format("/rate/%s/%d", type, parentId)),
+                Rate.class, successListener, failureListener).setTag(tag));
     }
-
+    /**
+     * Brings rate of user that has rated to described model via GET request to server.
+     *
+     * @param tag used as request tag.
+     * @param type one of ["user", "recipe", "menu"]. Items that could be rated.
+     * @param parentId id of model that requested.
+     * @param userId id of the user that is requested for the rate.
+     * @param successListener will be called with {@link Rate rate} object.
+     * @param failureListener will be called when call fails.
+     */
     public static void getRatingByUser(String tag, String type, int parentId, int userId,
                                         Response.Listener<Rate> successListener,
                                         Response.ErrorListener failureListener) {
@@ -735,9 +931,19 @@ public class API {
                 BASE_URL + (String.format("/rate/%s/%d/%d", type, parentId, userId)),
                 Rate.class, successListener, failureListener).setTag(tag));
     }
-
-    public static void login(String tag, User user, Response.Listener<AccessToken> successListener,
-                               Response.ErrorListener failureListener) {
+    /**
+     * Does login call to get bearer token that will be used for authorization
+     * via POST request to server. Excludes {@link User#email id} and {@link User#password userId}
+     * fields from post body. Response is {@link AccessToken accessToken}
+     *
+     * @param tag used as request tag.
+     * @param user Email and Password will be send from {@link User user} object.
+     * @param successListener will be called with {@link AccessToken accessToken} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void login(String tag, User user,
+                             Response.Listener<AccessToken> successListener,
+                             Response.ErrorListener failureListener) {
         String postBody = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
             @Override
             public boolean shouldSkipField(FieldAttributes f) {
@@ -753,9 +959,16 @@ public class API {
                 BASE_URL + "/session/login", AccessToken.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
     }
-
-    public static void logout(String tag, Response.Listener<User> successListener,
-                               Response.ErrorListener failureListener) {
+    /**
+     * Should be called onDestroy of application and manual logout call via POST request to server.
+     *
+     * @param tag used as request tag.
+     * @param successListener will be called with {@link User user} object.
+     * @param failureListener will be called when call fails.
+     */
+    public static void logout(String tag,
+                              Response.Listener<User> successListener,
+                              Response.ErrorListener failureListener) {
 
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/session/logout", User.class,
@@ -775,7 +988,6 @@ public class API {
         mQueue.add(new ImageRequest(url, successListener,
                 maxWidth, maxHeight, config, errorListener).setTag(tag));
     }
-
     /**
      * This is a generic request class which have designed from volley and
      * GSON components. This basically makes GET and POST requests and transforms
@@ -821,7 +1033,12 @@ public class API {
             Log.v("Request", postBody);
             return this;
         }
-
+        /**
+         * Sets post body.
+         *
+         * @param postBody JSON in string format.
+         * @return itself for chain calls.
+         */
         public GeneralRequest<T> setPostBodyInJSONForm(String postBody) {
             this.postBody = postBody;
             Log.v("Request", postBody);
