@@ -22,11 +22,12 @@
         android:layout_alignBottom="@+id/profile_image" />
 
     <Button
-        android:id="@+id/consume_button"
+        android:id="@+id/button_stats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
+        android:textAllCaps="false"
         android:layout_below="@id/profile_image"
         android:background="@color/green"
         android:text="@string/button_statistics"
@@ -37,7 +38,7 @@
         android:id="@+id/myFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/consume_button"
+        android:layout_below="@id/button_stats"
         android:clipToPadding="false"
         tools:listitem="@layout/item_recipe" />
 
