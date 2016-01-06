@@ -47,7 +47,7 @@ import su.levenetc.android.textsurface.contants.Side;
 /**
  * Created by onurguler on 06/01/16.
  */
-public class Stats extends BaseFragment{
+public class Stats extends LeafFragment{
 
     private RecyclerView consumedRecipes;
 

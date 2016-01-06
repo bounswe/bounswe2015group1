@@ -46,8 +46,8 @@
         <item>Sugar: %.1f</item>
         <item>Iron: %.1f</item>
     </string-array>
-    <string name="button_consume">Save as Consumed</string>
-    <string name="button_consumed_before">Consumed</string>
+    <string name="button_consume">Save this recipe as consumed</string>
+    <string name="button_consumed_before">This recipe is consumed before</string>
 
     <!-- Profile -->
     <string name="title_fullName">Name</string>
@@ -74,6 +74,7 @@
     <string name="title_menu_search">Search</string>
     <string name="title_menu_menu">Create Menu</string>
     <string name="title_menu_stats">Statistics</string>
+    <string name="title_menu_advanced_search">Filters</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
     <string name="title_menu_recipeDetail">Recipe Detail</string>
