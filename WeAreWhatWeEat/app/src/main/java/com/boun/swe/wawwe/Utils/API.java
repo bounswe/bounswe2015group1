@@ -505,7 +505,7 @@ public class API {
                                                Response.Listener<Nutrition> successListener,
                                                Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("consume/daily/average/%d", App.getUserId()),
+                BASE_URL + String.format("/consume/daily/average/%d", App.getUserId()),
                 Nutrition.class, successListener, failureListener).setTag(tag));
     }
     /**
@@ -519,7 +519,7 @@ public class API {
                                              Response.Listener<Recipe[]> successListener,
                                              Response.ErrorListener failureListener) {
         mQueue.add(new GeneralRequest<>(Request.Method.GET,
-                BASE_URL + String.format("consume/%d", App.getUserId()),
+                BASE_URL + String.format("/consume/%d", App.getUserId()),
                 Recipe[].class, successListener, failureListener).setTag(tag));
     }
     /**
