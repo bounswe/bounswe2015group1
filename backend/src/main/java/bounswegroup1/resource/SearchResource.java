@@ -56,7 +56,7 @@ public class SearchResource{
 
     @GET
     @Path("/advancedSearch/recipe/{q}")
-    public List<Menu> getAdvancedRecipeResults(@PathParam("q") String q,
+    public List<Recipe> getAdvancedRecipeResults(@PathParam("q") String q,
                                              @Context UriInfo uriInfo) {
         MultivaluedMap<String, String> map = uriInfo.getQueryParameters();
 
@@ -66,7 +66,7 @@ public class SearchResource{
     }
 
     @GET
-    @Path("/advancedSearch/recipe/{q}")
+    @Path("/advancedSearch/menu/{q}")
     public List<Menu> getAdvancedMenuResults(@PathParam("q") String q,
                                              @Context UriInfo uriInfo) {
         MultivaluedMap<String, String> map = uriInfo.getQueryParameters();
