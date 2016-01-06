@@ -18,8 +18,6 @@ public class Menu extends BaseModel implements Parcelable {
     private List<String> recipeNames;
     private String description;
 
-    transient private boolean isExpanded = false;
-
     public Menu(String name, String period, List<Integer> recipeIds, String description){
         this.name = name;
         this.period = period;
@@ -85,14 +83,6 @@ public class Menu extends BaseModel implements Parcelable {
 
     public void setRecipeNames(List<String> recipeNames) {
         this.recipeNames = recipeNames;
-    }
-
-    public boolean isExpanded() {
-        return isExpanded;
-    }
-
-    public void setIsExpanded(boolean isExpanded) {
-        this.isExpanded = isExpanded;
     }
 
     @Override

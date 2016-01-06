@@ -59,7 +59,7 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
-        API.getUserMenus(getTag(),
+        API.getAllMenus(getTag(),
                 new Response.Listener<Menu[]>() {
                     @Override
                     public void onResponse(Menu[] response) {

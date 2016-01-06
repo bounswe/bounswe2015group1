@@ -11,8 +11,9 @@ abstract public class BaseModel implements Comparable<BaseModel> {
     int id;
     Date createdAt;
     float rating;
-    transient private BaseModel subItemOf = null;
+    transient private BaseModel[] subItems = null;
     transient private boolean isRecommended = false;
+    transient private boolean isExpanded = false;
 
     public int getId() { return id; }
 
@@ -36,12 +37,12 @@ abstract public class BaseModel implements Comparable<BaseModel> {
         this.rating = rating;
     }
 
-    public BaseModel getParentItem() {
-        return subItemOf;
+    public BaseModel[] getSubItems() {
+        return subItems;
     }
 
-    public void setSubItem(BaseModel subItemOf) {
-        this.subItemOf = subItemOf;
+    public void setSubItems(BaseModel[] subItems) {
+        this.subItems = subItems;
     }
 
     public boolean isRecommended() {
@@ -52,9 +53,22 @@ abstract public class BaseModel implements Comparable<BaseModel> {
         this.isRecommended = isRecommended;
     }
 
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setIsExpanded(boolean isExpanded) {
+        this.isExpanded = isExpanded;
+    }
+
     @Override
     public int compareTo(BaseModel another) {
         return rating > another.getRating() || isRecommended ? -1 :
                 rating == another.getRating() ? 0 : 1;
+    }
+
+    public boolean areItemsDifferent(BaseModel another) {
+        return (subItems != null && another.subItems == null ||
+                subItems == null && another.subItems != null);
     }
 }

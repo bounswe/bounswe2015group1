@@ -1,11 +1,13 @@
 package com.boun.swe.wawwe.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -34,25 +36,23 @@ import java.util.List;
  * Created by onurguler on 08/12/15.
  */
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    // TODO raising recommendation to high level... not working properly
     /**
-     * TODO sorted list updates same item with different content only if they fall into same position
-     * therefore if one applies direct upgrade in list, duplicate entries created...
-     */
-
-    /**
-     * TODO Previous implementation of expandable list does not applies for sortedList
-     * new finding place for new entries below its parent is not easy...
+     * By design, recommended contribution create duplicate entries if already fetched by
+     * {@link API#getAllRecipes(String, Response.Listener, Response.ErrorListener) getAllRecipes} or
+     * {@link API#getAllMenus(String, Response.Listener, Response.ErrorListener)}  getAllMenus}
      */
     SortedList<BaseModel> items;
     Context context;
 
-    private final int RECIPE = 0, MENU = 1, USER = 2, SUB_RECIPE = 4;
+    private final int RECIPE = 0, MENU = 1, USER = 2;
 
     public FeedAdapter(Context context) {
         this.context = context;
         items = new SortedList<>(BaseModel.class, new SortedList.Callback<BaseModel>() {
             @Override
             public int compare(BaseModel o1, BaseModel o2) {
+                // TODO recommended upgrade.. sometimes causes crash!?!?
                 return o1.compareTo(o2);
             }
 
@@ -83,8 +83,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             @Override
             public boolean areItemsTheSame(BaseModel item1, BaseModel item2) {
+                // TODO check for are items changed
                 return item1.getId() == item2.getId() &&
-                        item1.getClass().equals(item2.getClass());
+                        item1.getClass().equals(item2.getClass()) &&
+                        !item1.areItemsDifferent(item2);
             }
         });
     }
@@ -113,9 +115,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         Object data = items.get(position);
         if (data instanceof Recipe) {
-            if (((Recipe) data).getParentItem()!= null)
-                return SUB_RECIPE;
-            else return RECIPE;
+            return RECIPE;
         } else if (data instanceof Menu) {
             return MENU;
         } else if (data instanceof User) {
@@ -144,10 +144,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 rowView = inflater.inflate(R.layout.item_menu, viewGroup, false);
                 viewHolder = new MenuViewHolder(rowView);
                 break;
-            case SUB_RECIPE:
-                rowView = inflater.inflate(R.layout.subitem_recipe, viewGroup, false);
-                viewHolder = new SubRecipeViewHolder(rowView);
-                break;
             default:
                 //These lines are probably wrong :)
                 rowView = inflater.inflate(R.layout.item_user, viewGroup, false);
@@ -161,10 +157,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         switch (viewHolder.getItemViewType()) {
-            case SUB_RECIPE:
-                SubRecipeViewHolder srvh = (SubRecipeViewHolder) viewHolder;
-                configureSubRecipeViewHolder(srvh, position);
-                break;
             case RECIPE:
                 RecipeViewHolder rvh = (RecipeViewHolder) viewHolder;
                 configureRecipeViewHolder(rvh, position);
@@ -189,7 +181,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void configureRecipeViewHolder(RecipeViewHolder holder, int position) {
+    private void configureRecipeViewHolder(final RecipeViewHolder holder, int position) {
         final Recipe recipe = (Recipe) items.get(position);
 
         holder.recipeName.setText(recipe.getName());
@@ -199,41 +191,22 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 makeFragmentTransaction(RecipeDetail.getFragment(recipe));
             }
         });
-        if (recipe.isRecommended()) {
-            holder.recommended.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.recommended.setVisibility(View.GONE);
-        }
-    }
-
-    private void configureSubRecipeViewHolder(SubRecipeViewHolder holder, int position) {
-        final Recipe recipe = (Recipe) items.get(position);
-
-        holder.recipeName.setText(recipe.getName());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                API.getRecipe(null, recipe.getId(),
-                    new Response.Listener<Recipe>() {
-                        @Override
-                        public void onResponse(Recipe response) {
-                            if (response != null)
-                                makeFragmentTransaction(RecipeDetail.getFragment(response));
-                            else
-                                Toast.makeText(context, context.getString(R.string.error_requestRecipe),
-                                        Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context, context.getString(R.string.error_requestRecipe),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            }
-        });
+        holder.recommended.setVisibility(recipe.isRecommended() ?
+                View.VISIBLE : View.GONE);
+        // Example(and bad) usage of load image from url call...
+//        API.loadImageFromUrl(context.getPackageName(), "http://molacorbakebapsalonu.com/assets/kebap.jpg",
+//                new Response.Listener<Bitmap>() {
+//                    @Override
+//                    public void onResponse(Bitmap response) {
+//                        holder.recipePic.setImageBitmap(response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                });
     }
 
     private void configureMenuViewHolder(final MenuViewHolder holder, int position) {
@@ -249,22 +222,64 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     else {
                         menu.setIsExpanded(true);
 
-                        List<BaseModel> recipes = new ArrayList<>();
-
-                        Iterator<String> names = menu.getRecipeNames().iterator();
-                        Iterator<Integer> ids = menu.getRecipeIds().iterator();
-                        while (names.hasNext() && ids.hasNext()) {
-                            Recipe recipe = new Recipe(ids.next(), names.next());
-                            recipe.setSubItem(menu);
-                            recipe.setRating(menu.getRating());
-                            recipes.add(recipe);
-                        }
-
-                        items.addAll(recipes);
+                        for (int i = 0; i < holder.itemHolder.getChildCount(); i++)
+                            holder.itemHolder.getChildAt(i)
+                                    .setVisibility(View.VISIBLE);
                     }
                 }
             });
+
+            if (menu.getSubItems() == null) {
+                List<BaseModel> recipes = new ArrayList<>();
+
+                Iterator<String> names = menu.getRecipeNames().iterator();
+                Iterator<Integer> ids = menu.getRecipeIds().iterator();
+                while (names.hasNext() && ids.hasNext()) {
+                    final Recipe recipe = new Recipe(ids.next(), names.next());
+                    recipe.setRating(menu.getRating());
+                    recipes.add(recipe);
+
+                    View subItem = generateSubItem((ViewGroup) holder.itemView);
+                    subItem.setVisibility(View.GONE);
+                    holder.itemHolder.addView(subItem);
+                    SubRecipeViewHolder subHolder = new SubRecipeViewHolder(subItem);
+
+                    subHolder.recipeName.setText(recipe.getName());
+                    subHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            API.getRecipe(null, recipe.getId(),
+                                    new Response.Listener<Recipe>() {
+                                        @Override
+                                        public void onResponse(Recipe response) {
+                                            if (response != null)
+                                                makeFragmentTransaction(RecipeDetail.getFragment(response));
+                                            else
+                                                Toast.makeText(context, context.getString(R.string.error_requestRecipe),
+                                                        Toast.LENGTH_SHORT).show();
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(context, context.getString(R.string.error_requestRecipe),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    });
+                }
+
+                menu.setSubItems(recipes.toArray(new BaseModel[recipes.size()]));
+            }
         }
+    }
+
+    private View generateSubItem(ViewGroup viewGroup) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View subItem = inflater.inflate(R.layout.subitem_recipe, viewGroup, false);
+
+        return subItem;
     }
 
     private void makeFragmentTransaction(BaseFragment fragment) {

@@ -1,7 +1,9 @@
 package com.boun.swe.wawwe.Utils;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.android.volley.toolbox.ImageRequest;
 import com.boun.swe.wawwe.Models.Allergy;
 import com.boun.swe.wawwe.Models.AutoComplete;
 import com.boun.swe.wawwe.Models.Nutrition;
@@ -75,6 +77,7 @@ public class API {
         if (instance == null) {
             instance = new API();
             mQueue = Volley.newRequestQueue(App.getInstance());
+
         }
     }
 
@@ -180,8 +183,8 @@ public class API {
         if (isTest) {
             String file1 = "test_recipe1.json";
             String file2 = "test_recipe2.json";
-            String postBody1 = loadJSONFromAsset(file1);
-            String postBody2 = loadJSONFromAsset(file2);
+            String postBody1 = Commons.loadJSONFromAsset(file1);
+            String postBody2 = Commons.loadJSONFromAsset(file2);
 
             Gson gson1 = new Gson();
             Gson gson2 = new Gson();
@@ -282,9 +285,9 @@ public class API {
             String file2 = "test_recipe2.json";
             String file3 = "test_recipe3.json";
 
-            String postBody1 = loadJSONFromAsset(file1);
-            String postBody2 = loadJSONFromAsset(file2);
-            String postBody3 = loadJSONFromAsset(file3);
+            String postBody1 = Commons.loadJSONFromAsset(file1);
+            String postBody2 = Commons.loadJSONFromAsset(file2);
+            String postBody3 = Commons.loadJSONFromAsset(file3);
 
             Gson gson1 = new Gson();
             Gson gson2 = new Gson();
@@ -350,6 +353,7 @@ public class API {
                     public boolean shouldSkipField(FieldAttributes f) {
                         return f.getName().equals("userId");
                     }
+
                     @Override
                     public boolean shouldSkipClass(Class<?> clazz) {
                         return false;
@@ -492,12 +496,12 @@ public class API {
         mQueue.add(request.setTag(tag));
     }
 
-    public static void getUserMenus(String tag, Response.Listener<Menu[]> successListener,
-                                    Response.ErrorListener failureListener) {
+    public static void getAllMenus(String tag, Response.Listener<Menu[]> successListener,
+                                   Response.ErrorListener failureListener) {
         if(isTest){
             String file1 = "test_menu1.json";
 
-            String postBody1 = loadJSONFromAsset(file1);
+            String postBody1 = Commons.loadJSONFromAsset(file1);
 
             Gson gson1 = new Gson();
 
@@ -510,8 +514,33 @@ public class API {
             Menu testMenu2 = gson1.fromJson(postBody1, Menu.class);
 
             successListener.onResponse(new Menu[] {testMenu, testMenu1, testMenu2});
-        } else mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL +"/menu", Menu[].class,
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET, BASE_URL + "/menu", Menu[].class,
                 successListener, failureListener).setTag(tag));
+    }
+
+    public static void getUserMenus(String tag, Response.Listener<Menu[]> successListener,
+                                   Response.ErrorListener failureListener) {
+        if(isTest){
+            String file1 = "test_menu1.json";
+
+            String postBody1 = Commons.loadJSONFromAsset(file1);
+
+            Gson gson1 = new Gson();
+
+            JsonReader reader1 = new JsonReader(new StringReader(postBody1));
+
+            reader1.setLenient(true);
+
+            Menu testMenu = gson1.fromJson(postBody1, Menu.class);
+            Menu testMenu1 = gson1.fromJson(postBody1, Menu.class);
+            Menu testMenu2 = gson1.fromJson(postBody1, Menu.class);
+
+            successListener.onResponse(new Menu[] {testMenu, testMenu1, testMenu2});
+        } else mQueue
+                .add(new GeneralRequest<>(Request.Method.GET,
+                        String.format("%s%s%d", BASE_URL, "/menu/user/", App.getUserId()),
+                        Menu[].class, successListener, failureListener)
+                        .setTag(tag));
     }
 
     public static void getMenu(String tag, int menuID,
@@ -520,7 +549,7 @@ public class API {
         if(isTest){
             String file1 = "test_menu1.json";
 
-            String postBody1 = loadJSONFromAsset(file1);
+            String postBody1 = Commons.loadJSONFromAsset(file1);
 
             Gson gson1 = new Gson();
 
@@ -734,22 +763,19 @@ public class API {
                 successListener, failureListener).setTag(tag));
     }
 
-    public static String loadJSONFromAsset(String fileName) {
-        String json = null;
-        try {
-            InputStream is = App.getInstance().getApplicationContext().getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
+    public static void loadImageFromUrl(String tag, String url,
+                                         Response.Listener<Bitmap> successListener,
+                                         Response.ErrorListener errorListener) {
+        loadImageFromUrl(tag, url, 0, 0, null, successListener, errorListener);
     }
 
+    public static void loadImageFromUrl(String tag, String url, int maxWidth, int maxHeight,
+                                        Bitmap.Config config,
+                                        Response.Listener<Bitmap> successListener,
+                                        Response.ErrorListener errorListener) {
+        mQueue.add(new ImageRequest(url, successListener,
+                maxWidth, maxHeight, config, errorListener).setTag(tag));
+    }
 
     /**
      * This is a generic request class which have designed from volley and
