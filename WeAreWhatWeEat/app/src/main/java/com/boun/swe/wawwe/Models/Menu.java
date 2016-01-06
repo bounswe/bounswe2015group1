@@ -34,7 +34,7 @@ public class Menu extends BaseModel implements Parcelable {
         period = in.readString();
         recipeNames = in.createStringArrayList();
         description = in.readString();
-        rating = in.readDouble();
+        rating = in.readFloat();
         createdAt = new Date(in.readLong());
     }
 
@@ -107,7 +107,7 @@ public class Menu extends BaseModel implements Parcelable {
         dest.writeString(period);
         dest.writeStringList(recipeNames);
         dest.writeString(description);
-        dest.writeDouble(rating);
+        dest.writeFloat(rating);
         dest.writeLong(createdAt.getTime());
     }
 

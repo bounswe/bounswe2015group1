@@ -95,7 +95,7 @@
                     style="@style/CustomTitle" />
 
                 <me.gujun.android.taggroup.TagGroup
-                    android:id="@+id/tag_group_static"
+                    android:id="@+id/recipeDetail_tagGroup"
                     style="@style/TagGroup.Large"
                     app:atg_borderColor="@color/colorAccent"
                     app:atg_textColor="@color/colorAccent"

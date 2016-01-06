@@ -6,6 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by Mert on 19/12/15.
  */
+@Deprecated
 public class AutoComplete implements Parcelable {
 
     private String id;

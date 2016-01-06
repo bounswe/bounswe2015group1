@@ -15,7 +15,6 @@ import com.boun.swe.wawwe.Fragments.MenuDetail;
 import com.boun.swe.wawwe.Fragments.RecipeDetail;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.BaseModel;
-import com.boun.swe.wawwe.Models.Comment;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
@@ -30,13 +29,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by onurguler on 08/12/15.
  */
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    /**
+     * TODO sorted list updates same item with different content only if they fall into same position
+     * therefore if one applies direct upgrade in list, duplicate entries created...
+     */
 
+    /**
+     * TODO Previous implementation of expandable list does not applies for sortedList
+     * new finding place for new entries below its parent is not easy...
+     */
     SortedList<BaseModel> items;
     Context context;
 
@@ -72,12 +78,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             @Override
             public boolean areContentsTheSame(BaseModel oldItem, BaseModel newItem) {
-                return true;
+                return newItem.isRecommended() == oldItem.isRecommended();
             }
 
             @Override
             public boolean areItemsTheSame(BaseModel item1, BaseModel item2) {
-                return item1.getId() == item2.getId();
+                return item1.getId() == item2.getId() &&
+                        item1.getClass().equals(item2.getClass());
             }
         });
     }
@@ -91,22 +98,22 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addItems(BaseModel[] data) {
-        int start = items.size();
+        items.beginBatchedUpdates();
         items.addAll(Arrays.asList(data));
-        notifyItemRangeChanged(start, data.length);
+        items.endBatchedUpdates();
     }
 
     public void clear() {
-        int size = items.size();
+        items.beginBatchedUpdates();
         items.clear();
-        notifyItemRangeRemoved(0, size);
+        items.endBatchedUpdates();
     }
 
     @Override
     public int getItemViewType(int position) {
         Object data = items.get(position);
         if (data instanceof Recipe) {
-            if (((Recipe) data).isSubItem())
+            if (((Recipe) data).getParentItem()!= null)
                 return SUB_RECIPE;
             else return RECIPE;
         } else if (data instanceof Menu) {
@@ -192,6 +199,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 makeFragmentTransaction(RecipeDetail.getFragment(recipe));
             }
         });
+        if (recipe.isRecommended()) {
+            holder.recommended.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.recommended.setVisibility(View.GONE);
+        }
     }
 
     private void configureSubRecipeViewHolder(SubRecipeViewHolder holder, int position) {
@@ -242,7 +255,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         Iterator<Integer> ids = menu.getRecipeIds().iterator();
                         while (names.hasNext() && ids.hasNext()) {
                             Recipe recipe = new Recipe(ids.next(), names.next());
-                            recipe.setIsSubItem(true);
+                            recipe.setSubItem(menu);
                             recipe.setRating(menu.getRating());
                             recipes.add(recipe);
                         }

@@ -72,9 +72,9 @@ public class RecipeDetail extends LeafFragment {
         ImageView recipeImage = (ImageView) recipeDetailView.findViewById(R.id.recipeImage);
         TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
 
-        final TagGroup tagGroupStatic = (TagGroup) recipeDetailView.findViewById(R.id.tag_group_static);
-        tagGroupStatic.setTags(recipe.getTags());
-        tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+        final TagGroup tagGroup = (TagGroup) recipeDetailView.findViewById(R.id.recipeDetail_tagGroup);
+        tagGroup.setTags(recipe.getTags());
+        tagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
             public void onTagClick(String tag) {
                 if (context instanceof MainActivity) {
@@ -214,9 +214,9 @@ public class RecipeDetail extends LeafFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ||
-                recipe.getUserId() == App.getUserId())
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
+        menu.findItem(R.id.menu_profile_add).setVisible(false);
+        if (recipe.getUserId() != App.getUserId())
+            menu.findItem(R.id.menu_profile_editDone).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

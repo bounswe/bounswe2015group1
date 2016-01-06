@@ -54,7 +54,6 @@ public class RecipeCreator extends LeafFragment {
     private Recipe recipe;
     private boolean isEditMode;
 
-    TagGroup tagGroupStatic;
     TextSurface nutritionHolderLeft;
     TextSurface nutritionHolderMiddle;
     TextSurface nutritionHolderRight;
@@ -79,7 +78,6 @@ public class RecipeCreator extends LeafFragment {
         final Button addIngredients = (Button) recipeCreationView.findViewById(R.id.add_new_ingredient);
         final Button submit = (Button) recipeCreationView.findViewById(R.id.button_recipe_submit);
         final TagGroup tagGroup = (TagGroup) recipeCreationView.findViewById(R.id.tag_group);
-        tagGroupStatic = (TagGroup) recipeCreationView.findViewById(R.id.tag_group_static);
         nutritionHolderLeft = (TextSurface) recipeCreationView.findViewById(R.id.nutritionsLeft);
         nutritionHolderMiddle = (TextSurface) recipeCreationView.findViewById(R.id.nutritionsMiddle);
         nutritionHolderRight = (TextSurface) recipeCreationView.findViewById(R.id.nutritionsRight);
@@ -87,20 +85,27 @@ public class RecipeCreator extends LeafFragment {
         recipe = getArguments().getParcelable("recipe");
         isEditMode = getArguments().getBoolean("isEditMode");
 
-        if (isEditMode)
+        if (isEditMode) {
             updateIngredientValues(recipe.getNutritions().getNutritionsAsArray());
-        else
-            recipe = new Recipe();
+            recipeName.setText(recipe.getName());
+            howTo.setText(recipe.getDescription());
+            submit.setText(context.getString(R.string.button_edit_recipe));
 
-        tagGroupStatic.setOnTagClickListener(new TagGroup.OnTagClickListener() {
-            @Override
-            public void onTagClick(String tag) {
-                if (context instanceof MainActivity) {
-                    MainActivity mainActivity = (MainActivity) context;
-                    mainActivity.makeFragmentTransaction(Search.getFragment(tag));
-                }
+            for (Ingredient ingredient: recipe.getIngredients()) {
+                View ingredientRow = addIngredientRow(ingredientHolder);
+
+                EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
+                EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                ingredients.put(ingredient.getName(), ingredient);
+
+                ingredientName.setText(ingredient.getName());
+                ingredientAmount.setText(String.format("%d", ingredient.getAmount()));
             }
-        });
+        }
+        else {
+            recipe = new Recipe();
+            addIngredientRow(ingredientHolder);
+        }
 
         // Set headers
         int[] headerIds = new int[] { R.id.rCreation_header_rName, R.id.rCreation_header_rIngredients,
@@ -137,15 +142,10 @@ public class RecipeCreator extends LeafFragment {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String[] allTagsUserCreated = tagGroup.getTags();
-                String[] allTagsStatic = tagGroupStatic.getTags();
-
-                String[] allTags = Arrays.copyOf(allTagsUserCreated, allTagsUserCreated.length + allTagsStatic.length);
-                System.arraycopy(allTagsStatic, 0, allTags, allTagsUserCreated.length, allTagsStatic.length);
 
                 recipe.setName(recipe_name);
                 recipe.setDescription(directions);
-                recipe.setTags(Arrays.asList(allTags));
+                recipe.setTags(Arrays.asList(tagGroup.getTags()));
 
                 if (isEditMode)
                     API.editRecipe(getTag(), recipe,
@@ -189,25 +189,6 @@ public class RecipeCreator extends LeafFragment {
         });
         recipeName.requestFocus();
 
-        if (isEditMode) {
-            recipeName.setText(recipe.getName());
-            howTo.setText(recipe.getDescription());
-            submit.setText(context.getString(R.string.button_edit_recipe));
-            tagGroupStatic.setTags(recipe.getTags());
-
-            for (Ingredient ingredient: recipe.getIngredients()) {
-                View ingredientRow = addIngredientRow(ingredientHolder);
-
-                EditText ingredientName = (EditText) ingredientRow.findViewById(R.id.ingredient_name);
-                EditText ingredientAmount = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
-
-                ingredientName.setText(ingredient.getName());
-                ingredientAmount.setText(String.format("%d", ingredient.getAmount()));
-
-            }
-        }
-        else addIngredientRow(ingredientHolder);
-
         return recipeCreationView;
     }
 
@@ -244,7 +225,7 @@ public class RecipeCreator extends LeafFragment {
             public void afterTextChanged(Editable s) { }
         });
 
-        final ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(context,
+        ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_dropdown_item_1line);
         ingName.setAdapter(adapter);
 
@@ -264,12 +245,9 @@ public class RecipeCreator extends LeafFragment {
                             @Override
                             public void onResponse(Ingredient response) {
                                 ingredients.put(response.getName(), response);
+                                ingName.dismissDropDown();
                                 updateIngredient(response);
                                 ingredientRow.setTag(response.getName());
-                                ArrayList<String> staticTags = new ArrayList<>();
-                                for (Ingredient ingredient : ingredients.values())
-                                    staticTags.add(ingredient.getName());
-                                tagGroupStatic.setTags(staticTags);
                                 amountText.setText("1");
                             }
                         },
@@ -307,7 +285,7 @@ public class RecipeCreator extends LeafFragment {
                                 @Override
                                 public void onResponse(AutoComplete[] response) {
                                     ingName.dismissDropDown();
-                                    final ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(
+                                    ArrayAdapter<AutoComplete> adapter = new ArrayAdapter<>(
                                             context, android.R.layout.simple_list_item_1);
                                     adapter.addAll(response);
                                     ingName.setAdapter(adapter);
@@ -328,33 +306,54 @@ public class RecipeCreator extends LeafFragment {
             }
         });
 
-        final ImageButton delete = (ImageButton) ingredientRow.findViewById(R.id.button_ingredient_delete);
-        delete.setOnClickListener(new View.OnClickListener() {
+        ingredientRow.findViewById(R.id.button_ingredient_delete)
+                .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // Library does not provide delete tag option so this operation
-                // is required to remove tag...
-                String tag2Remove = (String) ingredientRow.getTag();
-                Ingredient removedIngredient = ingredients.remove(tag2Remove);
+                final String tag2Remove = (String) ingredientRow.getTag();
+                final Ingredient removedIngredient = ingredients.get(tag2Remove);
                 if (removedIngredient != null) {
                     removedIngredient.setAmount(-removedIngredient.getAmount());
-                    updateIngredient(removedIngredient);
+                    if (removedIngredient.getNutritions() != null) {
+                        updateIngredient(removedIngredient);
+                        ingredients.remove(tag2Remove);
 
-                    ArrayList<String> staticTags = new ArrayList<>();
-                    for (Ingredient ingredient : ingredients.values())
-                        staticTags.add(ingredient.getName());
-                    tagGroupStatic.setTags(staticTags);
-                }
+                        if (ingredientHolder.getChildCount() - 2 != 0) {
+                            ingredientHolder.removeView(ingredientRow);
+                        } else {
+                            ((ArrayAdapter)ingName.getAdapter()).clear();
+                            ((ArrayAdapter)ingName.getAdapter()).notifyDataSetChanged();
+                            ingName.setText(null);
+                            EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                            ingAmt.setText(null);
+                        }
+                    }
+                    else {
+                        API.getIngredientItem(getTag(), removedIngredient.getIngredientId(),
+                                new Response.Listener<Ingredient>() {
+                                    @Override
+                                    public void onResponse(Ingredient response) {
+                                        updateIngredient(removedIngredient);
+                                        ingredients.remove(tag2Remove);
 
-                if (ingredientHolder.getChildCount() - 2 != 0) {
-                    ingredientHolder.removeView(ingredientRow);
-                } else {
-                    adapter.clear();
-                    adapter.notifyDataSetChanged();
-                    ingName.setText(null);
-                    EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
-                    ingAmt.setText(null);
+                                        if (ingredientHolder.getChildCount() - 2 != 0) {
+                                            ingredientHolder.removeView(ingredientRow);
+                                        } else {
+                                            ((ArrayAdapter)ingName.getAdapter()).clear();
+                                            ((ArrayAdapter)ingName.getAdapter()).notifyDataSetChanged();
+                                            ingName.setText(null);
+                                            EditText ingAmt = (EditText) ingredientRow.findViewById(R.id.ingredient_amount);
+                                            ingAmt.setText(null);
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                });
+                    }
                 }
             }
         });

@@ -13,6 +13,7 @@ import com.boun.swe.wawwe.R;
 public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView recipePic;
+    public TextView recommended;
     public TextView recipeName;
     public TextView type;
     public TextView calories;
@@ -22,10 +23,12 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         recipePic = (ImageView) itemView.findViewById(R.id.recipePic_small);
+        recommended = (TextView) itemView.findViewById(R.id.textView_recommended);
         recipeName = (TextView) itemView.findViewById(R.id.itemRecipeName);
 
         type = (TextView) itemView.findViewById(R.id.type);
         calories = (TextView) itemView.findViewById(R.id.calories);
         score = (TextView) itemView.findViewById(R.id.score);
+
     }
 }

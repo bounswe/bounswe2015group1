@@ -64,7 +64,6 @@ public class Feeds extends BaseFragment {
                     @Override
                     public void onResponse(Menu[] response) {
                         if (response != null) {
-                            //Object[] o = {response};
                             adapter.addItems(response);
                         }
                     }
@@ -76,6 +75,24 @@ public class Feeds extends BaseFragment {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        API.getRecommendedRecipesForUser(getTag(),
+                new Response.Listener<Recipe[]>() {
+                    @Override
+                    public void onResponse(Recipe[] response) {
+                        for (Recipe recipe: response)
+                            recipe.setRecommended(true);
+
+                        adapter.addItems(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
         return feedsView;
     }
 
