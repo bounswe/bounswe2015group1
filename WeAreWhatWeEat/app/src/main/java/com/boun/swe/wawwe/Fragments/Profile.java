@@ -75,6 +75,16 @@ public class Profile extends BaseFragment {
 
         multipleActions = (FloatingActionsMenu) profileView.findViewById(R.id.multiple_actions);
 
+        profileView.findViewById(R.id.button_stats).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (context instanceof MainActivity) {
+                    MainActivity main = (MainActivity) context;
+                    main.makeFragmentTransaction(Stats.getFragment(null));
+                }
+            }
+        });
+
         API.getUserMenus(getTag(),
                 new Response.Listener<com.boun.swe.wawwe.Models.Menu[]>() {
                     @Override

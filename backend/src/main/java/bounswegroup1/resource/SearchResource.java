@@ -1,5 +1,7 @@
 package bounswegroup1.resource;
 
+import java.io.FileInputStream;
+
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -31,6 +33,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import net.didion.jwnl.data.*;
+import net.didion.jwnl.dictionary.Dictionary;
+import net.didion.jwnl.*;
 
 
 @Path("/search")
@@ -74,5 +80,67 @@ public class SearchResource{
         System.out.println("CONTEXT URIINFO CONTENT:" + uriInfo.getQueryParameters());
 
         return dao.getAdvancedMenuResults(q, map);
+    }
+
+    @GET
+    @Path("/s/{q}")
+    public void semanticSearch(@PathParam("q") String q) {
+        //dao.semanticSearch(q);
+    
+        try{
+/*        String path = SearchDAO.class.getClassLoader().getResource("WordNet-3.0").getPath()+"/dict";
+        System.out.println("path : "+path);
+
+        System.setProperty("wordnet.database.dir", path);
+
+        NounSynset nounSynset; 
+      NounSynset[] hyponyms; 
+      System.out.println("1 ");
+
+      database = WordNetDatabase.getFileInstance(); 
+      database.getBaseFormCandidates("cat", SynsetType.NOUN); 
+      System.out.println("2 ");
+
+      Synset[] synsets = database.getSynsets("fly", SynsetType.NOUN); 
+      System.out.println("3 ");
+      for (int i = 0; i < synsets.length; i++) { 
+          nounSynset = (NounSynset)(synsets[i]); 
+          hyponyms = nounSynset.getHyponyms(); 
+          System.out.println(nounSynset.getWordForms()[0] + 
+                  ": " + nounSynset.getDefinition() + ") has " + hyponyms.length + " hyponyms"); 
+      }*/
+
+        JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
+        final Dictionary dictionary = Dictionary.getInstance();
+        System.out.println("1 ");
+
+        IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, q);
+        //IndexWord indexWord = dictionary.getRandomIndexWord(POS.NOUN);
+
+
+        System.out.println("2 ");
+        System.out.println(indexWord.toString());
+        Synset[] senses = indexWord.getSenses();
+
+        System.out.println("3 ");
+
+        for (Synset set : senses) {
+            System.out.println("4 ");
+            System.out.println(indexWord + ": " + set.getGloss());
+
+            System.out.println("\nPOINTERS OF THIS SYNSET:");
+            for(Pointer p : set.getPointers()){
+                System.out.println(p.getTargetSynset()); 
+            }
+
+            System.out.println("\n SEMANTIC WORDS:");
+            for(Word word : set.getWords()){
+                System.out.println("The semantic word is " + word.getLemma());
+            }
+        }
+      
+        }catch(Exception e){
+            System.out.println("HATA ALDI: "+e.getMessage());
+        }
     }
 }

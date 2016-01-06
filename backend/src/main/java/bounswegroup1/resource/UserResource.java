@@ -43,7 +43,10 @@ public class UserResource {
 
     @POST
     public User addUser(@Valid User user) {
+        user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+
         Long id = dao.addUser(user);
+
         user.setId(id);
         user.setRating(0.0f);
         
@@ -53,6 +56,8 @@ public class UserResource {
     @POST
     @Path("/update")
     public User updateUser(@Auth AccessToken token, User user) {
+        user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+
         if (token.getUserId() == user.getId()) {
             dao.updateUser(user);
         }

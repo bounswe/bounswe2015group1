@@ -84,7 +84,8 @@
     <!-- Stats -->
     <string name="label_stats">Statistics</string>
     <string name="label_nutritients">Nutritients</string>
-    <string name="label_consumed">Consumed</string>
+    <string name="label_consumed">Consumed Recipes</string>
+    <string name="label_allergies">My Allergies</string>
 
     <!-- Comment Rating -->
     <string name="prompt_makeComment">Write Comment…</string>
