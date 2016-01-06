@@ -46,6 +46,8 @@
         <item>Sugar: %.1f</item>
         <item>Iron: %.1f</item>
     </string-array>
+    <string name="button_consume">Save as Consumed</string>
+    <string name="button_consumed_before">Consumed</string>
 
     <!-- Profile -->
     <string name="title_fullName">Name</string>
@@ -56,6 +58,7 @@
     <string name="prompt_dateOfBirth">No Birth Date?</string>
     <string name="button_action_myRecipes">My Recipes</string>
     <string name="button_action_createRecipes">Create Recipe</string>
+    <string name="button_statistics">See Your Statistics</string>
 
     <!-- Profile Edit -->
     <string name="title_email">Email</string>

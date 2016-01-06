@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,6 +72,25 @@ public class RecipeDetail extends LeafFragment {
 
         ImageView recipeImage = (ImageView) recipeDetailView.findViewById(R.id.recipeImage);
         TextView directions = (TextView) recipeDetailView.findViewById(R.id.description);
+        final Button consumed = (Button) recipeDetailView.findViewById(R.id.button_consumed);
+        API.getAllRecipesConsumed(getTag(), new Response.Listener<Recipe[]>() {
+            @Override
+            public void onResponse(Recipe[] response) {
+                for (Recipe response_recipe: response){
+                    if (recipe.getId() == response_recipe.getId()){
+                        consumed.setEnabled(false);
+                        consumed.setText(Commons.getString(R.string.button_consumed_before));
+                        return;
+                    }
+                }
+                consumed.setText(Commons.getString(R.string.button_consume));
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
 
         final TagGroup tagGroup = (TagGroup) recipeDetailView.findViewById(R.id.recipeDetail_tagGroup);
         tagGroup.setTags(recipe.getTags());
@@ -81,6 +101,29 @@ public class RecipeDetail extends LeafFragment {
                     MainActivity mainActivity = (MainActivity) context;
                     mainActivity.makeFragmentTransaction(Search.getFragment(tag));
                 }
+            }
+        });
+
+
+        consumed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                API.addConsumed(getTag(), recipe,
+                        new Response.Listener<Recipe>() {
+                            @Override
+                            public void onResponse(Recipe response) {
+                                view.setEnabled(false);
+                                ((Button) view).setText(Commons.getString(R.string.button_consumed_before));
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(context, Commons.getString(R.string.error_consumed),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
             }
         });
 
