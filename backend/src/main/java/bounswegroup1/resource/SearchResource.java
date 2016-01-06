@@ -1,6 +1,9 @@
 package bounswegroup1.resource;
 
 import java.io.FileInputStream;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.core.MediaType;
 
@@ -86,37 +89,36 @@ public class SearchResource{
     @Path("/s/{q}")
     public void semanticSearch(@PathParam("q") String q) {
         //dao.semanticSearch(q);
+
+        Pattern pattern = Pattern.compile("\\s");
+        Matcher matcher = pattern.matcher(q);
+        boolean found = matcher.find();
+
+        List<String> queryWords;
+
+        if(found){
+          System.out.println("matche");
+          String[] strArr = q.split("\\s+");
+          queryWords = new ArrayList<String>(Arrays.asList(strArr));
+        }else{
+          System.out.println("do not match");
+          ArrayList<String> list = new ArrayList<String>();
+          list.add(q);
+          queryWords = list;
+        }
+
+        for(int i = 0; i< queryWords.size(); i++){
+          System.out.println(queryWords.get(i));
+        }
+
     
         try{
-/*        String path = SearchDAO.class.getClassLoader().getResource("WordNet-3.0").getPath()+"/dict";
-        System.out.println("path : "+path);
 
-        System.setProperty("wordnet.database.dir", path);
-
-        NounSynset nounSynset; 
-      NounSynset[] hyponyms; 
-      System.out.println("1 ");
-
-      database = WordNetDatabase.getFileInstance(); 
-      database.getBaseFormCandidates("cat", SynsetType.NOUN); 
-      System.out.println("2 ");
-
-      Synset[] synsets = database.getSynsets("fly", SynsetType.NOUN); 
-      System.out.println("3 ");
-      for (int i = 0; i < synsets.length; i++) { 
-          nounSynset = (NounSynset)(synsets[i]); 
-          hyponyms = nounSynset.getHyponyms(); 
-          System.out.println(nounSynset.getWordForms()[0] + 
-                  ": " + nounSynset.getDefinition() + ") has " + hyponyms.length + " hyponyms"); 
-      }*/
-
-        JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
+        JWNL.initialize(new FileInputStream("src/main/resources/JWNLProperties.xml"));     
         final Dictionary dictionary = Dictionary.getInstance();
         System.out.println("1 ");
 
         IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, q);
-        //IndexWord indexWord = dictionary.getRandomIndexWord(POS.NOUN);
-
 
         System.out.println("2 ");
         System.out.println(indexWord.toString());
