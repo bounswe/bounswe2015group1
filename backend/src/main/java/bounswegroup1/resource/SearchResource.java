@@ -110,7 +110,7 @@ public class SearchResource{
                   ": " + nounSynset.getDefinition() + ") has " + hyponyms.length + " hyponyms"); 
       }*/
 
-        JWNL.initialize(new FileInputStream("backend/JWNLProperties.xml"));     
+        JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
         final Dictionary dictionary = Dictionary.getInstance();
         System.out.println("1 ");
 
