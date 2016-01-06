@@ -94,7 +94,6 @@ public class Feeds extends BaseFragment {
 
                     }
                 });
-
         return feedsView;
     }
 
