@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <su.levenetc.android.textsurface.TextSurface
+        android:id="@+id/title_stats"
+        style="@style/CustomTitle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/item_marginLow"
+        android:background="@drawable/border_style"
+        android:orientation="vertical">
+
+        <su.levenetc.android.textsurface.TextSurface
+            android:id="@+id/stats_title_nutritions"
+            style="@style/CustomTitle" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritionsLeft"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritionsMiddle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <su.levenetc.android.textsurface.TextSurface
+                android:id="@+id/nutritionsRight"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <su.levenetc.android.textsurface.TextSurface
+        android:id="@+id/title_consumed_recipes"
+        style="@style/CustomTitle" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/consumed_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_recipe" />
+
+</LinearLayout>

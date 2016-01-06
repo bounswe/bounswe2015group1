@@ -5,6 +5,8 @@ import android.util.DisplayMetrics;
 
 import com.boun.swe.wawwe.App;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,6 +91,22 @@ public class Commons {
 
     public static String getString(int resourceId, String... args){
         return App.getInstance().getString(resourceId, args);
+    }
+
+    public static String loadJSONFromAsset(String fileName) {
+        String json = null;
+        try {
+            InputStream is = App.getInstance().getApplicationContext().getAssets().open(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     /**

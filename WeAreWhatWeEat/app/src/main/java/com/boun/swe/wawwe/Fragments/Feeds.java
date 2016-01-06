@@ -59,7 +59,7 @@ public class Feeds extends BaseFragment {
                     }
                 });
 
-        API.getUserMenus(getTag(),
+        API.getAllMenus(getTag(),
                 new Response.Listener<Menu[]>() {
                     @Override
                     public void onResponse(Menu[] response) {
@@ -80,10 +80,12 @@ public class Feeds extends BaseFragment {
                 new Response.Listener<Recipe[]>() {
                     @Override
                     public void onResponse(Recipe[] response) {
-                        for (Recipe recipe: response)
-                            recipe.setRecommended(true);
+                        if (response != null) {
+                            for (Recipe recipe : response)
+                                recipe.setRecommended(true);
 
-                        adapter.addItems(response);
+                            adapter.addItems(response);
+                        }
                     }
                 },
                 new Response.ErrorListener() {

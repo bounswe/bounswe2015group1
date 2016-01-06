@@ -10,8 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9785b5f3-c21a-44e9-bb28-4fee6414ea25" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Models/Allergy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Utils/API.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Utils/API.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Fragments/Feeds.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Fragments/Feeds.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WeAreWhatWeEat.iws" />
@@ -33,28 +33,61 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="API.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="API.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Utils/API.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="12.959427">
-              <caret line="371" column="21" selection-start-line="371" selection-start-column="21" selection-end-line="371" selection-end-column="21" />
+            <state vertical-scroll-proportion="-4.0740743">
+              <caret line="848" column="0" selection-start-line="848" selection-start-column="0" selection-end-line="848" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2566#2567#0" expanded="true" />
-                <element signature="e#2602#2603#0" expanded="true" />
-                <element signature="e#5419#5791#0" expanded="true" />
-                <element signature="e#5790#5791#0" expanded="true" />
-                <element signature="e#6341#6713#0" expanded="true" />
-                <element signature="e#6712#6713#0" expanded="true" />
-                <element signature="e#15451#15823#0" expanded="true" />
-                <element signature="e#15822#15823#0" expanded="true" />
-                <element signature="e#18175#18191#0" expanded="true" />
-                <element signature="e#20827#20839#0" expanded="true" />
-                <element signature="e#26310#26358#0" expanded="true" />
-                <element signature="e#26430#26478#0" expanded="true" />
-                <element signature="e#26551#26599#0" expanded="true" />
-                <element signature="e#26671#26719#0" expanded="true" />
-                <element signature="e#27625#27673#0" expanded="true" />
+                <element signature="e#2647#2648#0" expanded="true" />
+                <element signature="e#2683#2684#0" expanded="true" />
+                <element signature="e#2773#3031#0" expanded="true" />
+                <element signature="e#3030#3031#0" expanded="true" />
+                <element signature="e#5370#5371#0" expanded="true" />
+                <element signature="e#5430#5431#0" expanded="true" />
+                <element signature="e#5500#5872#0" expanded="true" />
+                <element signature="e#5871#5872#0" expanded="true" />
+                <element signature="e#6422#6794#0" expanded="true" />
+                <element signature="e#6793#6794#0" expanded="true" />
+                <element signature="e#9428#9429#0" expanded="true" />
+                <element signature="e#9480#9481#0" expanded="true" />
+                <element signature="e#11516#11517#0" expanded="true" />
+                <element signature="e#11560#11561#0" expanded="true" />
+                <element signature="e#15815#15816#0" expanded="true" />
+                <element signature="e#15875#15876#0" expanded="true" />
+                <element signature="e#16467#16839#0" expanded="true" />
+                <element signature="e#16838#16839#0" expanded="true" />
+                <element signature="e#18238#18254#0" expanded="true" />
+                <element signature="e#20890#20902#0" expanded="true" />
+                <element signature="e#26822#26823#0" expanded="true" />
+                <element signature="e#26874#26875#0" expanded="true" />
+                <element signature="e#27451#27499#0" expanded="true" />
+                <element signature="e#27571#27619#0" expanded="true" />
+                <element signature="e#27692#27740#0" expanded="true" />
+                <element signature="e#27812#27860#0" expanded="true" />
+                <element signature="e#29086#29134#0" expanded="true" />
+                <element signature="e#30260#30261#0" expanded="true" />
+                <element signature="e#30312#30313#0" expanded="true" />
+                <element signature="e#31243#31244#0" expanded="true" />
+                <element signature="e#31295#31296#0" expanded="true" />
+                <element signature="e#32232#32233#0" expanded="true" />
+                <element signature="e#32284#32285#0" expanded="true" />
+                <element signature="e#34578#34579#0" expanded="true" />
+                <element signature="e#34622#34623#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Feeds.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Fragments/Feeds.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5821727">
+              <caret line="87" column="25" selection-start-line="87" selection-start-column="25" selection-end-line="87" selection-end-column="25" />
+              <folding>
+                <element signature="e#2847#3267#0" expanded="true" />
+                <element signature="e#3266#3267#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1607,6 +1640,7 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_fragment_menu_detail.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Models/Allergy.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Utils/API.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Fragments/Feeds.java" />
       </list>
     </option>
   </component>
@@ -2063,8 +2097,8 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.49676898" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3286119" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.45184135" sideWeight="0.48546043" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.45184135" sideWeight="0.48546043" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286119" sideWeight="0.5145396" order="7" side_tool="true" content_ui="tabs" />
@@ -2104,17 +2138,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_list_item_child_vertical.xml">
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_fragment_signup.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
@@ -2475,11 +2498,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6454545">
           <caret line="107" column="45" selection-start-line="107" selection-start-column="45" selection-end-line="107" selection-end-column="45" />
-          <folding>
-            <element signature="e#2426#2461#0" expanded="true" />
-            <element signature="e#3196#3231#0" expanded="true" />
-            <element signature="e#3512#3547#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2512,9 +2531,9 @@
         <state vertical-scroll-proportion="0.442029">
           <caret line="97" column="32" selection-start-line="97" selection-start-column="32" selection-end-line="97" selection-end-column="32" />
           <folding>
-            <element signature="e#2674#2716#0" expanded="false" />
-            <element signature="e#3369#4522#0" expanded="false" />
-            <element signature="e#4521#4522#0" expanded="false" />
+            <element signature="e#2481#2523#0" expanded="false" />
+            <element signature="e#3176#4329#0" expanded="false" />
+            <element signature="e#4328#4329#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2526,17 +2545,7 @@
           <folding>
             <element signature="imports" expanded="false" />
             <element signature="e#1842#1903#0" expanded="false" />
-            <element signature="e#2081#2132#0" expanded="false" />
-            <element signature="e#4143#4164#0" expanded="false" />
-            <element signature="e#4166#4192#0" expanded="false" />
-            <element signature="e#4210#4235#0" expanded="false" />
-            <element signature="e#4237#4256#0" expanded="false" />
-            <element signature="e#4258#4282#0" expanded="false" />
-            <element signature="e#5005#6009#0" expanded="false" />
-            <element signature="e#6008#6009#0" expanded="false" />
-            <element signature="e#6027#6340#0" expanded="false" />
-            <element signature="e#6339#6340#0" expanded="false" />
-            <element signature="e#10124#10212#0" expanded="false" />
+            <element signature="e#1842#1903#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2572,10 +2581,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.59641254">
           <caret line="124" column="38" selection-start-line="124" selection-start-column="38" selection-end-line="124" selection-end-column="38" />
-          <folding>
-            <element signature="e#2417#2418#0" expanded="true" />
-            <element signature="e#2457#2458#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2609,32 +2615,63 @@
             <element signature="e#2581#2604#0" expanded="true" />
             <element signature="e#3330#3365#0" expanded="true" />
             <element signature="e#3646#3669#0" expanded="true" />
-            <element signature="e#4754#4777#0" expanded="true" />
+            <element signature="e#4759#4782#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Utils/API.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="12.959427">
-          <caret line="371" column="21" selection-start-line="371" selection-start-column="21" selection-end-line="371" selection-end-column="21" />
+        <state vertical-scroll-proportion="-4.0740743">
+          <caret line="848" column="0" selection-start-line="848" selection-start-column="0" selection-end-line="848" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2566#2567#0" expanded="true" />
-            <element signature="e#2602#2603#0" expanded="true" />
-            <element signature="e#5419#5791#0" expanded="true" />
-            <element signature="e#5790#5791#0" expanded="true" />
-            <element signature="e#6341#6713#0" expanded="true" />
-            <element signature="e#6712#6713#0" expanded="true" />
-            <element signature="e#15451#15823#0" expanded="true" />
-            <element signature="e#15822#15823#0" expanded="true" />
-            <element signature="e#18175#18191#0" expanded="true" />
-            <element signature="e#20827#20839#0" expanded="true" />
-            <element signature="e#26310#26358#0" expanded="true" />
-            <element signature="e#26430#26478#0" expanded="true" />
-            <element signature="e#26551#26599#0" expanded="true" />
-            <element signature="e#26671#26719#0" expanded="true" />
-            <element signature="e#27625#27673#0" expanded="true" />
+            <element signature="e#2647#2648#0" expanded="true" />
+            <element signature="e#2683#2684#0" expanded="true" />
+            <element signature="e#2773#3031#0" expanded="true" />
+            <element signature="e#3030#3031#0" expanded="true" />
+            <element signature="e#5370#5371#0" expanded="true" />
+            <element signature="e#5430#5431#0" expanded="true" />
+            <element signature="e#5500#5872#0" expanded="true" />
+            <element signature="e#5871#5872#0" expanded="true" />
+            <element signature="e#6422#6794#0" expanded="true" />
+            <element signature="e#6793#6794#0" expanded="true" />
+            <element signature="e#9428#9429#0" expanded="true" />
+            <element signature="e#9480#9481#0" expanded="true" />
+            <element signature="e#11516#11517#0" expanded="true" />
+            <element signature="e#11560#11561#0" expanded="true" />
+            <element signature="e#15815#15816#0" expanded="true" />
+            <element signature="e#15875#15876#0" expanded="true" />
+            <element signature="e#16467#16839#0" expanded="true" />
+            <element signature="e#16838#16839#0" expanded="true" />
+            <element signature="e#18238#18254#0" expanded="true" />
+            <element signature="e#20890#20902#0" expanded="true" />
+            <element signature="e#26822#26823#0" expanded="true" />
+            <element signature="e#26874#26875#0" expanded="true" />
+            <element signature="e#27451#27499#0" expanded="true" />
+            <element signature="e#27571#27619#0" expanded="true" />
+            <element signature="e#27692#27740#0" expanded="true" />
+            <element signature="e#27812#27860#0" expanded="true" />
+            <element signature="e#29086#29134#0" expanded="true" />
+            <element signature="e#30260#30261#0" expanded="true" />
+            <element signature="e#30312#30313#0" expanded="true" />
+            <element signature="e#31243#31244#0" expanded="true" />
+            <element signature="e#31295#31296#0" expanded="true" />
+            <element signature="e#32232#32233#0" expanded="true" />
+            <element signature="e#32284#32285#0" expanded="true" />
+            <element signature="e#34578#34579#0" expanded="true" />
+            <element signature="e#34622#34623#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Fragments/Feeds.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5821727">
+          <caret line="87" column="25" selection-start-line="87" selection-start-column="25" selection-end-line="87" selection-end-column="25" />
+          <folding>
+            <element signature="e#2847#3267#0" expanded="true" />
+            <element signature="e#3266#3267#0" expanded="true" />
           </folding>
         </state>
       </provider>
