@@ -596,7 +596,6 @@ public class API {
                     .setPostBodyInJSONForm(postBody).setTag(tag));
         }
     }
-
     public static void getAllComments(String tag, String type, int parentID, Response.Listener<Comment[]> successListener,
                                       Response.ErrorListener failureListener) {
         if(isTest){

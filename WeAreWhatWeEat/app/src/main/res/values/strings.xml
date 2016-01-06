@@ -70,12 +70,18 @@
     <string name="title_menu_profile">Profile</string>
     <string name="title_menu_search">Search</string>
     <string name="title_menu_menu">Create Menu</string>
+    <string name="title_menu_stats">Statistics</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
     <string name="title_menu_recipeDetail">Recipe Detail</string>
     <string name="title_menu_menuDetail">Menu Detail</string>
     <string name="title_menu_myRecipe">My Recipes</string>
     <string name="title_menu_signup">Sign up</string>
+
+    <!-- Stats -->
+    <string name="label_stats">Statistics</string>
+    <string name="label_nutritients">Nutritients</string>
+    <string name="label_consumed">Consumed</string>
 
     <!-- Comment Rating -->
     <string name="prompt_makeComment">Write Comment…</string>
