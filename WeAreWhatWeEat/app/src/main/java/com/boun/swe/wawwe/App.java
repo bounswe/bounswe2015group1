@@ -5,10 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.Allergy;
 import com.boun.swe.wawwe.Models.SearchPrefs;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Mert on 16/10/15.
@@ -25,6 +30,7 @@ public class App extends Application {
 
     private static int userId = -1;
     private static SearchPrefs searchPrefs;
+    private static Set<String> allergies;
 
     @Override
     public void onCreate() {
@@ -56,6 +62,24 @@ public class App extends Application {
     public static boolean getRememberMe() {
         return getSharedPreferecesForUser().getBoolean(instance
                 .getString(R.string.preference_rememberMe), false);
+    }
+
+    public static boolean addAlergy(Allergy allergy) {
+        if (allergies == null)
+            allergies = new HashSet<>();
+        return allergies.add(allergy.getIngredientName());
+    }
+
+    public static boolean hasAlergy(String allergyName) {
+        if (allergies != null)
+            return allergies.contains(allergyName);
+        return false;
+    }
+
+    public static String[] getAllergies() {
+        if (allergies == null)
+            allergies = new HashSet<>();
+        return allergies.toArray(new String[allergies.size()]);
     }
 
     public static void setUser(User user) {

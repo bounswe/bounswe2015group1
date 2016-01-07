@@ -59,6 +59,7 @@
     <string name="button_action_myRecipes">My Recipes</string>
     <string name="button_action_createRecipes">Create Recipe</string>
     <string name="button_statistics">See Your Statistics</string>
+    <string name="prompt_containsAllergen">ALLERGEN</string>
 
     <!-- Profile Edit -->
     <string name="title_email">Email</string>
@@ -85,6 +86,7 @@
     <!-- Stats -->
     <string name="label_stats">Statistics</string>
     <string name="label_nutritients">Nutritients</string>
+    <string name="label_dailyAverage">Daily Consumption</string>
     <string name="label_consumed">Consumed Recipes</string>
     <string name="label_allergies">My Allergies</string>
 

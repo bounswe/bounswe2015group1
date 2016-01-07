@@ -3,6 +3,7 @@ package com.boun.swe.wawwe.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.boun.swe.wawwe.App;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -15,6 +16,11 @@ public class Allergy implements Parcelable {
     String ingredientName;
 
     public Allergy() { }
+
+    public Allergy(String ingredientName) {
+        userId = App.getUserId();
+        this.ingredientName = ingredientName;
+    }
 
     public Allergy(int userId, String ingredientName) {
         this.userId = userId;

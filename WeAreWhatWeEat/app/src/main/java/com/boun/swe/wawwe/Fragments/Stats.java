@@ -1,6 +1,5 @@
 package com.boun.swe.wawwe.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,20 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
+import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.Allergy;
-import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Nutrition;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
@@ -50,6 +44,7 @@ import su.levenetc.android.textsurface.contants.Side;
 public class Stats extends LeafFragment{
 
     private RecyclerView consumedRecipes;
+    private TagGroup tagGroup;
 
     public Stats() { }
 
@@ -74,7 +69,7 @@ public class Stats extends LeafFragment{
         // Set headers
         int[] headerIds = new int[] { R.id.stats_title_nutritions,
                 R.id.title_consumed_recipes, R.id.title_allergies };
-        int[] headerTextIds = new int[] { R.string.label_nutritients,
+        int[] headerTextIds = new int[] { R.string.label_dailyAverage,
                 R.string.label_consumed, R.string.label_allergies };
         for (int i = 0;i < headerIds.length;i++) {
             TextSurface header = (TextSurface) statsView.findViewById(headerIds[i]);
@@ -88,16 +83,19 @@ public class Stats extends LeafFragment{
                     )));
         }
 
-        final TagGroup tagGroup = (TagGroup) statsView.findViewById(R.id.allergies_tagGroup);
-        final List<String> allergies = new ArrayList<>();
+        tagGroup = (TagGroup) statsView.findViewById(R.id.allergies_tagGroup);
         API.getUserAllergy(getTag(),
                 new Response.Listener<Allergy[]>() {
                     @Override
                     public void onResponse(Allergy[] response) {
-                        if(response != null){
-                            for(int i=0;i<response.length;i++){
-                                allergies.add(response[i].getIngredientName());
+                        if (response != null) {
+                            List<String> allergies = new ArrayList<>();
+                            for (int i = 0; i < response.length; i++) {
+                                String allergen = response[i].getIngredientName();
+                                allergies.add(allergen);
+                                App.addAlergy(new Allergy(allergen));
                             }
+                            tagGroup.setTags(allergies);
                         }
                         //TODO no allergy text should be added
                     }
@@ -107,8 +105,6 @@ public class Stats extends LeafFragment{
                         Toast.makeText(context, "Could not get user allergies", Toast.LENGTH_SHORT).show();
                     }
                 });
-        tagGroup.setTags(allergies);
-
 
         API.getAllRecipesConsumed(getTag(), new Response.Listener<Recipe[]>() {
             @Override
@@ -173,11 +169,30 @@ public class Stats extends LeafFragment{
         return statsView;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for (String allergyName: tagGroup.getTags()) {
+            if (!App.hasAlergy(allergyName))
+                API.addAllergy(MainActivity.class.getSimpleName(), new Allergy(allergyName),
+                        new Response.Listener<Allergy>() {
+                            @Override
+                            public void onResponse(Allergy response) {
+                                App.addAlergy(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+        }
+    }
+
     public static Stats getFragment(Bundle bundle) {
         Stats statsFragment = new Stats();
         statsFragment.setArguments(bundle);
         return statsFragment;
     }
-
-
 }

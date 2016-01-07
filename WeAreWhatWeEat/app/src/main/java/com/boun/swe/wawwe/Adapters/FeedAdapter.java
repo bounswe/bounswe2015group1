@@ -12,16 +12,19 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.Fragments.BaseFragment;
 import com.boun.swe.wawwe.Fragments.MenuDetail;
 import com.boun.swe.wawwe.Fragments.RecipeDetail;
 import com.boun.swe.wawwe.MainActivity;
 import com.boun.swe.wawwe.Models.BaseModel;
+import com.boun.swe.wawwe.Models.Ingredient;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.R;
 import com.boun.swe.wawwe.Utils.API;
+import com.boun.swe.wawwe.Utils.Commons;
 import com.boun.swe.wawwe.ViewHolders.MenuViewHolder;
 import com.boun.swe.wawwe.ViewHolders.RecipeViewHolder;
 import com.boun.swe.wawwe.ViewHolders.SubRecipeViewHolder;
@@ -191,8 +194,31 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 makeFragmentTransaction(RecipeDetail.getFragment(recipe));
             }
         });
-        holder.recommended.setVisibility(recipe.isRecommended() ?
-                View.VISIBLE : View.GONE);
+
+        boolean containsAllergen = false;
+        ingredientSearcher: for (Ingredient ingredient: recipe.getIngredients()) {
+            for (String allergyName: App.getAllergies()) {
+                String ingredientName = ingredient.getName().toLowerCase();
+                if (ingredientName.contains(allergyName.toLowerCase())) {
+                    containsAllergen = true;
+                    break ingredientSearcher;
+                }
+            }
+        }
+
+        if (!containsAllergen) {
+            if (recipe.isRecommended()) {
+                holder.recommended.setText("Recommended");
+                holder.recommended.setVisibility(View.VISIBLE);
+            }
+        }
+        else {
+            holder.recommended.setVisibility(View.VISIBLE);
+            holder.recommended.setText(Commons.getString(R.string.prompt_containsAllergen));
+        }
+
+        if (!containsAllergen && !recipe.isRecommended())
+            holder.recommended.setVisibility(View.GONE);
 
         // Example(and bad) usage of load image from url call...
 //        API.loadImageFromUrl(context.getPackageName(), "http://molacorbakebapsalonu.com/assets/kebap.jpg",
