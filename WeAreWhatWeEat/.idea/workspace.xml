@@ -9,9 +9,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9785b5f3-c21a-44e9-bb28-4fee6414ea25" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/android_keystore.jks" afterPath="" />
-    </list>
+    <list default="true" id="9785b5f3-c21a-44e9-bb28-4fee6414ea25" name="Default" comment="" />
     <ignored path="WeAreWhatWeEat.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
