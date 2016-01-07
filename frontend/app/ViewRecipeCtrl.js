@@ -4,15 +4,11 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 		$scope.rate = 3;
 		$scope.avgRate = 3;
 		$scope.recipeId = parseInt($stateParams.recipeID);
-		//$scope.recipe =  recipeService.getRecipeWithID(parseInt($stateParams.recipeID));
+
 		$scope.editAllowed = false;
 		$scope.commentAllowed = false;
 		console.log("Recipe view: " + JSON.stringify($scope.recipe));
 		$scope.recommendedRecipes = [];
-		/*
-		$scope.comments=[{"id" : 1, "body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"},
-						{"id" : 7, "body":"Uzuncana bir text Uzuncana Çok Uzun Çok Çok", "owner" : "Jane Doe", "date" : "12/2/2009"},
-						{"id" : 1, "body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"}];*/
 
 		$scope.comments = []
 		$scope.nutrCollapsed =true;
@@ -64,7 +60,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 			})
 		}
 
-		// CALL INIT WHEN API IS READY
+
 		var init = function() {
 			$scope.loggedIn = userService.getLoggedIn();
 			recipeService.getRecipeWithID($scope.recipeId).then(
@@ -150,21 +146,20 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 
 
 		$scope.back = function() {
-			//console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
-			//$state.go($rootScope.previousState, $rootScope.previousParams);
-			//$rootScope.back();
 			window.history.back();
 		};
 
 		$scope.consume = function() {
-			var rawRecipe = $scope.recipe;
+			var rawRecipe = JSON.parse(JSON.stringify($scope.recipe));
+			console.log("Raw Recipe: " + JSON.stringify(rawRecipe));
 			delete rawRecipe.userId;
 			delete rawRecipe.createdAt;
 			delete rawRecipe.rating;
 			delete rawRecipe.nutritions.id;
 			for(var i=0; i < rawRecipe.ingredients.length; i++) {
 				delete rawRecipe.ingredients[i].unit;
-				console.log("Deleted Unit")
+				delete rawRecipe.ingredients[i].allergenic;
+				
 			}
 			recipeService.consumeRecipe(JSON.stringify(rawRecipe))
 		}

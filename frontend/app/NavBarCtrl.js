@@ -25,7 +25,6 @@ myApp.controller('NavBarCtrl', function($scope, $http, $window, $state, userServ
 		});
 
 		$scope.search = function() {
-			//searchService.search($scope.searchText,0,5);
 			var params = {};
 			var paramExists = false;
 			$scope.nutritionList.forEach(function(nutrition) {

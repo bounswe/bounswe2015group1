@@ -7,9 +7,6 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 		$scope.commentAllowed = false;
 		console.log("Menu view: " + JSON.stringify($scope.menu));
 
-		/*$scope.comments=[{"id" : 1,"body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"},
-						{"id" : 7,"body":"Uzuncana bir text Uzuncana Çok Uzun Çok Çok", "owner" : "Jane Doe", "date" : "12/2/2009"},
-						{"id" : 1,"body":"Deneme", "owner" : "Jane Doe", "date" : "12/2/2009"}];*/
 
 		$scope.comments = []
 
@@ -56,7 +53,6 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 
 		$scope.addRating = function() {
 			communityService.rate("menu", $scope.menuId, $scope.rate).then(function(response) {
-				//$scope.avgRating = response.data.rating;
 				$scope.getAvgRating();
 			});
 		}
@@ -79,9 +75,6 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 		}
 
 		$scope.back = function() {
-			//console.log("BACK TO: " + $rootScope.previousState + " WITH PARAMS " + $rootScope.previousParams);
-			//$state.go($rootScope.previousState, $rootScope.previousParams);
-			//$rootScope.back();
 			window.history.back();
 		};
 

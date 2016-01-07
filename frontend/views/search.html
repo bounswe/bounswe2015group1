@@ -14,20 +14,6 @@
 			<uib-pagination total-items="recipeResults.length" ng-show="recipeResults.length > 0" ng-model="recipesCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
 			<p ng-hide="recipeResults.length > 0">No recipe is found</p>
     	</uib-tab>
-    		<!--
-    		<div ng-repeat="result in menuResults" class="well well-lg row"> 
-				<div class="col-md-2">
-					<img src="img/chefhat.png" class="img-thumbnail" style="max-width=25%">
-				</div>
-				<div class="col-md-10">
-					<h3><a href="#" ng-click="viewRecipe(result.id)"> {{ result.name }} </a></h3>
-					<p>
-						<div ng-repeat="ingredient in result.ingredients">
-		 					{{ ingredient.amount }} {{ ingredient.unit }}  {{ ingredient.name  }}
-						</div>
-					</p>
-				</div>
-			</div>-->
     	<uib-tab heading="Menus">
     	    <uib-pagination total-items="menuResults.length" ng-show="menuResults.length > 0" ng-model="menusCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
 				<div class="row" ng-repeat=" menu in menuResults.slice(((menusCurrentPage-1)*maxSize),menusCurrentPage*maxSize)">

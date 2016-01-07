@@ -11,7 +11,6 @@ myApp.controller('MainCtrl', function($scope, $state, $http, $rootScope, recipeS
 				for(var i=0; i <recipeLength; i++) {
 					$scope.recipes.push(allRecipes[i])
 				}
-				//console.log(JSON.stringify($scope.recipes));
 			});
 			menuService.fetchAllMenus().then(function(response) {
 				var allMenus = response.data;
@@ -30,12 +29,6 @@ myApp.controller('MainCtrl', function($scope, $state, $http, $rootScope, recipeS
 		$scope.viewMenu = function(id) {
 			$state.go('viewMenu', { menuID : id});
 		};
-
-
-		/*$scope.$watch(recipeService.getRecipes, function() {
-				$scope.recipes = recipeService.getRecipes();
-				console.log('Recipes Fetched');
-		});*/
 
 		init();
 

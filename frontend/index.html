@@ -143,9 +143,9 @@
                                               <td>Min</td>
                                               <td>Max</td>
                                             </th>
-                                            <tr ng-repeat="nutritionType in nutritionList">
+                                            <tr ng-repeat="(id,nutritionType) in nutritionList">
                                               <td>
-                                                <label>{{ nutritionType.charAt(0).toUpperCase() + nutritionType.slice(1)}}</label>
+                                                <label>{{ nutritionType }}  ({{ nutritionUnits[id]}})</label>
                                               </td>
                                               <td>
                                                 <input type="number" ng-model="mins[nutritionType]" min="0" step="0.1" />

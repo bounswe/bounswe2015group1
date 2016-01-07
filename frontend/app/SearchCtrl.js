@@ -39,11 +39,7 @@ myApp.controller('SearchCtrl', function($scope, $rootScope, $state, $stateParams
 					$scope.menuResults = response.data;
 			});
 		}
-		
-		/*$scope.$watch(searchService.getResults, function() {
-				$scope.results = searchService.getResults();
-				console.log('Results Fetched');
-		});*/
+
 		var init = function() {
 			if($stateParams.params !== null && $stateParams.params != '' && typeof $stateParams.params != 'undefined' ) {
 				$scope.advancedSearch($stateParams.query, JSON.parse($stateParams.params));

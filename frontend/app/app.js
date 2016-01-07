@@ -53,22 +53,9 @@ angular.module('FoodApp').run(function($rootScope, $state) {
     		$rootScope.previousParams = fromParams;
     		console.log('Previous state:'+$rootScope.previousState);
     		console.log('Previous Params state:'+ JSON.stringify($rootScope.previousParams));
-    		/*if($rootScope.stateStack.length < 10) {
-    			$rootScope.stateStack.push(from.name);
-    			$rootScope.paramStack.push(fromParams);
-    		}*/
 		});
 
-		/*$rootScope.back = function() {
-			if($rootScope.stateStack.length == 0) {
-				$state.go("main");
-			}
-			else {
-				var params = $rootScope.paramStack.pop();
-				var params = typeof params == "undefined" ? {dummy : 0} : params;
-				$state.go($rootScope.stateStack.pop(),$rootScope.paramStack.pop());
-			}
-		}*/
+
 });
 
 angular.module('FoodApp').factory('userService', function($http, $window, $state, $rootScope, standinDB) {
@@ -178,7 +165,6 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 		}, function(){
 			console.log("Register Error");
 			alert("An error occured while registering. Try again...");
-			//$window.location.href = "/";
 		});
 
 	};
@@ -228,12 +214,9 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 			console.log("Update Success");
 			console.log(JSON.stringify(response.data));
 			alert("You have updated your profile successfully...");
-			//$window.location.href = "/profile";
-
 		}, function(){
 			console.log("Update Error");
 			alert("An error occured while updating your profile. Try again...");
-			//$window.location.href = "/profile";
 		});
 	}
 
@@ -361,11 +344,6 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 		};
 
 	var fetchAllRecipes = function() {
-		// DELETE WHEN API IS READY
-		$http.get($rootScope.baseUrl + '/api/recipe/all').then(function(response) {
-				recipes = response.data;
-				//console.log(JSON.stringify(recipes));
-		});
 		return $http.get($rootScope.baseUrl + '/api/recipe/all');
 	};
 	var getAllRecipes = function() {
@@ -535,11 +513,6 @@ angular.module('FoodApp').factory('menuService', function($http, $rootScope, $q,
 
 
 angular.module('FoodApp').factory('searchService', function($http, $rootScope, $q, userService, standinDB) {
-	/*var recipeResults = [];
-	var menuResults = [];
-	var lastRecipeQuery = '';
-	var lastMenuQuery = '';
-	var tags = [];*/
 	var recipeSearch = function(query) {
 		if($rootScope.saveTheDay) {
 			var recipes = standinDB.searchRecipes(query);
@@ -548,10 +521,8 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, $
 					resolve({"data" : recipes});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		else return $http.get($rootScope.baseUrl + '/api/search/recipe/' + query);
-		//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 	};
 
 	var menuSearch = function(query) {
@@ -562,12 +533,8 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, $
 					resolve({"data" : menus});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		else return $http.get($rootScope.baseUrl + '/api/search/menu/' + query);
-		/*return $http.get($rootScope.baseUrl + '/api/recipe/all').then(function(){
-			return response.data;
-		});*/
 	};
 	var recipeAdvancedSearch = function(query, sParams) {
 		return $http({url: $rootScope.baseUrl + '/api/search/advancedSearch/recipe/' + query,
@@ -591,7 +558,6 @@ angular.module('FoodApp').factory('searchService', function($http, $rootScope, $
 
 angular.module('FoodApp').factory('communityService', function($http, $rootScope, $q, userService, standinDB) {
 	var getComments = function(type, parentId) {
-		//return $http.get($rootScope.baseUrl + '/api/search/recipe/' + query);
 		if($rootScope.saveTheDay) {
 			var comments = standinDB.getComments(type, parentId);
 			return $q(function(resolve,reject) {
@@ -599,7 +565,6 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 					resolve({"data" : comments});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		return $http.get($rootScope.baseUrl + '/api/comment/' + type + "/" + parentId);
 	};
@@ -655,7 +620,6 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 					resolve({"data" : rating});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		else return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId);
 	};
@@ -668,7 +632,6 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 					resolve({"data" : rating});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		var req = {
 			 method: 'POST',
@@ -690,7 +653,6 @@ angular.module('FoodApp').factory('communityService', function($http, $rootScope
 					resolve({"data" : rating});
 				},$rootScope.saveTheDelay)
 			});
-			//return $http.get($rootScope.baseUrl + '/api/recipe/all');
 		}
 		else return $http.get($rootScope.baseUrl + '/api/rate/' + type + "/" + parentId + "/" + userService.getUser().id);
 	}
