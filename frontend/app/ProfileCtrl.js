@@ -1,8 +1,17 @@
 myApp.controller('ProfileCtrl', function($rootScope,$scope,$http,userService,recipeService) {
+		var timestampToDate = function(timestamp){
+		  var d = new Date(timestamp);
+		  var year = d.getFullYear();
+		  var month = d.getMonth() + 1;
+		  var date = d.getDate();
+		  return year + "-" + month + "-" + date;
+		}
+
 		var init = function() {
 			console.log(JSON.stringify(userService.getUser()));
 			$scope.nameProfile = userService.getUser().fullName;
 			$scope.emailProfile = userService.getUser().email;
+			$scope.birthDateProfile = timestampToDate(userService.getUser().dateOfBirth);
 			$scope.locationProfile = userService.getUser().location;
 			$scope.isRestaurantProfile = userService.getUser().isRestaurant;
 

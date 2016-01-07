@@ -102,4 +102,10 @@
 .tags .tag:hover {
     color: red;
     text-decoration: none;
+    cursor:pointer;
+}
+
+textarea, input[type], button {
+    margin-top:7px;
+    margin-bottom:7px;
 }

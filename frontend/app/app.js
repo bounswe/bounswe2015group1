@@ -164,7 +164,7 @@ angular.module('FoodApp').factory('userService', function($http, $window, $state
 
 		}, function(){
 			console.log("Register Error");
-			alert("An error occured while registering. Try again...");
+			alert("E-mail you typed already exists. Try again...");
 		});
 
 	};
@@ -308,6 +308,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 				recipeAddStatus = 200;
 				alert("Your recipe added successfully!");
 				console.log("Recipe Added");
+				$window.location.href = "/";
 			}, function(response){
 				console.log('RESPONSE STATUS: ' + response.status);
 				if(response.status==401) {
@@ -676,8 +677,11 @@ angular.module('FoodApp').directive('tagManager', function() {
 			'<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}} ' +
 			'<span class="glyphicon glyphicon-remove" aria-hidden="true"></a>' +
 			'</div>' +
-			'<input type="text" class="form-control" placeholder="" ng-model="userTags"></input> ' +
-			'<button class="btn btn-default" ng-click="add()">Add</button>',
+			'<div class="form-inline"><input type="text" '+
+			'class="form-control col-md-2 col-lg-3 col-xs-12" placeholder="" ' + 
+			'ng-model="userTags"></input> ' +
+			'<button class="btn btn-default" ng-click="add()" ng-show="!!userTags">' + 
+			'<span style="color:green;font-weight:bold;">Add!</span></button></div>',
 		link: function ( $scope, $element ) {
 
 		var input = angular.element( $element.children()[1] );

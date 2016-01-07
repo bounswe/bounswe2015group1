@@ -6,10 +6,10 @@
 	<div class="col-md-9">
 	<form name="AddRecipe" role="form" novalidate>
 		<h3>Create a recipe</h3>
-		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9" ng-class="{ 'has-error' : AddRecipe.recipeName.$invalid && !AddRecipe.recipeName.$pristine }">
+		<div class="form-group col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<label>Recipe Name</label>
 			<input type="text" name="recipeName" class="form-control" placeholder="Recipe name" ng-model="recipeName" required>
-			<p ng-show="AddRecipe.recipeName.$invalid && !AddRecipe.recipeName.$pristine" class="help-block">Recipe name is required.</p>
+			<!-- <p ng-show="AddRecipe.recipeName.$invalid && !AddRecipe.recipeName.$pristine" class="help-block">Recipe name is required.</p> -->
 		</div>
 		<div class="col-md-9">
 			<label>Ingredients</label>
@@ -34,7 +34,7 @@
 			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12" ng-model="newIngredientAmount" placeholder="Amount">
 			<input type="text" class="form-control col-md-2 col-lg-3 col-xs-12" ng-model="newIngredientFullData.nf_serving_size_unit" placeholder="Unit">
 			<button class="form-control btn btn-default col-md-2 col-lg-3 col-xs-12" ng-show="!!newIngredientName && !!newIngredientAmount && newIngredientFullData.nf_serving_size_unit" ng-click="addIngredient()" aria-label="Add Ingredient">
-  			<span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:green;"></span></button>
+  			<span style="color:green;font-weight:bold;">Add!</span></button>
 		</div>
 		<div class="col-md-9">
 			<label>Tags</label>
