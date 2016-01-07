@@ -105,7 +105,7 @@
                  <form id="searchForm" method="post">
 
                   <div class="input-group">
-                          <input type="text" ng-model="searchText" class="form-control" placeholder="Search recipe, ingredient.." aria-describedby="basic-addon2">
+                          <input type="text" ng-model="searchText" ng-enter="search()" class="form-control" placeholder="Search recipe, ingredient.." aria-describedby="basic-addon2">
                           <span class="input-group-addon"  ng-click="search()" href="#" id="basic-addon2"><a ng-click="search()" href="#"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a></span>
                   </div>
                   <div class="btn-group input-group" data-toggle="buttons" style="margin-top: 10px;">
@@ -129,19 +129,19 @@
                                             <option value="monthly">Monthly</option>
                                           </select>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div>
                                           <label>Included Ingredients</label>
                                           <tag-manager tags="includedIngredients"></tag-manager>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div>
                                           <label>Excluded Ingredients</label>
                                           <tag-manager tags="excludedIngredients"></tag-manager>
                                         </div>
                                         <div>
                                           <table>
                                             <th>
-                                              <td>Min</td>
-                                              <td>Max</td>
+                                              <td><label>Min</label></td>
+                                              <td><label>Max</label></td>
                                             </th>
                                             <tr ng-repeat="(id,nutritionType) in nutritionList">
                                               <td>

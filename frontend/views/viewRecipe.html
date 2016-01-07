@@ -11,7 +11,7 @@
 		<p><label>Average Rate :</label> <uib-rating ng-model="avgRate" max="max" readonly="true" aria-labelledby="default-rating"></uib-rating></p>
 		<p><label>Add Rating : </label> <uib-rating ng-model="rate" max="max" aria-labelledby="default-rating"></uib-rating>
 		<button type="button" ng-click="addRating()" class="btn">Rate</button></p>
-		<label>Recommended for you:</label></br>
+		<label ng-show="recommendedRecipes.length > 0">Recommended for you:</label></br>
 		<p ng-repeat="recommended in recommendedRecipes">
 			<a href="#" ui-sref="viewRecipe({ recipeID: recommended.id.toString()})"> {{ recommended.name }}</a>
 		</p>
@@ -58,7 +58,7 @@
 		
 		<div ng-hide="!commentAllowed">
 			<label>Add Comment</label>
-			<input type="text" class="form-control" ng-model="commentText" placeholder="Write Your Comment Here...">
+			<input type="text" class="form-control" ng-enter="addComment()" ng-model="commentText" placeholder="Write Your Comment Here...">
 			<button type="button" ng-click="addComment()" class="btn">Send</button>
 		</div>
 

@@ -694,14 +694,14 @@ angular.module('FoodApp').directive('tagManager', function() {
 		$scope.remove = function ( idx ) {
 			$scope.tags.splice( idx, 1 );
 		};
-
+		/*
 		// Capture all keypresses
 		input.bind( 'keypress', function ( event ) {
 		// But we only care when Enter was pressed
 		if ( event.keyCode == 13 ) {
 			$scope.$apply( $scope.add );
 			}
-			});
+			});*/
 		}
 	};
 });
@@ -716,4 +716,18 @@ angular.module('FoodApp').directive('stringToTimestamp', function() {
                 });
             }
         }
+    });
+
+angular.module('FoodApp').directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                    scope.$apply(function(){
+                        scope.$eval(attrs.ngEnter, {'event': event});
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
     });
