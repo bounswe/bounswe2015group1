@@ -66,6 +66,7 @@ myApp.controller('ViewRecipeCtrl', function($scope, $rootScope, $state, $statePa
 			recipeService.getRecipeWithID($scope.recipeId).then(
 				function(response){
 					$scope.recipe = response.data;
+					$scope.tagsString = $scope.recipe.tags.join(", ");
 					console.log("View Recipe recipe data: " + JSON.stringify($scope.recipe))
 					console.log("User data : " + JSON.stringify(userService.getUser()));
 					if(response.data.userId == userService.getUser().id) {

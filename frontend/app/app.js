@@ -317,7 +317,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 
 		};
 
-		var updateRecipe = function(id,name,ingredients,desc,tags, nutrition) {
+		var updateRecipe = function(id, userId, name,ingredients,desc,tags, nutrition) {
 			if($rootScope.saveTheDay) {
 				return
 			}
@@ -328,7 +328,7 @@ angular.module('FoodApp').factory('recipeService', function($http, $rootScope, $
 			   'Authorization': 'Bearer ' + userService.getToken().accessToken,
 			   'Content-Type': 'application/json'
 			 },
-			 data : { "id": id, "name" : name, "ingredients" : ingredients, "description": desc, "tags" : tags , "nutritions" : nutrition}
+			 data : { "id": id, "userId" : userId , "name" : name, "ingredients" : ingredients, "description": desc, "tags" : tags , "nutritions" : nutrition}
 			};
 			$http(req).then(function(response){
 				recipeAddStatus = 200;

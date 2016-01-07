@@ -35,7 +35,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
 				console.log("TAGS: " + JSON.stringify($scope.tags));
 				console.log("NUTRITIONS: " + JSON.stringify(nutrition));
 				if($scope.editMode) {
-					recipeService.updateRecipe($scope.recipeId,$scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.tags, nutrition);
+					recipeService.updateRecipe($scope.recipeId, $scope.userId, $scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.tags, nutrition);
 				}
 				else {
 					 recipeService.addRecipe($scope.recipeName, $scope.ingredients, $scope.recipeDesc, $scope.tags, nutrition);
@@ -119,6 +119,7 @@ myApp.controller('AddRecipeCtrl', function($rootScope, $scope, $http, $statePara
   						$scope.recipeName = response.data.name;
   						$scope.recipeDesc = response.data.description
   						$scope.recipeId = response.data.id;
+  						$scope.userId = response.data.userId;
   						$scope.tags = response.data.tags;
   						for(var i=0; i < $scope.ingredients.length; i++) {
   							$http.get($rootScope.baseUrl + '/api/ingredient/item/' + $scope.ingredients[i].ingredientId).then(function(response){
