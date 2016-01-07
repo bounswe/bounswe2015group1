@@ -54,14 +54,14 @@ public class SearchResource{
         this.dao = dao;
     }
 
-    @GET
-    @Path("/recipe/{q}")
+    //@GET
+    //@Path("/recipe/{q}")
     public List<Recipe> getRecipeResults(@PathParam("q") String q) {
         return dao.getRecipeResults(q);
     }
 
-    @GET
-    @Path("/menu/{q}")
+    //@GET
+    //@Path("/menu/{q}")
     public List<Menu> getMenuResults(@PathParam("q") String q) {
         return dao.getMenuResults(q);
     }
@@ -89,7 +89,7 @@ public class SearchResource{
     }
 
     @GET
-    @Path("/semanticSearch/recipe/{q}")
+    @Path("/recipe/{q}")
     public List<Recipe> semanticSearchRecipe(@PathParam("q") String q) {
         //dao.semanticSearch(q);
 
@@ -127,6 +127,9 @@ public class SearchResource{
             List synonyms = new ArrayList<String>();
             List meronyms = new ArrayList<String>();
 
+            allNyms.add(queryWord);
+            System.out.println("QUERY WORD IS : " + queryWord);
+
             try{
                 JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
                 final Dictionary dictionary = Dictionary.getInstance();
@@ -207,7 +210,7 @@ public class SearchResource{
             catch(Exception e){
                 System.out.println("HATA ALDI: "+e.getMessage());
                 e.printStackTrace();
-                return recipes;
+                continue;
             }
 
             allNyms.addAll(synonyms);
@@ -226,12 +229,28 @@ public class SearchResource{
 
                 }
             }
+        }
+        List recipeResults = getRecipeResults(q);
+        if(recipeResults!=null){
+            recipes.addAll(recipeResults);
+        }
+
+        List noDuplicates = new ArrayList<Recipe>();
+
+        for(int k=0; k<recipes.size(); k++)
+        {
+            Recipe r = (Recipe) recipes.get(k);
+            if(!noDuplicates.contains(r)){ 
+                noDuplicates.add(r);
+                System.out.println(r.getId());
+            }
         }    
-        return recipes;
+
+        return noDuplicates;
     }
 
     @GET
-    @Path("/semanticSearch/menu/{q}")
+    @Path("/menu/{q}")
     public List<Menu> semanticSearchMenu(@PathParam("q") String q) {
         //dao.semanticSearch(q);
 
@@ -269,6 +288,8 @@ public class SearchResource{
             List synonyms = new ArrayList<String>();
             List meronyms = new ArrayList<String>();
 
+            allNyms.add(queryWord);
+
             try{
                 JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
                 final Dictionary dictionary = Dictionary.getInstance();
@@ -349,7 +370,7 @@ public class SearchResource{
             catch(Exception e){
                 System.out.println("HATA ALDI: "+e.getMessage());
                 e.printStackTrace();
-                return menus;
+                continue;
             }
 
             allNyms.addAll(synonyms);
@@ -369,6 +390,23 @@ public class SearchResource{
                 }
             }
         }    
-        return menus;
+
+        List menuResults = getMenuResults(q);
+        if(menuResults!=null){
+            menus.addAll(menuResults);
+        }        
+
+        List noDuplicates = new ArrayList<Menu>();
+
+        for(int k=0; k<menus.size(); k++)
+        {
+            Menu r = (Menu) menus.get(k);
+            if(!noDuplicates.contains(r)){ 
+                noDuplicates.add(r);
+                System.out.println(r.getId());
+            }
+        }    
+
+        return noDuplicates;
     }    
 }

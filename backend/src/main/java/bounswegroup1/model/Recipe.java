@@ -158,4 +158,14 @@ public class Recipe {
         return false;
     }
 
+    public boolean equals(Object r){
+        if(r instanceof Recipe){
+            Recipe toCompare = (Recipe) r;
+            System.out.println("EQUAL");
+            return this.id.equals(toCompare.id);
+        }
+        System.out.println("NOT EQUAL");
+        return false;
+    }
+
 }

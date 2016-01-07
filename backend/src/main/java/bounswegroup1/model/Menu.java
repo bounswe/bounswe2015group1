@@ -116,4 +116,14 @@ public class Menu {
             dao.createRecipe(recipe, id);
         }
     }
+
+    public boolean equals(Object r){
+        if(r instanceof Menu){
+            Menu toCompare = (Menu) r;
+            System.out.println("EQUAL");
+            return this.id.equals(toCompare.id);
+        }
+        System.out.println("NOT EQUAL");
+        return false;
+    }
 }

@@ -27,6 +27,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
+
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
@@ -43,8 +46,12 @@ public class UserResource {
 
     @POST
     public User addUser(@Valid User user) {
-        user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+        if(user.getDateOfBirth() != null)
+            user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+        else
+            user.setDateOfBirth(new DateTime());
 
+        
         Long id = dao.addUser(user);
 
         user.setId(id);
@@ -56,7 +63,10 @@ public class UserResource {
     @POST
     @Path("/update")
     public User updateUser(@Auth AccessToken token, User user) {
-        user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+        if(user.getDateOfBirth() != null)
+            user.setDateOfBirth(user.getDateOfBirth().dayOfMonth().roundFloorCopy());
+        else
+            user.setDateOfBirth(new DateTime());
 
         if (token.getUserId() == user.getId()) {
             dao.updateUser(user);
