@@ -10,9 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9785b5f3-c21a-44e9-bb28-4fee6414ea25" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Adapters/FeedAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/boun/swe/wawwe/Adapters/FeedAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" afterPath="$PROJECT_DIR$/build/intermediates/dex-cache/cache.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/android_keystore.jks" afterPath="" />
     </list>
     <ignored path="WeAreWhatWeEat.iws" />
     <ignored path=".idea/workspace.xml" />
