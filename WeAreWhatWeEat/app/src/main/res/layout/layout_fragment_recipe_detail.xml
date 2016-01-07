@@ -95,8 +95,7 @@
                     android:textColor="@color/black"
                     android:gravity="center"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:minLines="1"
-                    android:lines="3"/>
+                    android:minLines="1" />
 
             </LinearLayout>
 

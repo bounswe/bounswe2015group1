@@ -193,6 +193,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
         holder.recommended.setVisibility(recipe.isRecommended() ?
                 View.VISIBLE : View.GONE);
+
         // Example(and bad) usage of load image from url call...
 //        API.loadImageFromUrl(context.getPackageName(), "http://molacorbakebapsalonu.com/assets/kebap.jpg",
 //                new Response.Listener<Bitmap>() {
