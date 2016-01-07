@@ -150,11 +150,14 @@ public class Recipe {
     public boolean isContainTag(String tag){
         ArrayList<String> tags = new ArrayList<String>(this.getTags());
 
-        for(int i=0;i<tags.size(); i++){
-            if(tags.get(i).equals(tag)){
-                return true;
+        if(tags.size()>0){
+            for(int i=0;i<tags.size(); i++){
+                if(tags.get(i).equals(tag)){
+                    return true;
+                }
             }
         }
+        
         return false;
     }
 

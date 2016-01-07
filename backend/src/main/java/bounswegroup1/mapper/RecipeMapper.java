@@ -42,8 +42,11 @@ public class RecipeMapper implements ResultSetMapper<Recipe> {
         }
 
 
-        if(!recipe.isContainTag(rs.getString("tag"))){
-            recipe.addTags(rs.getString("tag"));
+        String tag = rs.getString("tag");
+        if(tag != null){
+            if(!recipe.isContainTag(rs.getString("tag"))){
+                recipe.addTags(rs.getString("tag"));
+            }
         }
 
 

@@ -16,29 +16,29 @@ import bounswegroup1.model.Recipe;
 import bounswegroup1.model.Nutrition;
 
 public abstract class RecipeDAO {
-    @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
+    @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id, "+
+    "recipe_ingredients,nutrition_recipe,nutritions"+
     " where recipes.id =:id"+
     " and recipes.id = recipe_ingredients.recipe_id"+
-    " and recipes.id = tags.recipe_id"+
     " and nutritions.id = nutrition_recipe.nutrition_id"+
     " and recipes.id = nutrition_recipe.recipe_id"+
     " order by recipes.id,recipe_ingredients.ingredient_id")
     @Mapper(RecipeMapper.class)
     abstract protected List<Recipe> _getRecipe(@Bind("id") Long recipeId);
 
-    @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
+    @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id,"+
+    " recipe_ingredients,nutrition_recipe,nutritions"+
     " where recipes.id = recipe_ingredients.recipe_id"+
-    " and recipes.id = tags.recipe_id"+
     " and nutritions.id = nutrition_recipe.nutrition_id"+
     " and recipes.id = nutrition_recipe.recipe_id"+
     " order by recipes.id,recipe_ingredients.ingredient_id")
     @Mapper(RecipesMapper.class)
     abstract protected List<List<Recipe>> _getRecipes();
 
-    @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
+    @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id,"+
+    " recipe_ingredients,nutrition_recipe,nutritions"+
     " where recipes.user_id = :userId"+
     " and recipes.id = recipe_ingredients.recipe_id"+
-    " and recipes.id = tags.recipe_id"+
     " and nutritions.id = nutrition_recipe.nutrition_id"+
     " and recipes.id = nutrition_recipe.recipe_id"+
     " order by recipes.id,recipe_ingredients.ingredient_id")
@@ -77,9 +77,9 @@ public abstract class RecipeDAO {
     abstract public void createNutritionRecipe(@Bind("nutritionId") Long nutritionId,@Bind("recipeId") Long recipeId);
 
 
-    @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
+    @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id, "+
+    " recipe_ingredients,nutrition_recipe,nutritions"+
     " where recipes.id = recipe_ingredients.recipe_id"+
-    " and recipes.id = tags.recipe_id"+
     " and nutritions.id = nutrition_recipe.nutrition_id"+
     " and recipes.id = nutrition_recipe.recipe_id"+
     " and recipes.id in"+
@@ -112,9 +112,9 @@ public abstract class RecipeDAO {
                 "        where user_id = :userId "+
                 "    ) "+
                 ") "+
-                " select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions "+
+                " select * from recipes left outer join tags on recipes.id = tags.recipe_id,"+
+                " recipe_ingredients,nutrition_recipe,nutritions "+
                 " where recipes.id = recipe_ingredients.recipe_id "+
-                " and recipes.id = tags.recipe_id "+
                 " and nutritions.id = nutrition_recipe.nutrition_id "+
                 " and recipes.id = nutrition_recipe.recipe_id "+
                 " and recipes.id in "+

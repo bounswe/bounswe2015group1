@@ -25,9 +25,9 @@ import javax.ws.rs.core.MultivaluedMap;
 @UseStringTemplate3StatementLocator
 public abstract class SearchDAO{
 
-	 @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions"+
+	 @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id,"+
+                " recipe_ingredients,nutrition_recipe,nutritions"+
 				" where recipes.id = recipe_ingredients.recipe_id"+
-				" and recipes.id = tags.recipe_id"+
 				" and nutritions.id = nutrition_recipe.nutrition_id"+
 				" and recipes.id = nutrition_recipe.recipe_id"+
 				" and recipes.id in"+
@@ -107,12 +107,12 @@ public abstract class SearchDAO{
             "                    and recipes.id = tags.recipe_id) "+
             "                union "+
             "                (select distinct(recipes.id) from recipes,recipe_ingredients "+
-            "                    where recipe_ingredients.ingredient_name in (<wantedIngredientList>) "+
+            "                    where lower(recipe_ingredients.ingredient_name) in (<wantedIngredientList>) "+
             "                    and recipes.id = recipe_ingredients.recipe_id) "+
             "                ) "+
             "            and recipes.id not in ( "+
             "                    select distinct(recipes.id) from recipes,recipe_ingredients "+
-            "                    where recipe_ingredients.ingredient_name in (<notWantedIngredientList>) "+
+            "                    where lower(recipe_ingredients.ingredient_name) in (<notWantedIngredientList>) "+
             "                    and recipes.id = recipe_ingredients.recipe_id "+
             "                ) "+
             "        ) "+
@@ -146,9 +146,9 @@ public abstract class SearchDAO{
         @BindIn("notWantedIngredientList") List<String> notWantedIngredientList,
         @BindBean("minNutrition") Nutrition minNutrition, @BindBean("maxNutrition") Nutrition maxNutrition);
 
-    @SqlQuery("select * from recipes, recipe_ingredients,tags,nutrition_recipe,nutritions "+
+    @SqlQuery("select * from recipes left outer join tags on recipes.id = tags.recipe_id,"+
+        " recipe_ingredients,nutrition_recipe,nutritions "+
         "where recipes.id = recipe_ingredients.recipe_id "+
-        "and recipes.id = tags.recipe_id "+ 
         "and nutritions.id = nutrition_recipe.nutrition_id "+
         "and recipes.id = nutrition_recipe.recipe_id "+
         "and recipes.id in "+
@@ -165,12 +165,12 @@ public abstract class SearchDAO{
         "        and recipes.id = tags.recipe_id) "+
         "    union "+
         "    (select distinct(recipes.id) from recipes,recipe_ingredients "+
-        "        where recipe_ingredients.ingredient_name in ( <wantedIngredientList> ) "+
+        "        where lower(recipe_ingredients.ingredient_name) in ( <wantedIngredientList> ) "+
         "        and recipes.id = recipe_ingredients.recipe_id) "+
         "    ) "+
         "and recipes.id not in ( "+
         "        select distinct(recipes.id) from recipes,recipe_ingredients "+
-        "        where recipe_ingredients.ingredient_name in ( <notWantedIngredientList> ) "+
+        "        where lower(recipe_ingredients.ingredient_name) in ( <notWantedIngredientList> ) "+
         "        and recipes.id = recipe_ingredients.recipe_id "+
         "    ) "+
         "and recipes.rating >= :minRating "+

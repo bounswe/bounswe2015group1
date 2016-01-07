@@ -53,8 +53,11 @@ public class RecipesMapper implements ResultSetMapper<List<Recipe>> {
             lastIngredientId = rs.getString("ingredient_id");
         }
 
-        if(!curr.isContainTag(rs.getString("tag"))){
-            curr.addTags(rs.getString("tag"));
+        String tag = rs.getString("tag");
+        if(tag != null){
+            if(!curr.isContainTag(rs.getString("tag"))){
+                curr.addTags(rs.getString("tag"));
+            }
         }
 
         return res;

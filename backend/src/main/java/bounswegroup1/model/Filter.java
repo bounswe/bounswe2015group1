@@ -123,11 +123,11 @@ public class Filter {
             setWantedIngList(myList);
         }else{
             if(map.getFirst("wantedIngredients").contains(",")){
-                String[] ingArray  = map.getFirst("wantedIngredients").split(",");
+                String[] ingArray  = map.getFirst("wantedIngredients").toLowerCase().split(",");
                 setWantedIngList(new ArrayList<String>(Arrays.asList(ingArray)));
             }else{
                 ArrayList<String> myList = new ArrayList<String>();
-                myList.add(map.getFirst("wantedIngredients"));
+                myList.add(map.getFirst("wantedIngredients").toLowerCase());
                 setWantedIngList(myList);
             }
             
@@ -140,11 +140,11 @@ public class Filter {
             setNotWantedIngList(myList);
         }else{
             if(map.getFirst("notWantedIngredients").contains(",")){
-                String[] ingArray  = map.getFirst("notWantedIngredients").split(",");
+                String[] ingArray  = map.getFirst("notWantedIngredients").toLowerCase().split(",");
                 setNotWantedIngList(new ArrayList<String>(Arrays.asList(ingArray)));
             }else{
                 ArrayList<String> myList = new ArrayList<String>();
-                myList.add(map.getFirst("notWantedIngredients"));
+                myList.add(map.getFirst("notWantedIngredients").toLowerCase());
                 setNotWantedIngList(myList);
             }
         }
