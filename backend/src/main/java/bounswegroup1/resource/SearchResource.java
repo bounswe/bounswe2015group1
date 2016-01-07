@@ -86,7 +86,7 @@ public class SearchResource{
     }
 
     @GET
-    @Path("/s/{q}")
+    @Path("/semanticSearch/recipe/{q}")
     public void semanticSearch(@PathParam("q") String q) {
         //dao.semanticSearch(q);
 
@@ -112,37 +112,260 @@ public class SearchResource{
         }
 
     
-        try{
+        List recipes = new ArrayList<Recipe>();
 
-        JWNL.initialize(new FileInputStream("src/main/resources/JWNLProperties.xml"));     
-        final Dictionary dictionary = Dictionary.getInstance();
-        System.out.println("1 ");
+        for (Iterator itrQuery = queryWords.iterator(); itrQuery.hasNext();) {
+            String queryWord = (String) itrQuery.next();
 
-        IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, q);
+            List allNyms = new ArrayList<String>();
+            List hypernyms = new ArrayList<String>();
+            List hyponyms = new ArrayList<String>();
+            List hyperHyponyms = new ArrayList<String>();
+            List synonyms = new ArrayList<String>();
+            List meronyms = new ArrayList<String>();
 
-        System.out.println("2 ");
-        System.out.println(indexWord.toString());
-        Synset[] senses = indexWord.getSenses();
+            try{
+                JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
+                final Dictionary dictionary = Dictionary.getInstance();
 
-        System.out.println("3 ");
+                IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, queryWord);
+                //IndexWord indexWord = dictionary.getRandomIndexWord(POS.NOUN);
 
-        for (Synset set : senses) {
-            System.out.println("4 ");
-            System.out.println(indexWord + ": " + set.getGloss());
 
-            System.out.println("\nPOINTERS OF THIS SYNSET:");
-            for(Pointer p : set.getPointers()){
-                System.out.println(p.getTargetSynset()); 
+                Synset[] senses = indexWord.getSenses();
+                System.out.println("All related words for: " + q);
+
+                for (Synset set : senses) {
+                    System.out.println("A synset for :" + set.toString());
+
+                    Word[] synWords = set.getWords();
+
+                    for(Word w : synWords){
+                        synonyms.add(w.getLemma());
+                    }
+
+                    PointerTargetNodeList hypoTargets;
+                    PointerTargetNodeList hyperTargets;
+                    PointerTargetNodeList meroTargets;
+
+                    try{
+                        hypoTargets = new PointerTargetNodeList(set.getTargets(PointerType.HYPONYM));
+                        hyperTargets = new PointerTargetNodeList(set.getTargets(PointerType.HYPERNYM));
+                        meroTargets = new PointerTargetNodeList(set.getTargets(PointerType.MEMBER_MERONYM));
+
+                    }
+                    catch(Exception e){
+                        System.out.println("NO HYPERNYMS OR HYPONYMS");
+                        continue;
+                    }
+
+                    for (Iterator itr = hyperTargets.iterator(); itr.hasNext();) {
+
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Hyper target :" + t.toString());
+
+                        Word[] hyperWords = t.getSynset().getWords();
+                        
+                        for(Word w : hyperWords){
+                            hypernyms.add(w.getLemma());  
+                            System.out.println("\n HYPERNM: " + w.getLemma());
+
+                        }
+                    }
+                    
+                    for (Iterator itr = hypoTargets.iterator(); itr.hasNext();) {
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Hypo target :" + t.toString());
+                        
+                        Word[] hypoWords = t.getSynset().getWords();
+                        
+                        for(Word w : hypoWords){
+                            hyponyms.add(w.getLemma());  
+                            System.out.println("\n HYPONM: " + w.getLemma());
+
+                        }
+                    }
+                    
+                    for (Iterator itr = meroTargets.iterator(); itr.hasNext();) {
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Mero target :" + t.toString());
+                        
+                        Word[] meroWords = t.getSynset().getWords();
+                        
+                        for(Word w : meroWords){
+                            meronyms.add(w.getLemma());  
+                            System.out.println("\n MERONYM: " + w.getLemma());
+
+                        }
+                    }
+                }
+                
+            }
+            catch(Exception e){
+                System.out.println("HATA ALDI: "+e.getMessage());
+                e.printStackTrace();
+                return recipes;
             }
 
-            System.out.println("\n SEMANTIC WORDS:");
-            for(Word word : set.getWords()){
-                System.out.println("The semantic word is " + word.getLemma());
+            allNyms.addAll(synonyms);
+            allNyms.addAll(hypernyms);
+            allNyms.addAll(hyponyms);
+            allNyms.addAll(meronyms);
+            //allNyms.addAll(hyperHyponyms);
+
+            for (Iterator itr = allNyms.iterator(); itr.hasNext();) {
+                String nym = (String) itr.next();
+                try{
+                    recipes.addAll(dao.getRecipeResults(nym));
+                    System.out.println(nym + "is found!");
+                }
+                catch(Exception e){
+
+                }
             }
-        }
-      
-        }catch(Exception e){
-            System.out.println("HATA ALDI: "+e.getMessage());
-        }
+        }    
+        return recipes;
     }
+
+    @GET
+    @Path("/semanticSearch/menu/{q}")
+    public void semanticSearch(@PathParam("q") String q) {
+        //dao.semanticSearch(q);
+
+        Pattern pattern = Pattern.compile("\\s");
+        Matcher matcher = pattern.matcher(q);
+        boolean found = matcher.find();
+
+        List<String> queryWords;
+
+        if(found){
+          System.out.println("matche");
+          String[] strArr = q.split("\\s+");
+          queryWords = new ArrayList<String>(Arrays.asList(strArr));
+        }else{
+          System.out.println("do not match");
+          ArrayList<String> list = new ArrayList<String>();
+          list.add(q);
+          queryWords = list;
+        }
+
+        for(int i = 0; i< queryWords.size(); i++){
+          System.out.println(queryWords.get(i));
+        }
+
+    
+        List menus = new ArrayList<Menu>();
+
+        for (Iterator itrQuery = queryWords.iterator(); itrQuery.hasNext();) {
+            String queryWord = (String) itrQuery.next();
+
+            List allNyms = new ArrayList<String>();
+            List hypernyms = new ArrayList<String>();
+            List hyponyms = new ArrayList<String>();
+            List hyperHyponyms = new ArrayList<String>();
+            List synonyms = new ArrayList<String>();
+            List meronyms = new ArrayList<String>();
+
+            try{
+                JWNL.initialize(new FileInputStream("JWNLProperties.xml"));     
+                final Dictionary dictionary = Dictionary.getInstance();
+
+                IndexWord indexWord = dictionary.getIndexWord(POS.NOUN, queryWord);
+                //IndexWord indexWord = dictionary.getRandomIndexWord(POS.NOUN);
+
+
+                Synset[] senses = indexWord.getSenses();
+                System.out.println("All related words for: " + q);
+
+                for (Synset set : senses) {
+                    System.out.println("A synset for :" + set.toString());
+
+                    Word[] synWords = set.getWords();
+
+                    for(Word w : synWords){
+                        synonyms.add(w.getLemma());
+                    }
+
+                    PointerTargetNodeList hypoTargets;
+                    PointerTargetNodeList hyperTargets;
+                    PointerTargetNodeList meroTargets;
+
+                    try{
+                        hypoTargets = new PointerTargetNodeList(set.getTargets(PointerType.HYPONYM));
+                        hyperTargets = new PointerTargetNodeList(set.getTargets(PointerType.HYPERNYM));
+                        meroTargets = new PointerTargetNodeList(set.getTargets(PointerType.MEMBER_MERONYM));
+
+                    }
+                    catch(Exception e){
+                        System.out.println("NO HYPERNYMS OR HYPONYMS");
+                        continue;
+                    }
+
+                    for (Iterator itr = hyperTargets.iterator(); itr.hasNext();) {
+
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Hyper target :" + t.toString());
+
+                        Word[] hyperWords = t.getSynset().getWords();
+                        
+                        for(Word w : hyperWords){
+                            hypernyms.add(w.getLemma());  
+                            System.out.println("\n HYPERNM: " + w.getLemma());
+
+                        }
+                    }
+                    
+                    for (Iterator itr = hypoTargets.iterator(); itr.hasNext();) {
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Hypo target :" + t.toString());
+                        
+                        Word[] hypoWords = t.getSynset().getWords();
+                        
+                        for(Word w : hypoWords){
+                            hyponyms.add(w.getLemma());  
+                            System.out.println("\n HYPONM: " + w.getLemma());
+
+                        }
+                    }
+                    
+                    for (Iterator itr = meroTargets.iterator(); itr.hasNext();) {
+                        PointerTargetNode t = (PointerTargetNode) itr.next();
+                        System.out.println("Mero target :" + t.toString());
+                        
+                        Word[] meroWords = t.getSynset().getWords();
+                        
+                        for(Word w : meroWords){
+                            meronyms.add(w.getLemma());  
+                            System.out.println("\n MERONYM: " + w.getLemma());
+
+                        }
+                    }
+                }
+                
+            }
+            catch(Exception e){
+                System.out.println("HATA ALDI: "+e.getMessage());
+                e.printStackTrace();
+                return menus;
+            }
+
+            allNyms.addAll(synonyms);
+            allNyms.addAll(hypernyms);
+            allNyms.addAll(hyponyms);
+            allNyms.addAll(meronyms);
+            //allNyms.addAll(hyperHyponyms);
+
+            for (Iterator itr = allNyms.iterator(); itr.hasNext();) {
+                String nym = (String) itr.next();
+                try{
+                    menus.addAll(dao.getMenuResults(nym));
+                    System.out.println(nym + "is found!");
+                }
+                catch(Exception e){
+
+                }
+            }
+        }    
+        return menus;
+    }    
 }
