@@ -676,15 +676,15 @@ angular.module('FoodApp').directive('tagManager', function() {
 			'<a ng-repeat="(idx, tag) in tags" class="tag" ng-click="remove(idx)">{{tag}} ' +
 			'<span class="glyphicon glyphicon-remove" aria-hidden="true"></a>' +
 			'</div>' +
-			'<input type="text" class="form-control" placeholder="Add a tag..." ng-model="userTags"></input> ' +
+			'<input type="text" class="form-control" placeholder="" ng-model="userTags"></input> ' +
 			'<button class="btn btn-default" ng-click="add()">Add</button>',
 		link: function ( $scope, $element ) {
 
 		var input = angular.element( $element.children()[1] );
-
+		$scope.userTags = "";
 		// This adds the new tag to the tags array
 		$scope.add = function() {
-			if($.inArray($scope.userTags, $scope.tags) == -1){
+			if($.inArray($scope.userTags, $scope.tags) == -1 && $scope.userTags != ""){
 				$scope.tags.push( $scope.userTags );
 				$scope.userTags = "";
 			}
@@ -694,14 +694,14 @@ angular.module('FoodApp').directive('tagManager', function() {
 		$scope.remove = function ( idx ) {
 			$scope.tags.splice( idx, 1 );
 		};
-		/*
+		
 		// Capture all keypresses
 		input.bind( 'keypress', function ( event ) {
 		// But we only care when Enter was pressed
 		if ( event.keyCode == 13 ) {
 			$scope.$apply( $scope.add );
 			}
-			});*/
+			});
 		}
 	};
 });
