@@ -47,6 +47,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -202,6 +203,52 @@ public class API {
         mQueue.add(new GeneralRequest<>(Request.Method.POST,
                 BASE_URL + "/user/update", User.class, successListener, failureListener)
                 .setPostBodyInJSONForm(postBody).setTag(tag));
+    }
+    /**
+     * Returns {@link Recipe recipes} for query via GET request to server.
+     * Adds advanced search parameters to request.
+     *
+     * @param tag used as request tag.
+     * @param query text to be searched.
+     * @param successListener will be called with {@link Recipe recipes} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void advanceSearchRecipe(String tag, String query,
+                                           Response.Listener<Recipe[]> successListener,
+                                           Response.ErrorListener failureListener) {
+        if (isTest) {
+            String postBody1 = Commons.loadJSONFromAsset("test_recipe1.json");
+            String postBody2 = Commons.loadJSONFromAsset("test_recipe2.json");
+
+            Gson gson = new Gson();
+
+            Recipe testRcp1 = gson.fromJson(postBody1, Recipe.class);
+            Recipe testRcp2 = gson.fromJson(postBody2, Recipe.class);
+
+            Recipe[] searchResults = { testRcp1, testRcp2 };
+            successListener.onResponse(searchResults);
+        } else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                Commons.getUrlForGet(BASE_URL + String.format("/search/advancedSearch/recipe/%s", query),
+                        App.getSearchPrefs().getFiltersAsParams()),
+                Recipe[].class, successListener, failureListener).setTag(tag));
+    }
+    /**
+     * Returns {@link Menu menus} for query via GET request to server.
+     * Adds advanced search parameters to request.
+     *
+     * @param tag used as request tag.
+     * @param query text to be searched.
+     * @param successListener will be called with {@link Menu menus} objects array.
+     * @param failureListener will be called when call fails.
+     */
+    public static void advanceSearchMenu(String tag, String query,
+                                           Response.Listener<Menu[]> successListener,
+                                           Response.ErrorListener failureListener) {
+        if (isTest);
+        else mQueue.add(new GeneralRequest<>(Request.Method.GET,
+                Commons.getUrlForGet(BASE_URL + String.format("/search/advancedSearch/menu/%s", query),
+                        App.getSearchPrefs().getFiltersAsParams()),
+                Menu[].class, successListener, failureListener).setTag(tag));
     }
     /**
      * Returns {@link Recipe recipes} for query via GET request to server.
@@ -1004,12 +1051,13 @@ public class API {
         private Gson gson;
         private Class<T> responseClazz;
         private Map<String, String> headers = new HashMap<>();
+        private Map<String, String> params = new HashMap<>();
         private Response.Listener<T> listener;
 
         private String postBody;
 
         public GeneralRequest(int method, String url, Class<T> responseClazz,
-                            Response.Listener<T> listener, Response.ErrorListener errorListener) {
+                               Response.Listener<T> listener, Response.ErrorListener errorListener) {
             super(method, url, errorListener);
             this.responseClazz = responseClazz;
             this.listener = listener;
@@ -1023,7 +1071,7 @@ public class API {
                 }
             }).create();
 
-            Log.v("Request", url + ", method: " +
+            Log.v("Request", getUrl() + ", method: " +
                     (method == Request.Method.GET ? "GET" : "POST"));
         }
 
@@ -1034,14 +1082,14 @@ public class API {
             return this;
         }
         /**
-         * Sets post body.
+         * Sets POST body.
          *
          * @param postBody JSON in string format.
          * @return itself for chain calls.
          */
         public GeneralRequest<T> setPostBodyInJSONForm(String postBody) {
             this.postBody = postBody;
-            Log.v("Request", postBody);
+            Log.v("Json body", postBody);
             return this;
         }
 
@@ -1057,6 +1105,11 @@ public class API {
             if (UUID != null)
                 headers.put("Authorization", "Bearer " + UUID);
             return headers;
+        }
+
+        @Override
+        public Map<String, String> getParams() {
+            return params;
         }
 
         @Override

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp">
+        android:layout_margin="@dimen/item_margin" >
 
         <EditText
             android:id="@+id/search_searchBox"
@@ -27,6 +27,17 @@
             android:text="Search" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_advanceSearchEnable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:text="@string/button_searchAdvancedEnabled"
+        android:layout_margin="@dimen/item_margin"
+        android:background="@drawable/button_advanced_search"
+        android:layout_gravity="center_horizontal" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchResults"

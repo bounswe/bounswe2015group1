@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.boun.swe.wawwe.Models.AccessToken;
+import com.boun.swe.wawwe.Models.SearchPrefs;
 import com.boun.swe.wawwe.Models.User;
 import com.boun.swe.wawwe.Utils.API;
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ public class App extends Application {
     private static App instance;
 
     private static int userId = -1;
+    private static SearchPrefs searchPrefs;
 
     @Override
     public void onCreate() {
@@ -68,6 +70,29 @@ public class App extends Application {
                 .getString(R.string.preference_userInfo), "");
         return "".equals(userStr) ? null :
                 new Gson().fromJson(userStr, User.class);
+    }
+
+    public static void setSearchPrefs(SearchPrefs searchPrefs) {
+        App.searchPrefs = searchPrefs;
+
+        SharedPreferences.Editor editor = getEditorForUserPreferences();
+        String searchPrefsJson = new Gson().toJson(searchPrefs, SearchPrefs.class);
+        editor.putString(instance.getString(R.string.preference_searchPrefs), searchPrefsJson);
+        editor.commit();
+    }
+
+    public static SearchPrefs getSearchPrefs() {
+        if (searchPrefs == null) {
+            String searchPrefsJson = getSharedPreferecesForUser().getString(instance
+                    .getString(R.string.preference_searchPrefs), "");
+
+            if ("".equals(searchPrefsJson)) {
+                searchPrefs = new SearchPrefs();
+                setSearchPrefs(searchPrefs);
+            }
+            else searchPrefs = new Gson().fromJson(searchPrefsJson, SearchPrefs.class);
+        }
+        return searchPrefs;
     }
 
     public static void setAccessValues(AccessToken accessToken) {

@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.Response;
@@ -17,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.boun.swe.wawwe.Adapters.FeedAdapter;
 import com.boun.swe.wawwe.App;
 import com.boun.swe.wawwe.MainActivity;
+import com.boun.swe.wawwe.Models.SearchPrefs;
 import com.boun.swe.wawwe.Models.Menu;
 import com.boun.swe.wawwe.Models.Recipe;
 import com.boun.swe.wawwe.R;
@@ -28,6 +30,7 @@ import com.boun.swe.wawwe.Utils.API;
 public class Search extends LeafFragment {
 
     private EditText searchBox;
+    private Button AdvancedSearchEnabled;
     private RecyclerView searchResults;
 
     public Search() { }
@@ -53,6 +56,21 @@ public class Search extends LeafFragment {
         final FeedAdapter adapter = new FeedAdapter(context);
         searchResults.setAdapter(adapter);
 
+        AdvancedSearchEnabled = (Button) searchView
+                .findViewById(R.id.button_advanceSearchEnable);
+        AdvancedSearchEnabled.setSelected(App.getSearchPrefs()
+                .isAdvanceSearchSelected());
+        AdvancedSearchEnabled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AdvancedSearchEnabled.setSelected(!AdvancedSearchEnabled.isSelected());
+
+                SearchPrefs searchPrefs = App.getSearchPrefs();
+                searchPrefs.setAdvanceSearchSelected(AdvancedSearchEnabled.isSelected());
+                App.setSearchPrefs(searchPrefs);
+            }
+        });
+
         String query = getArguments().getString("query", null);
         if (query != null) {
             searchBox.setText(query);
@@ -75,34 +93,71 @@ public class Search extends LeafFragment {
 
     private void makeSearch(String query, final FeedAdapter adapter) {
         adapter.clear();
-        API.searchRecipe(getTag(), query,
-                new Response.Listener<Recipe[]>() {
-                    @Override
-                    public void onResponse(Recipe[] response) {
-                        if (response != null)
-                            adapter.addItems(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // No response...
-                    }
-                });
-        API.searchMenus(getTag(), query,
-                new Response.Listener<Menu[]>() {
-                    @Override
-                    public void onResponse(Menu[] response) {
-                        if (response != null)
-                            adapter.addItems(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // No response...
-                    }
-                });
+        if (AdvancedSearchEnabled.isSelected()) {
+            SearchPrefs searchPrefs = App.getSearchPrefs();
+            if (searchPrefs.isIncludeRecipes()) {
+                API.advanceSearchRecipe(getTag(), query,
+                        new Response.Listener<Recipe[]>() {
+                            @Override
+                            public void onResponse(Recipe[] response) {
+                                if (response != null)
+                                    adapter.addItems(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+            }
+            if (searchPrefs.isIncludeMenus()) {
+                API.advanceSearchMenu(getTag(), query,
+                        new Response.Listener<Menu[]>() {
+                            @Override
+                            public void onResponse(Menu[] response) {
+                                if (response != null)
+                                    adapter.addItems(response);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+            }
+        }
+        else {
+            API.searchRecipe(getTag(), query,
+                    new Response.Listener<Recipe[]>() {
+                        @Override
+                        public void onResponse(Recipe[] response) {
+                            if (response != null)
+                                adapter.addItems(response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // No response...
+                        }
+                    });
+            API.searchMenus(getTag(), query,
+                    new Response.Listener<Menu[]>() {
+                        @Override
+                        public void onResponse(Menu[] response) {
+                            if (response != null)
+                                adapter.addItems(response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // No response...
+                        }
+                    });
+        }
     }
 
     public static Search getFragment(String query) {
@@ -129,7 +184,7 @@ public class Search extends LeafFragment {
             case R.id.menu_profile_editDone:
                 if (context instanceof MainActivity) {
                     MainActivity main = (MainActivity) context;
-                    main.makeFragmentTransaction(AdvancedSearch.getFragment(null));
+                    main.makeFragmentTransaction(SearchPreferences.getFragment());
                 }
                 return true;
 

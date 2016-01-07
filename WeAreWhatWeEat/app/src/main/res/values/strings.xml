@@ -74,7 +74,7 @@
     <string name="title_menu_search">Search</string>
     <string name="title_menu_menu">Create Menu</string>
     <string name="title_menu_stats">Statistics</string>
-    <string name="title_menu_advanced_search">Filters</string>
+    <string name="title_menu_search_preferences">Search Preferences</string>
     <string name="title_menu_profileEdit">Update Profile</string>
     <string name="title_menu_recipeCreation">Create Recipe</string>
     <string name="title_menu_recipeDetail">Recipe Detail</string>
@@ -91,4 +91,43 @@
     <!-- Comment Rating -->
     <string name="prompt_makeComment">Write Comment…</string>
 
+    <!-- SearchPreferences -->
+    <string name="button_searchAdvancedEnabled">Advanced Search Enabled</string>
+    <string name="title_searchPrefsCheckRecipe">Search Recipes:</string>
+    <string name="title_searchPrefsCheckMenu">Search Menus:</string>
+    <string name="title_searchPrefsPeriod">Period:</string>
+    <string name="title_searchPrefsIncludedIng">Included Ingredients:</string>
+    <string name="title_searchPrefsExcludedIng">Excluded Ingredients:</string>
+    <string name="hint_searchPrefsIngredients">Should be separated by commas</string>
+    <string-array name="title_searchPreferences">
+        <item>Min Rating:</item>
+        <item>Max Rating:</item>
+
+        <item>Min Calories:</item>
+        <item>Max Calories:</item>
+
+        <item>Min Carbs:</item>
+        <item>Max Carbs:</item>
+
+        <item>Min Fats:</item>
+        <item>Max Fats:</item>
+
+        <item>Min Protein:</item>
+        <item>Max Protein:</item>
+
+        <item>Min Sodium:</item>
+        <item>Max Sodium:</item>
+
+        <item>Min Fiber:</item>
+        <item>Max Fiber:</item>
+
+        <item>Min Chol:</item>
+        <item>Max Chol:</item>
+
+        <item>Min Sugar:</item>
+        <item>Max Sugar:</item>
+
+        <item>Min Iron:</item>
+        <item>Max Iron:</item>
+    </string-array>
 </resources>

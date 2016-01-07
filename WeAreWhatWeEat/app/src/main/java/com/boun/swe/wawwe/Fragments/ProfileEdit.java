@@ -105,8 +105,7 @@ public class ProfileEdit extends LeafFragment implements DatePickerDialog.OnDate
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_profile, menu);
         menu.findItem(R.id.menu_profile_editDone).setIcon(R.mipmap.ic_done_black_24dp);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            menu.findItem(R.id.menu_profile_add).setVisible(false);
+        menu.findItem(R.id.menu_profile_add).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
