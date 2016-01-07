@@ -40,6 +40,9 @@ import java.util.List;
 import net.didion.jwnl.data.*;
 import net.didion.jwnl.dictionary.Dictionary;
 import net.didion.jwnl.*;
+import net.didion.jwnl.util.*;
+import net.didion.jwnl.data.list.*;
+
 
 
 @Path("/search")
@@ -87,7 +90,7 @@ public class SearchResource{
 
     @GET
     @Path("/semanticSearch/recipe/{q}")
-    public void semanticSearch(@PathParam("q") String q) {
+    public List<Recipe> semanticSearchRecipe(@PathParam("q") String q) {
         //dao.semanticSearch(q);
 
         Pattern pattern = Pattern.compile("\\s");
@@ -229,7 +232,7 @@ public class SearchResource{
 
     @GET
     @Path("/semanticSearch/menu/{q}")
-    public void semanticSearch(@PathParam("q") String q) {
+    public List<Menu> semanticSearchMenu(@PathParam("q") String q) {
         //dao.semanticSearch(q);
 
         Pattern pattern = Pattern.compile("\\s");
