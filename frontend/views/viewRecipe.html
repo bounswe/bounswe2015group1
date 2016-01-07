@@ -42,7 +42,7 @@
 		{{ recipe.description }}
 		<br/>
 		<div>
-			<h4  ng-click="nutrCollapsed = !nutrCollapsed"><a href="#" style="font-family: Montserrat;color: #F4A73B;"><u>Nutritional Values</u> (Click to expand)</a></h4>
+			<h4  ng-click="nutrCollapsed = !nutrCollapsed" style="font-family: Montserrat;color: #F4A73B;"><u >Nutritional Values</u> (Click to expand)</h4>
 			<div uib-collapse="nutrCollapsed" ng-repeat="(id,nutrition) in nutritionLiterals">
 				<b>{{ nutrition.charAt(0).toUpperCase() + nutrition.slice(1) }}</b> : {{ recipe.nutritions[nutrition] }} {{ nutritionUnits[id] }}
 			</div>

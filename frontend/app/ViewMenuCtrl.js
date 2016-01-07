@@ -42,6 +42,12 @@ myApp.controller('ViewMenuCtrl', function($scope, $rootScope, $state, $statePara
 						$scope.commentAllowed = true;
 					}
 					$scope.menu = response.data;
+					userService.getUserWithId($scope.menu.userId).then(
+						function(response) {
+							$scope.owner = response.data;
+							$scope.ownerName=$scope.owner.fullName;
+						}
+					);
 				}
 			);
 			
